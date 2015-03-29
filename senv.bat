@@ -13,7 +13,6 @@ rem echo script='%script%'
 rem echo parentdir='%parentdir%'
 rem echo parent='%parent%'
 rem echo unixpath='%unixpath%'
-goto :eof
 
 if not exist ..\env.bat (
 	echo Add %parent%\env.bat: (..\env.bat^)
@@ -48,7 +47,21 @@ doskey vbmct="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tc
 doskey vbmcu="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
 doskey bd="boot2docker.exe" $*
 
+rem -------------
+rem Generate profile
+rem --------------
+sed -e "s;#unixpath#;%unixpath%;g" profile.template > profile
+echo.%HTTP_PROXY%| findstr /C:"http" 1>nul
+if errorlevel 1 sed -i -e "/^.*HTTP_PROXY.*$/d" profile
+echo.%HTTPS_PROXY%| findstr /C:"http" 1>nul
+if errorlevel 1 sed -i -e "/^.*HTTPS_PROXY.*$/d" profile
+echo.%NO_PROXY%| findstr /C:"localhost" 1>nul
+if errorlevel 1 sed -i -e "/^.*NO_PROXY.*$/d" profile
+if errorlevel 0 sed -i -e "s/#NO_PROXY#/%NO_PROXY%/g" profile
+
 goto :eof
+goto :eof
+
 
 rem http://www.dostips.com/DtTutoFunctions.php#FunctionTutorial.ReturningValuesClassic
 :getparentdir
