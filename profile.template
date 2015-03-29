@@ -19,8 +19,8 @@ alias la='ls -la'
 alias d='dmenu_run &'
 alias ce='cd /etc/sysconfig/tcedir'
 
-rem proxy    should be defined as http://<user>:<pwd>@proxy.company:80
-rem no_proxy should be defined as .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
+# proxy    should be defined as http://<user>:<pwd>@proxy.company:80
+# no_proxy should be defined as .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
 
 export HTTP_PROXY=#HTTP_PROXY#
 export HTTPS_PROXY=#HTTPS_PROXY#
