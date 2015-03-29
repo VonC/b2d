@@ -14,6 +14,7 @@ if not exist ..\env.bat (
 	exit /B 1
 )
 call "%parent%\env.bat"
+set PATH=%PATH%;%script%
 
 rem http://stackoverflow.com/a/7218493/6309: test substring
 echo.%PATH%| findstr /C:"Boot2Docker" 1>nul
