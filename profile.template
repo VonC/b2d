@@ -22,16 +22,16 @@ alias ce='cd /etc/sysconfig/tcedir'
 rem proxy    should be defined as http://<user>:<pwd>@proxy.company:80
 rem no_proxy should be defined as .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
 
-export HTTP_PROXY=%HTTP_PROXY%
-export HTTPS_PROXY=%HTTPS_PROXY%
-export NO_PROXY=%NO_PROXY%
+export HTTP_PROXY=#HTTP_PROXY#
+export HTTPS_PROXY=#HTTPS_PROXY#
+export NO_PROXY=#NO_PROXY#
 
-export http_proxy=%HTTP_PROXY%
-export https_proxy=%HTTPS_PROXY%
-export no_proxy=%NO_PROXY%
+export http_proxy=#HTTP_PROXY#
+export https_proxy=#HTTPS_PROXY#
+export no_proxy=#NO_PROXY#
 
 alias l='ls -alrt'
 alias h=history
-alias cdd='cd %unixpath%'
+alias cdd='cd #unixpath#'
 
-ln -fs %unixpath% /home/docker
+ln -fs #unixpath# /home/docker
