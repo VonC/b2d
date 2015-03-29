@@ -4,8 +4,16 @@ set script=%~dp0%
 set parent=%script: =,%
 set parent=%parent:\= %
 set parentdir=
+set unixpath=
 call :getparentdir %parent%
 set parent=%parentdir:,= %
+set unixpath=%unixpath%/b2d
+
+rem echo script='%script%'
+rem echo parentdir='%parentdir%'
+rem echo parent='%parent%'
+rem echo unixpath='%unixpath%'
+goto :eof
 
 if not exist ..\env.bat (
 	echo Add %parent%\env.bat: (..\env.bat^)
@@ -44,12 +52,43 @@ goto :eof
 
 rem http://www.dostips.com/DtTutoFunctions.php#FunctionTutorial.ReturningValuesClassic
 :getparentdir
-if "%~1" EQU "b2d" goto :EOF
-if not "%parentdir%" == "" (
-	set "parentdir=%parentdir%\%~1"
+setlocal enabledelayedexpansion
+set P=%~1
+rem echo 1='%P%'
+rem echo getparentdir parentdir='%parentdir%'
+rem echo getparentdir unixpath='%unixpath%'
+if "!P!" EQU "" goto :eof
+if "!P!" EQU "b2d" (
+	endlocal
+	set "parentdir=%parentdir%"
+	set "unixpath=%unixpath%"
+	goto :EOF
 )
+if not "%parentdir%" == "" (
+	set "parentdir=!parentdir!\!P!"
+	set "unixpath=!unixpath!/!P!"
+	rem echo notempty: parentdir='%parentdir%'
+	rem echo notempty: unixpath='%unixpath%'
+)
+rem echo between: parentdir='%parentdir%'
+rem echo between: unixpath='%unixpath%'
 if "%parentdir%" == "" (
-	set parentdir=%~1
+	set "parentdir=!P!"
+	set "unixpath=/!P!"
+	set "unixpath=!unixpath::=!"
+	call :lowercase unixpath
+	rem echo empty: parentdir='!parentdir!'
+	rem echo empty: unixpath='!unixpath!'
 )
 shift
+( endlocal & REM.-- RETURN VALUES
+	set "parentdir=%parentdir%"
+	set "unixpath=%unixpath%"
+)
+rem echo shiftt: parentdir='%parentdir%'
+rem echo shiftt: unixpath='%unixpath%'
 goto getparentdir
+
+:lowercase
+set %~1=!%1:C=c!
+goto :eof
