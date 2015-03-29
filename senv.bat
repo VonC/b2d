@@ -33,11 +33,11 @@ if errorlevel 1 (
 	exit /B 1
 )
 
-doskey vbm="c:\prgs\VirtualBox\VBoxManage.exe" $*
-doskey vbmmt="c:\prgs\VirtualBox\VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
-doskey vbmmu="c:\prgs\VirtualBox\VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
-doskey vbmct="c:\prgs\VirtualBox\VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
-doskey vbmcu="c:\prgs\VirtualBox\VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
+doskey vbm="VBoxManage.exe" $*
+doskey vbmmt="VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
+doskey vbmmu="VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
+doskey vbmct="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
+doskey vbmcu="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
 
 goto :eof
 
