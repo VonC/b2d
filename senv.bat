@@ -59,6 +59,16 @@ echo.%NO_PROXY%| findstr /C:"localhost" 1>nul
 if errorlevel 1 sed -i -e "/^.*NO_PROXY.*$/d" profile
 if errorlevel 0 sed -i -e "s/#NO_PROXY#/%NO_PROXY%/g" profile
 
+git -C %script% config filter.dffilter.smudge dfsmudge.sh
+git -C %script% config filter.dffilter.clean dfsclean.sh
+cp -f %script%dfsmudge.sh.template %script%dfsmudge.sh
+echo.%HTTP_PROXY%| findstr /C:"http" 1>nul
+if errorlevel 0 (
+	sed -i -e "s/#hasproxy#/1/g" dfsmudge.sh
+	sed -i -e "s;#http_proxy#;ENV http_proxy %HTTP_PROXY%;g" dfsmudge.sh
+	sed -i -e "s;#https_proxy#;ENV https_proxy %HTTPS_PROXY%;g" dfsmudge.sh
+	sed -i -e "s;#no_proxy#;ENV no_proxy %NO_PROXY%;g" dfsmudge.sh
+)
 goto :eof
 goto :eof
 
