@@ -53,11 +53,13 @@ rem --------------
 sed -e "s;#unixpath#;%unixpath%;g" profile.template > profile
 echo.%HTTP_PROXY%| findstr /C:"http" 1>nul
 if errorlevel 1 sed -i -e "/^.*HTTP_PROXY.*$/d" profile
+if errorlevel 0 sed -i -e "s;#HTTP_PROXY#;%HTTP_PROXY%;g" profile
 echo.%HTTPS_PROXY%| findstr /C:"http" 1>nul
 if errorlevel 1 sed -i -e "/^.*HTTPS_PROXY.*$/d" profile
+if errorlevel 0 sed -i -e "s;#HTTPS_PROXY#;%HTTPS_PROXY%;g" profile
 echo.%NO_PROXY%| findstr /C:"localhost" 1>nul
 if errorlevel 1 sed -i -e "/^.*NO_PROXY.*$/d" profile
-if errorlevel 0 sed -i -e "s/#NO_PROXY#/%NO_PROXY%/g" profile
+if errorlevel 0 sed -i -e "s;#NO_PROXY#;%NO_PROXY%;g" profile
 
 set scriptd=%script:\=\\%
 git -C %script% config filter.dffilter.smudge %scriptd%dfsmudge.sh
