@@ -12,7 +12,7 @@ set unixpath=%unixpath%/b2d
 rem echo script='%script%'
 rem echo parentdir='%parentdir%'
 rem echo parent='%parent%'
-rem echo unixpath='%unixpath%'
+rem echo.unixpath='%unixpath%'
 
 if not exist ..\env.bat (
 	echo Add %parent%\env.bat: (..\env.bat^)
@@ -63,7 +63,6 @@ if errorlevel 0 (
 	sed -i -e "s;#https_proxy#;%HTTPS_PROXY%;g" dfsmudge.sh
 	sed -i -e "s;#no_proxy#;%NO_PROXY%;g" dfsmudge.sh
 )
-goto :eof
 goto :eof
 
 
