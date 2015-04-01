@@ -37,4 +37,4 @@ alias cdd='cd #unixpath#'
 ln -fs #unixpath# /home/docker
 
 alias d=docker
-alias di=docker images
+alias di='docker images'
