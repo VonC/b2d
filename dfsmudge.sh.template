@@ -1,5 +1,5 @@
 if [[ "#hasproxy#" == "1" ]]; then
-	sed -e "s;^.*ENV http_proxy .*$;#http_proxy#;g" \
-		-e "s;^.*ENV https_proxy .*$;#https_proxy#;g" \
-		-e "s;^.*ENV no_proxy .*$;#no_proxy#;g"
+	sed -e "s;^.*\(ENV|export\) \(http_proxy[ =]|HTTP_PROXY[ =]\).*$;$1 $2#http_proxy#;g" \
+		-e "s;^.*\(ENV|export\) \(https_proxy[ =]|HTTPS_PROXY[ =]\).*$;$1 $2#https_proxy#;g" \
+		-e "s;^.*\(ENV|export\) \(no_proxy[ =]|NO_PROXY[ =]\).*$;$1 $2#no_proxy#;g"
 fi
