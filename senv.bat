@@ -47,11 +47,6 @@ doskey vbmct="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tc
 doskey vbmcu="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
 doskey bd="boot2docker.exe" $*
 
-rem -------------
-rem Generate profile
-rem --------------
-rem sed -e "s;#unixpath#;%unixpath%;g" profile.template > profile
-
 set scriptd=%script:\=\\%
 git -C %script% config filter.dffilter.smudge %scriptd%dfsmudge.sh
 git -C %script% config filter.dffilter.clean %scriptd%dfclean.sh
@@ -62,6 +57,7 @@ if errorlevel 0 (
 	sed -i -e "s;#http_proxy#;%HTTP_PROXY%;g" dfsmudge.sh
 	sed -i -e "s;#https_proxy#;%HTTPS_PROXY%;g" dfsmudge.sh
 	sed -i -e "s;#no_proxy#;%NO_PROXY%;g" dfsmudge.sh
+	sed -i -e "s;_unixpath_;%unixpath%;g" dfsmudge.sh
 )
 goto :eof
 
