@@ -38,3 +38,7 @@ ln -fs #unixpath# /home/docker
 
 alias d=docker
 alias di='docker images'
+alias dps='docker ps'
+alias dstar='docker stop $(docker ps -q --no-trunc)'
+alias drmast='docker rm $(docker ps -qa --no-trunc --filter "status=exited")'
+alias drmint='docker rmi $(docker images --filter 'dangling=true' -q --no-trunc")'
