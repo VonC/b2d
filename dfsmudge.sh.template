@@ -4,5 +4,5 @@ if [[ "#hasproxy#" == "1" ]]; then
 		-e "s;^.*\(ENV\|export\) \(no_proxy[ =]\|NO_PROXY[ =]\).*$;\1 \2#no_proxy#;g" \
 		-e "s;^\(.*\)#unixpath#\(.*\)$;\1_unixpath_\2 # unxpath:\1#unixpath#\2;g"
 else
-	cat
+	sed -e "s;^\(.*\)#unixpath#\(.*\)$;\1_unixpath_\2 # unxpath:\1#unixpath#\2;g"
 fi
