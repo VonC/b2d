@@ -25,17 +25,17 @@ set PATH=%PATH%;%script%
 
 rem http://stackoverflow.com/a/7218493/6309: test substring
 echo.%PATH%| findstr /C:"Boot2Docker" 1>nul
-if errorlevel 1 (
+if %errorlevel% == 1 (
 	echo "Boot2Docker is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
 echo.%PATH%| findstr /C:"Git" 1>nul
-if errorlevel 1 (
+if %errorlevel% == 1 (
 	echo "Git is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
 echo.%PATH%| findstr /C:"VirtualBox" 1>nul
-if errorlevel 1 (
+if %errorlevel% == 1 (
 	echo "VirtualBox is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
@@ -50,9 +50,11 @@ doskey bd="boot2docker.exe" $*
 set scriptd=%script:\=\\%
 git -C %script% config filter.dffilter.smudge %scriptd%dfsmudge.sh
 git -C %script% config filter.dffilter.clean %scriptd%dfclean.sh
+
 cp -f %script%dfsmudge.sh.template %script%dfsmudge.sh
+
 echo.%HTTP_PROXY%| findstr /C:"http" 1>nul
-if errorlevel 0 (
+if %errorlevel% == 0 (
 	sed -i -e "s/#hasproxy#/1/g" dfsmudge.sh
 	sed -i -e "s;#http_proxy#;%HTTP_PROXY%;g" dfsmudge.sh
 	sed -i -e "s;#https_proxy#;%HTTPS_PROXY%;g" dfsmudge.sh
