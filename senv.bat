@@ -59,8 +59,8 @@ if %errorlevel% == 0 (
 	sed -i -e "s;#http_proxy#;%HTTP_PROXY%;g" dfsmudge.sh
 	sed -i -e "s;#https_proxy#;%HTTPS_PROXY%;g" dfsmudge.sh
 	sed -i -e "s;#no_proxy#;%NO_PROXY%;g" dfsmudge.sh
-	sed -i -e "s;_unixpath_;%unixpath%;g" dfsmudge.sh
 )
+sed -i -e "s;_unixpath_;%unixpath%;g" dfsmudge.sh
 goto :eof
 
 
