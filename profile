@@ -35,6 +35,7 @@ alias h=history
 alias cdd='cd #unixpath#'
 
 ln -fs #unixpath# /home/docker
+export PATH=$PATH:#unixpath#
 
 alias d=docker
 alias di='docker images'
