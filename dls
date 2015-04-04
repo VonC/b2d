@@ -1,0 +1,10 @@
+echo Containers running
+docker ps -q --no-trunc
+
+echo ----------------
+echo Containers exited
+docker ps -qa --no-trunc --filter "status=exited"
+
+echo ----------------
+echo Images dangling
+docker images --filter "dangling=true" -q --no-trunc
