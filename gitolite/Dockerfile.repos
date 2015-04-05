@@ -1,0 +1,12 @@
+FROM go:latest
+
+MAINTAINER VonC <vonc@laposte.net>
+
+# ENV http_proxy http://<user>:<pwd>@proxy.company:80
+# ENV https_proxy http://<user>:<pwd>@proxy.company:80
+# ENV no_proxy .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
+
+RUN adduser --system --group --shell /bin/sh git
+RUN mkdir /home/git/repositories ; chown -R git:git /home/git/repositories
+
+VOLUME /home/git/repositories
