@@ -11,5 +11,5 @@ RUN mkdir /gitolite ; chown -R git:git /gitolite
 
 RUN cd /; git clone git://github.com/sitaramc/gitolite /github;
 # RUN cd /home/git/gitolite; su git -c "git checkout v3.6.2";
-RUN cd /home/git; su git -c "/github/install -to /gitolite";
+RUN cd /home/git; su git -c "/github/install -to /gitolite; mkdir /home/git/";
 RUN chown -R git:git /home/git
