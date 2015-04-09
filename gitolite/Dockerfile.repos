@@ -10,3 +10,6 @@ RUN adduser --system --group --shell /bin/sh git
 RUN mkdir /home/git/repositories ; chown -R git:git /home/git/repositories
 
 VOLUME /home/git/repositories
+
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["echo","data container for gitolite repos"]
