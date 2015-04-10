@@ -1,10 +1,10 @@
 #!/bin/sh
 
 display_usage() {
-        echo "Run a data container, and make sure it reuses always the *same* volume data."
+	echo "Run a data volume container, and make sure it reuses always the *same* volume data."
 	echo "This script must be run with the name of a data container to run."
-        echo "The name is mandatory (the ID is not accepted)."
-        echo "if it already runs or is exited, it checks if the volume needs to be adjusted."
+	echo "The name is mandatory (the ID is not accepted)."
+	echo "if it already runs or is exited, it checks if the volume needs to be adjusted."
 	echo -e "\nUsage:\n$0 data.container.name\n"
 }
 
