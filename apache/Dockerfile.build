@@ -1,0 +1,17 @@
+FROM gcc:latest
+
+MAINTAINER VonC <vonc@laposte.net>
+
+# ENV http_proxy http://<user>:<pwd>@proxy.company:80
+# ENV https_proxy http://<user>:<pwd>@proxy.company:80
+# ENV no_proxy .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
+
+RUN git clone https://github.com/apache/httpd.git -b 2.4.10 --depth=1 /usr/local/src/httpd-2.4.10
+WORKDIR /usr/local/src/httpd-2.4.10
+RUN git clone https://github.com/apache/apr.git -b 1.5.1 --depth=1 srclib/apr
+RUN git clone https://github.com/apache/apr-util.git -b 1.5.4 --depth=1 srclib/apr-util
+RUN ./buildconf
+RUN ./configure -enable-modules=all --with-included-apr --enable-mpm=worker --enable-suexec --enable-rewrite
+RUN make
+RUN checkinstall --pkgname=apache2-4 --pkgversion="2.4.10" --backup=no --deldoc=yes --fstrans=no --default
+RUN mkdir $HOME/deb && mv *.deb $HOME/deb
