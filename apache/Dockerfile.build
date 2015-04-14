@@ -19,3 +19,4 @@ RUN ./configure -enable-modules=all --with-included-apr --enable-mpm=worker --en
 RUN make
 RUN checkinstall --pkgname=apache2-4 --pkgversion="2.4.10" --backup=no --deldoc=yes --fstrans=no --default
 RUN mkdir $HOME/deb && mv *.deb $HOME/deb
+VOLUME $HOME/deb
