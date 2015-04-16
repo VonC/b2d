@@ -19,4 +19,5 @@ RUN  add-apt-repository ppa:git-core/ppa \
      curl \
      ca-certificates \
      git \
-     openssl
+     openssl \
+     ldap-utils
