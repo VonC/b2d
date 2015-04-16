@@ -1,0 +1,4 @@
+#! /bin/sh
+
+./git/build
+./go/build

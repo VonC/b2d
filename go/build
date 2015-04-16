@@ -1,0 +1,3 @@
+#! /bin/sh
+
+docker build -t go $HOME/b2d/go
