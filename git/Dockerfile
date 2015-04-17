@@ -20,4 +20,5 @@ RUN  add-apt-repository ppa:git-core/ppa \
      ca-certificates \
      git \
      openssl \
-     ldap-utils
+     ldap-utils \
+     iputils-ping
