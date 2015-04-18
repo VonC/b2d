@@ -9,6 +9,7 @@ WORKDIR $HTTPD_PREFIX
 
 COPY httpd-foreground /usr/local/bin/
 
+EXPOSE 80
 EXPOSE 443
 
 CMD ["httpd-foreground"]
