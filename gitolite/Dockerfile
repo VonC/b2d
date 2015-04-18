@@ -1,4 +1,4 @@
-FROM go:latest
+FROM git:latest
 
 MAINTAINER VonC <vonc@laposte.net>
 
@@ -6,10 +6,11 @@ MAINTAINER VonC <vonc@laposte.net>
 # ENV https_proxy http://<user>:<pwd>@proxy.company:80
 # ENV no_proxy .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
 
-RUN adduser --system --group --shell /bin/sh git
-RUN mkdir /gitolite ; chown -R git:git /gitolite
+RUN mkdir /home/git/gitolite ; chown -R git:git /home/git/gitolite
 
-RUN cd /; git clone git://github.com/sitaramc/gitolite /github;
-# RUN cd /home/git/gitolite; su git -c "git checkout v3.6.2";
-RUN cd /home/git; su git -c "/github/install -to /gitolite; mkdir /home/git/";
-RUN chown -R git:git /home/git
+USER git
+RUN cd /home/git; git clone git://github.com/sitaramc/gitolite github;
+RUN mkdir -p /home/git/.gitolite/logs
+# RUN git -C /home/git/github checkout v3.6.2
+RUN /home/git/github/install -to /home/git/gitolite
+RUN USER=git /home/git/gitolite/gitolite setup -a git
