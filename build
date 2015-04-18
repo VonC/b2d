@@ -1,4 +1,5 @@
 #! /bin/sh
 
-./git/build
-./go/build
+$HOME/b2d/git/build
+$HOME/b2d/go/build
+$HOME/b2d/gitolite/build
