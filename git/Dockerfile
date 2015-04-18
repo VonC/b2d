@@ -22,3 +22,4 @@ RUN  add-apt-repository ppa:git-core/ppa \
      openssl \
      ldap-utils \
      iputils-ping
+RUN adduser --system --group --shell /bin/sh git
