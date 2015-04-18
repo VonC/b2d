@@ -1,4 +1,4 @@
-FROM go:latest
+FROM git:latest
 
 MAINTAINER VonC <vonc@laposte.net>
 
