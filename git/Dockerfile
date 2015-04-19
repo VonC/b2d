@@ -22,4 +22,13 @@ RUN  add-apt-repository ppa:git-core/ppa \
      openssl \
      ldap-utils \
      iputils-ping
-RUN adduser --system --group --shell /bin/sh git
+RUN adduser --system --group --shell /bin/sh git \
+ && mkdir /home/git/bin
+COPY profile /home/git/.profile
+COPY bashrc /home/git/.bashrc
+COPY bash_aliases /home/git/.bash_aliases
+RUN chown -R git:git /home/git
+ENV PATH="$PATH:/home/git/bin"
+WORKDIR /home/git
+COPY bash_aliases /root/.bash_aliases
+ENTRYPOINT bash -l

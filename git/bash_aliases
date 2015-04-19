@@ -1,0 +1,2 @@
+alias l='ls -alrt'
+alias sugit='su --shell /bin/bash git'
