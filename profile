@@ -50,4 +50,4 @@ alias dr='docker run -it --rm'
 alias dpsa='docker ps -a'
 alias din='docker inspect'
 
-alias dc='docker run -i -t -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`:`pwd` -w `pwd` docker-compose'
+alias dc='docker run --rm -i -t -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`:`pwd` -w `pwd` docker-compose'
