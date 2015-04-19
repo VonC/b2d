@@ -10,8 +10,10 @@ RUN git clone https://github.com/apache/httpd.git -b 2.4.10 --depth=1 /usr/local
 WORKDIR /usr/local/src/httpd-2.4.10
 RUN git clone https://github.com/apache/apr.git -b 1.5.1 --depth=1 srclib/apr
 RUN git clone https://github.com/apache/apr-util.git -b 1.5.4 --depth=1 srclib/apr-util
-RUN curl https://raw.githubusercontent.com/VonC/compileEverything/master/apache/mod_authn_core.c.patch -o /usr/local/src/mod_authn_core.c.patch
-RUN curl https://raw.githubusercontent.com/VonC/compileEverything/master/apache/mod_auth_form.c.patch -o /usr/local/src/mod_auth_form.c.patch
+COPY mod_authn_core.c.patch /usr/local/src/mod_authn_core.c.patch
+COPY mod_auth_form.c.patch /usr/local/src/mod_auth_form.c.patch
+# RUN curl https://raw.githubusercontent.com/VonC/compileEverything/master/apache/mod_authn_core.c.patch -o /usr/local/src/mod_authn_core.c.patch
+# RUN curl https://raw.githubusercontent.com/VonC/compileEverything/master/apache/mod_auth_form.c.patch -o /usr/local/src/mod_auth_form.c.patch
 RUN patch -r - -N modules/aaa/mod_authn_core.c < ../mod_authn_core.c.patch ; true
 RUN patch -r - -N modules/aaa/mod_auth_form.c < ../mod_auth_form.c.patch ; true
 RUN ./buildconf
