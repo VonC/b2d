@@ -1,14 +1,15 @@
 #! /bin/bash
 
-SLAPD="${H}/openldap/slapd -s0"
-CONF1="${H}/openldap/slapd.1.conf"
+gldap=$HOME/git/openldap
+SLAPD="$(which slapd) -s0"
+CONF1="${gldap}/slapd.1.conf"
 LVL=0x4105
-URI1="ldap://localhost:@PORT_LDAP_TEST@/ ldap://@FQN@:@PORT_LDAP_TEST@/"
-LOG1="${H}/openldap/slapd.1.log"
-PIDFILE="${H}/openldap/slapd.1.pid"
-ARGSFILE="${H}/openldap/slapd.1.args"
+URI1="ldap://localhost:$PORT_LDAP_TEST/ ldap://$(hostname):$PORT_LDAP_TEST/"
+LOG1="${gldap}/slapd.1.log"
+PIDFILE="${gldap}/slapd.1.pid"
+ARGSFILE="${gldap}/slapd.1.args"
 
-PORT1=@PORT_LDAP_TEST@
+PORT1=$PORT_LDAP_TEST
 LOCALHOST=localhost
 TOOLARGS="-x $LDAP_TOOLARGS"
 TOOLPROTO="-P 3"
