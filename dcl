@@ -8,7 +8,13 @@ for i in $(docker ps -qa --no-trunc --filter "status=exited"); do
   fi
   if [[ $nbvol -gt 0 ]]; then
     if [[ "$1" != "-v" ]]; then
-      echo "preserve $i ($nbvol volumes)"
+      if [[ "$(docker inspect -f '{{ .Config.Image }}' $i)" == "docker-compose" ]]; then
+        echo "remove $i with $nbvol volumes (docker-compose)"
+        res=$(docker rm -v $i)
+      else
+        echo "preserve $i ($nbvol volumes)"
+        # docker inspect -f '{{ range $key, $value := .Volumes }}{{ $key }}{{ $value }}{{ end }}' $i
+      fi
     fi
     if [[ "$1" == "-v" ]]; then
       echo "rm -v $i ($nbvol volumes cleaned)"
