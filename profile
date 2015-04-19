@@ -46,6 +46,7 @@ alias drmae='docker rm $(docker ps -qa --no-trunc --filter "status=exited")'
 alias drmiad='docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'
 alias dr='docker run'
 alias dritrm='docker run -it --rm'
+alias dr='docker run -it --rm'
 alias dpsa='docker ps -a'
 alias din='docker inspect'
 
