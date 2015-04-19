@@ -1,0 +1,4 @@
+apache:
+  build: apache
+  ports:
+   - "80:80"
