@@ -9,7 +9,13 @@ MAINTAINER VonC <vonc@laposte.net>
 RUN  apt-get -yq update \
   && apt-get -yqq install slapd
 
+# curl https://raw.githubusercontent.com/VonC/compileEverything/master/openldap/slapdd.tpl -o $HOME/b2d/openldap/slapdd
 COPY slapdd /home/git/bin/slapdd
+RUN mkdir -p /home/git/openldap
+# curl https://raw.githubusercontent.com/VonC/compileEverything/master/openldap/slapd.1.conf.tpl -o $HOME/b2d/openldap/slapd.1.conf
+COPY slapd.1.conf /home/git/openldap/slapd.1.conf
 RUN chown -R git:git /home/git
 USER git
 WORKDIR /home/git
+
+ENV PORT_LDAP_TEST 9000
