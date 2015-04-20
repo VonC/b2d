@@ -1,4 +1,4 @@
 #! /bin/sh
 
-docker build -t gitolite $HOME/b2d/gitolite
+docker build -t gitolite $HOME/b2d/gitolite || exit $?
 docker build -t gitolite.repos -f $HOME/b2d/gitolite/Dockerfile.repos $HOME/b2d/gitolite
