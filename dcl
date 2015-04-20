@@ -1,5 +1,10 @@
 #!/bin/sh
 
+check_volumes() {
+	id="${1}"
+	if [[ -e "${HOME}/b2d/gcl" ]]; then gcl ${id}; fi
+}
+
 for i in $(docker ps -qa --no-trunc --filter "status=exited"); do
   nbvol=$(docker inspect -f '{{ .Volumes | len }}' $i)
   if [[ $nbvol == 0 ]]; then
@@ -12,6 +17,7 @@ for i in $(docker ps -qa --no-trunc --filter "status=exited"); do
         echo "remove $i with $nbvol volumes (docker-compose)"
         res=$(docker rm -v $i)
       else
+        check_volumes $i
         echo "preserve $i ($nbvol volumes)"
         # docker inspect -f '{{ range $key, $value := .Volumes }}{{ $key }}{{ $value }}{{ end }}' $i
       fi
