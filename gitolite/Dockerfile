@@ -9,7 +9,7 @@ MAINTAINER VonC <vonc@laposte.net>
 RUN mkdir /home/git/gitolite ; chown -R git:git /home/git/gitolite
 
 USER git
-RUN cd /home/git; git clone git://github.com/sitaramc/gitolite github;
+RUN cd /home/git; git clone https://github.com/sitaramc/gitolite github;
 RUN mkdir -p /home/git/.gitolite/logs
 # RUN git -C /home/git/github checkout v3.6.2
 RUN /home/git/github/install -to /home/git/gitolite
