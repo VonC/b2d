@@ -8,6 +8,24 @@ import "log"
 import "os/exec"
 import "strings"
 
+type marker struct {
+	name string
+	path string
+	link *volume
+}
+
+type volume struct {
+	dir  string
+	mark *marker
+}
+
+type container struct {
+	name    string
+	id      string
+	stopped bool
+	volumes []volume
+}
+
 func mustcmd(acmd string) string {
 	fmt.Println(acmd)
 	out, err := cmd(acmd)
@@ -19,7 +37,13 @@ func mustcmd(acmd string) string {
 
 func cmd(cmd string) (string, error) {
 	out, err := exec.Command("sh", "-c", cmd).Output()
-	return string(out), err
+	return strings.TrimSpace(string(out)), err
+}
+
+func readVolumes() {
+	out := mustcmd("sudo ls -alrt /mnt/sda1/var/lib/docker/vfs/dir")
+	vollines := strings.Split(out, "\n")
+	fmt.Println(vollines)
 }
 
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
@@ -42,12 +66,18 @@ func main() {
 			vfs := vols[1]
 			fmt.Printf("      volume %d: '%v'=>'%v'\n", i, path, vfs)
 			if strings.Contains(vfs, "/var/lib/docker/vfs/dir/") {
+				vfs2, _ := cmd(fmt.Sprintf("sudo readlink %s 2> /dev/null", vfs))
+				vfs2 = strings.TrimSpace(vfs2)
+				fmt.Printf("      vfs2 '%s' from sudo readlink %s\n", vfs2, vfs)
 				link := "." + name + "###" + strings.Replace(path, "/", ",#,", -1)
 				fmt.Printf("      link '%s'\n", link)
-				ls, _ := cmd(fmt.Sprintf("sudo ls /var/lib/docker/vfs/dir/%s 2> /dev/null", link))
+				ls, _ := cmd(fmt.Sprintf("sudo readlink /var/lib/docker/vfs/dir/%s 2> /dev/null", link))
 				ls = strings.TrimSpace(ls)
 				fmt.Printf("      ls link '%s'\n", ls)
 				dir := filepath.Base(vfs)
+				if vfs2 != "" {
+					dir = filepath.Base(vfs2)
+				}
 				if ls == "" {
 					fmt.Printf("      ln '%s' to '%s'\n", link, dir)
 					mustcmd(fmt.Sprintf("sudo ln -s %s /var/lib/docker/vfs/dir/%s", dir, link))
