@@ -9,6 +9,7 @@ MAINTAINER VonC <vonc@laposte.net>
 RUN mkdir /home/git/repositories ; chown -R git:git /home/git/repositories
 
 VOLUME /home/git/repositories
+VOLUME /home/git/repositories2
 
 ENTRYPOINT ["/bin/sh", "-c"]
 CMD ["echo","Data Volume Container for gitolite repos"]

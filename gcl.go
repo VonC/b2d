@@ -5,7 +5,10 @@ import "fmt"
 import "path/filepath"
 import "log"
 
-import "os/exec"
+import (
+	"os"
+	"os/exec"
+)
 import "strings"
 
 type marker struct {
@@ -41,13 +44,24 @@ func cmd(cmd string) (string, error) {
 }
 
 func readVolumes() {
-	out := mustcmd("sudo ls -alrt /mnt/sda1/var/lib/docker/vfs/dir")
+	out := mustcmd("sudo ls -1 /mnt/sda1/var/lib/docker/vfs/dir")
 	vollines := strings.Split(out, "\n")
 	fmt.Println(vollines)
+	for _, volline := range vollines {
+		dir := volline
+		dirlink, err := cmd(fmt.Sprintf("sudo readlink /mnt/sda1/var/lib/docker/vfs/dir/%s", dir))
+		fmt.Printf("---\ndir: '%s'\ndlk: '%s'\nerr='%v'", dir, dirlink, err)
+		if err != nil {
+			fmt.Printf("Invalid dir detected: '%s'\n", dir)
+			mustcmd(fmt.Sprintf("sudo rm /mnt/sda1/var/lib/docker/vfs/dir/%s", dir))
+		}
+	}
 }
 
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
 func main() {
+	readVolumes()
+	os.Exit(0)
 	out := mustcmd("docker ps -qa --no-trunc")
 	containers := strings.Split(out, "\n")
 	containers = containers[:len(containers)-1]
