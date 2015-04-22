@@ -49,11 +49,20 @@ func readVolumes() {
 	fmt.Println(vollines)
 	for _, volline := range vollines {
 		dir := volline
-		dirlink, err := cmd(fmt.Sprintf("sudo readlink /mnt/sda1/var/lib/docker/vfs/dir/%s", dir))
+		fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/", dir)
+		dirlink, err := cmd(fdir)
 		fmt.Printf("---\ndir: '%s'\ndlk: '%s'\nerr='%v'", dir, dirlink, err)
 		if err != nil {
-			fmt.Printf("Invalid dir detected: '%s'\n", dir)
-			mustcmd(fmt.Sprintf("sudo rm /mnt/sda1/var/lib/docker/vfs/dir/%s", dir))
+			finfo, err := os.Stat(fdir)
+			if err != nil {
+				fmt.Printf("Invalid dir detected: '%s' (%s)\n", dir, err)
+			}
+			if finfo.IsDir() {
+				fmt.Printf("dir detected: '%s'\n", dir)
+			} else {
+				fmt.Printf("Invalid dir (file) detected: '%s'\n", dir)
+			}
+			// mustcmd(fmt.Sprintf("sudo rm /mnt/sda1/var/lib/docker/vfs/dir/%s", dir))
 		}
 	}
 }
