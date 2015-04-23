@@ -1,25 +1,55 @@
 package main
 
-import "fmt"
-
-import "path/filepath"
-import "log"
-
 import (
+	"fmt"
+	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"regexp"
+	"strings"
 )
-import "strings"
 
-type marker struct {
-	name string
-	path string
-	link *volume
+type mpath string
+type vdir string
+
+var mpathre = regexp.MustCompile(`^\.(.*)$`)
+var vdirre = regexp.MustCompile(`^[a-f0-9]{64}$`)
+
+func newmpath(mp string) mpath {
+	res := mpathre.FindAllStringSubmatch(mp, -1)
+	mres := mpath("")
+	if res != nil && len(res) == 1 && len(res[0]) == 2 {
+		mres = mpath(res[0][1])
+	}
+	return mres
 }
 
+func newvdir(vd string) vdir {
+	res := vdirre.FindString(vd)
+	vres := vdir("")
+	if res != "" && res == vd {
+		vres = vdir(vd)
+	}
+	return vres
+}
+
+type marker struct {
+	path mpath
+	dir  vdir
+}
+
+var markers = []*marker{}
+
 type volume struct {
-	dir  string
+	dir  vdir
 	mark *marker
+}
+
+var volumes = []*volume{}
+
+func (v *volume) String() string {
+	return "vol '" + string(v.dir) + "'"
 }
 
 type container struct {
@@ -30,7 +60,6 @@ type container struct {
 }
 
 func mustcmd(acmd string) string {
-	fmt.Println(acmd)
 	out, err := cmd(acmd)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("out='%s', err='%s'", out, err))
@@ -39,32 +68,67 @@ func mustcmd(acmd string) string {
 }
 
 func cmd(cmd string) (string, error) {
+	fmt.Println(cmd)
 	out, err := exec.Command("sh", "-c", cmd).Output()
 	return strings.TrimSpace(string(out)), err
 }
 
 func readVolumes() {
-	out := mustcmd("sudo ls -1 /mnt/sda1/var/lib/docker/vfs/dir")
+	out := mustcmd("sudo ls -a1F /mnt/sda1/var/lib/docker/vfs/dir")
 	vollines := strings.Split(out, "\n")
 	fmt.Println(vollines)
 	for _, volline := range vollines {
 		dir := volline
-		fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/", dir)
-		dirlink, err := cmd(fdir)
-		fmt.Printf("---\ndir: '%s'\ndlk: '%s'\nerr='%v'", dir, dirlink, err)
-		if err != nil {
-			finfo, err := os.Stat(fdir)
-			if err != nil {
-				fmt.Printf("Invalid dir detected: '%s' (%s)\n", dir, err)
-			}
-			if finfo.IsDir() {
-				fmt.Printf("dir detected: '%s'\n", dir)
+		if dir == "./" || dir == "../" {
+			continue
+		}
+		if strings.HasSuffix(dir, "@") {
+			dir = dir[:len(dir)-1]
+			fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/%s", dir)
+			mp := newmpath(dir)
+			if mp == "" {
+				fmt.Printf("Invalid marker detected: '%s'\n", dir)
+				mustcmd("sudo rm " + fdir)
 			} else {
-				fmt.Printf("Invalid dir (file) detected: '%s'\n", dir)
+				dirlink, err := cmd("sudo readlink " + fdir)
+				fmt.Printf("---\ndir: '%s'\ndlk: '%s'\nerr='%v'\n", dir, dirlink, err)
+				if err != nil {
+					fmt.Printf("Invalid marker (no readlink) detected: '%s'\n", dir)
+					mustcmd("sudo rm " + fdir)
+				} else {
+					_, err := cmd("sudo ls /mnt/sda1/var/lib/docker/vfs/dir/" + dirlink)
+					if err != nil {
+						fmt.Printf("Invalid marker (readlink no ls) detected: '%s'\n", dir)
+						mustcmd("sudo rm " + fdir)
+					} else {
+						vd := newvdir(dirlink)
+						if vd == "" {
+							fmt.Printf("Invalid marker (readlink no vdir) detected: '%s'\n", dir)
+							mustcmd("sudo rm " + fdir)
+						} else {
+							markers = append(markers, &marker{mp, vd})
+						}
+					}
+				}
 			}
-			// mustcmd(fmt.Sprintf("sudo rm /mnt/sda1/var/lib/docker/vfs/dir/%s", dir))
+		} else if strings.HasSuffix(dir, "/") {
+
+			dir = dir[:len(dir)-1]
+			fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/%s", dir)
+			vd := newvdir(dir)
+			if vd == "" {
+				fmt.Printf("Invalid volume folder detected: '%s'\n", dir)
+				mustcmd("sudo rm " + fdir)
+			} else {
+				volumes = append(volumes, &volume{vd, nil})
+			}
+		} else {
+			fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/%s", dir)
+			fmt.Printf("Invalid file detected: '%s'\n", dir)
+			mustcmd("sudo rm " + fdir)
 		}
 	}
+	fmt.Printf("volumes: %v\nmarkers: %v\n", volumes, markers)
 }
 
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
