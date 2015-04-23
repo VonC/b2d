@@ -170,7 +170,17 @@ func readContainer() {
 						fmt.Printf("Invalid volume folder detected: '%s'\n", vfs)
 						break
 					}
-					cont.volumes = append(cont.volumes, &volume{dir: vd})
+					var newvol *volume
+					for _, volume := range volumes {
+						if string(volume.dir) == string(vd) {
+							newvol = volume
+							break
+						}
+					}
+					if newvol == nil {
+						newvol = &volume{dir: vd}
+					}
+					cont.volumes = append(cont.volumes, newvol)
 				}
 			}
 		}
@@ -200,10 +210,32 @@ func checkContainers() {
 	}
 }
 
+func (c *container) accept(v *volume) bool {
+	// TODO
+	return false
+}
+
+func checkVolumes() {
+	for _, volume := range volumes {
+		orphan := true
+		for _, container := range containers {
+			if container.accept(volume) {
+				orphan = false
+				break
+			}
+		}
+		if orphan {
+			fmt.Printf("Orphan detected, volume '%v'\n", volume)
+			// TODO rm if necessary
+		}
+	}
+}
+
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
 func main() {
 	readVolumes()
 	readContainer()
 	checkContainers()
+	checkVolumes()
 	os.Exit(0)
 }
