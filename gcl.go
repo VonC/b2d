@@ -179,9 +179,31 @@ func readContainer() {
 	fmt.Printf("containers: %v\n", containers)
 }
 
+func (v *volume) accept(m *marker) bool {
+	// TODO
+	return false
+}
+
+func checkContainers() {
+	for _, container := range containers {
+		for _, volume := range container.volumes {
+			if volume.mark == nil {
+				for _, mark := range markers {
+					if volume.accept(mark) {
+						fmt.Printf("Set mark '%s' to volume '%v' of container '%v'\n", mark, volume, container)
+						volume.mark = mark
+						// TODO check if ln is needed
+					}
+				}
+			}
+		}
+	}
+}
+
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
 func main() {
 	readVolumes()
 	readContainer()
+	checkContainers()
 	os.Exit(0)
 }
