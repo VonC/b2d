@@ -89,7 +89,7 @@ func cmd(cmd string) (string, error) {
 func readVolumes() {
 	out := mustcmd("sudo ls -a1F /mnt/sda1/var/lib/docker/vfs/dir")
 	vollines := strings.Split(out, "\n")
-	fmt.Println(vollines)
+	// fmt.Println(vollines)
 	for _, volline := range vollines {
 		dir := volline
 		if dir == "./" || dir == "../" {
@@ -148,17 +148,17 @@ func readContainer() {
 
 	out := mustcmd("docker ps -aq --no-trunc")
 	contlines := strings.Split(out, "\n")
-	fmt.Println(contlines)
+	// fmt.Println(contlines)
 	for _, contline := range contlines {
 		id := contline
 		res := mustcmd("docker inspect -f '{{ .Name }},{{ range $key, $value := .Volumes }}{{ $key }},{{ $value }}##~#{{ end }}' " + id)
-		fmt.Println("res1: '" + res + "'")
+		// fmt.Println("res1: '" + res + "'")
 		name := res[1:strings.Index(res, ",")]
 		cont := &container{name: name, id: id}
 		res = res[strings.Index(res, ",")+1:]
-		fmt.Println("res2: '" + res + "'")
+		// fmt.Println("res2: '" + res + "'")
 		vols := strings.Split(res, "##~#")
-		fmt.Println(vols)
+		// fmt.Println(vols)
 		for _, vol := range vols {
 			elts := strings.Split(vol, ",")
 			if len(elts) == 2 {
