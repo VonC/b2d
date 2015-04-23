@@ -162,13 +162,16 @@ func readContainer() {
 		for _, vol := range vols {
 			elts := strings.Split(vol, ",")
 			if len(elts) == 2 {
-				fmt.Printf("elts: '%v'\n", elts)
-				vd := newvdir(filepath.Base(elts[1]))
-				if vd == "" {
-					fmt.Printf("Invalid volume folder detected: '%s'\n", elts[1])
-					break
+				// fmt.Printf("elts: '%v'\n", elts)
+				vfs := elts[1]
+				if strings.Contains(vfs, "/var/lib/docker/vfs/dir/") {
+					vd := newvdir(filepath.Base(vfs))
+					if vd == "" {
+						fmt.Printf("Invalid volume folder detected: '%s'\n", vfs)
+						break
+					}
+					cont.volumes = append(cont.volumes, &volume{dir: vd})
 				}
-				cont.volumes = append(cont.volumes, &volume{dir: vd})
 			}
 		}
 		containers = append(containers, cont)
