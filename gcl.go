@@ -206,6 +206,10 @@ func checkContainers() {
 					}
 				}
 			}
+			if volume.mark == nil {
+				// TODO check if vfs folder exist.
+				// If it does, make the marker
+			}
 		}
 	}
 }
@@ -226,7 +230,7 @@ func checkVolumes() {
 		}
 		if orphan {
 			fmt.Printf("Orphan detected, volume '%v'\n", volume)
-			// TODO rm if necessary
+			// TODO rm if necessary or at least mv _xxx
 		}
 	}
 }
