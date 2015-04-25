@@ -52,6 +52,7 @@ type marker struct {
 var markers = []*marker{}
 
 type volume struct {
+	path string
 	dir  vdir
 	mark *marker
 }
@@ -143,7 +144,7 @@ func readVolumes() {
 				fmt.Printf("Invalid volume folder detected: '%s'\n", dir)
 				mustcmd("sudo rm " + fdir)
 			} else {
-				volumes = append(volumes, &volume{vd, nil})
+				volumes = append(volumes, &volume{"", vd, nil})
 			}
 		} else {
 			fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/%s", dir)
@@ -173,6 +174,7 @@ func readContainer() {
 			elts := strings.Split(vol, ",")
 			if len(elts) == 2 {
 				// fmt.Printf("elts: '%v'\n", elts)
+				path := elts[0]
 				vfs := elts[1]
 				if strings.Contains(vfs, "/var/lib/docker/vfs/dir/") {
 					vd := newvdir(filepath.Base(vfs))
@@ -184,11 +186,19 @@ func readContainer() {
 					for _, volume := range volumes {
 						if string(volume.dir) == string(vd) {
 							newvol = volume
+							if newvol.path == "" {
+								newvol.path = path
+							}
+							if newvol.path != path {
+								fmt.Printf("Invalid volume path detected: '%s' (vs. container volume path '%s')\n", newvol.path, path)
+							}
+							// TODO check marker
 							break
 						}
 					}
 					if newvol == nil {
-						newvol = &volume{dir: vd}
+						// TODO make marker
+						newvol = &volume{path: path, dir: vd}
 					}
 					cont.volumes = append(cont.volumes, newvol)
 				}
@@ -210,7 +220,7 @@ func checkContainers() {
 			if volume.mark == nil {
 				for _, mark := range markers {
 					if volume.accept(mark) {
-						fmt.Printf("Set mark '%s' to volume '%v' of container '%v'\n", mark, volume, container)
+						fmt.Printf("Set mark '%v' to volume '%v' of container '%v'\n", mark, volume, container)
 						volume.mark = mark
 						// TODO check if ln is needed
 					}
