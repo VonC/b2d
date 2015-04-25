@@ -31,6 +31,10 @@ func newmpath(mp string) *mpath {
 	return mres
 }
 
+func (mp *mpath) String() string {
+	return "." + mp.name + "###" + strings.Replace(mp.path, "/", ",#,", -1)
+}
+
 func newvdir(vd string) vdir {
 	res := vdirre.FindString(vd)
 	vres := vdir("")
