@@ -10,17 +10,23 @@ import (
 	"strings"
 )
 
-type mpath string
+type mpath struct {
+	name string
+	path string
+}
 type vdir string
 
-var mpathre = regexp.MustCompile(`^\.(.*)$`)
+var mpathre = regexp.MustCompile(`^\.(.*)###(.*)$`)
 var vdirre = regexp.MustCompile(`^[a-f0-9]{64}$`)
 
-func newmpath(mp string) mpath {
+func newmpath(mp string) *mpath {
 	res := mpathre.FindAllStringSubmatch(mp, -1)
-	mres := mpath("")
-	if res != nil && len(res) == 1 && len(res[0]) == 2 {
-		mres = mpath(res[0][1])
+	var mres *mpath
+	if res != nil && len(res) == 1 && len(res[0]) == 3 {
+		name := res[0][1]
+		path := res[0][2]
+		path = strings.Replace(path, ",#,", "/", -1)
+		mres = &mpath{name, path}
 	}
 	return mres
 }
@@ -35,8 +41,8 @@ func newvdir(vd string) vdir {
 }
 
 type marker struct {
-	path mpath
-	dir  vdir
+	mp  *mpath
+	dir vdir
 }
 
 var markers = []*marker{}
@@ -99,7 +105,7 @@ func readVolumes() {
 			dir = dir[:len(dir)-1]
 			fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/%s", dir)
 			mp := newmpath(dir)
-			if mp == "" {
+			if mp == nil {
 				fmt.Printf("Invalid marker detected: '%s'\n", dir)
 				mustcmd("sudo rm " + fdir)
 			} else {
