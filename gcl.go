@@ -193,6 +193,13 @@ func readContainer() {
 								fmt.Printf("Invalid volume path detected: '%s' (vs. container volume path '%s')\n", newvol.path, path)
 							}
 							// TODO check marker
+							if newvol.mark == nil {
+
+							} else {
+								if string(newvol.mark.dir) != string(newvol.dir) {
+
+								}
+							}
 							break
 						}
 					}
