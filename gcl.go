@@ -57,7 +57,9 @@ type volume struct {
 	mark *marker
 }
 
-var volumes = []*volume{}
+type volumes []*volume
+
+var allvolumes = volumes{}
 
 func (v *volume) String() string {
 	return "vol '" + string(v.dir) + "'"
@@ -144,7 +146,7 @@ func readVolumes() {
 				fmt.Printf("Invalid volume folder detected: '%s'\n", dir)
 				mustcmd("sudo rm " + fdir)
 			} else {
-				volumes = append(volumes, &volume{"", vd, nil})
+				allvolumes = append(allvolumes, &volume{"", vd, nil})
 			}
 		} else {
 			fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/%s", dir)
@@ -152,7 +154,7 @@ func readVolumes() {
 			mustcmd("sudo rm " + fdir)
 		}
 	}
-	fmt.Printf("volumes: %v\nmarkers: %v\n", volumes, markers)
+	fmt.Printf("volumes: %v\nmarkers: %v\n", allvolumes, markers)
 }
 
 func readContainer() {
@@ -183,7 +185,7 @@ func readContainer() {
 						break
 					}
 					var newvol *volume
-					for _, volume := range volumes {
+					for _, volume := range allvolumes {
 						if string(volume.dir) == string(vd) {
 							newvol = volume
 							if newvol.path == "" {
@@ -247,7 +249,7 @@ func (c *container) accept(v *volume) bool {
 }
 
 func checkVolumes() {
-	for _, volume := range volumes {
+	for _, volume := range allvolumes {
 		orphan := true
 		for _, container := range containers {
 			if container.accept(volume) {
