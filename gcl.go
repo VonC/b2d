@@ -146,7 +146,7 @@ func readVolumes() {
 				fmt.Printf("Invalid volume folder detected: '%s'\n", dir)
 				mustcmd("sudo rm " + fdir)
 			} else {
-				allvolumes = append(allvolumes, &volume{"", vd, nil})
+				allvolumes = append(allvolumes, &volume{dir: vd})
 			}
 		} else {
 			fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/%s", dir)
