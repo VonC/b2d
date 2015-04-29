@@ -65,6 +65,31 @@ func (v *volume) String() string {
 	return "vol '" + string(v.dir) + "'"
 }
 
+func (vols volumes) getVolume(vd vdir, path string) *volume {
+	var vol *volume
+	for _, volume := range vols {
+		if string(volume.dir) == string(vd) {
+			vol = volume
+			if vol.path == "" {
+				vol.path = path
+			}
+			if vol.path != path {
+				fmt.Printf("Invalid volume path detected: '%s' (vs. container volume path '%s')\n", vol.path, path)
+			}
+			// TODO check marker
+			if vol.mark == nil {
+
+			} else {
+				if string(vol.mark.dir) != string(vol.dir) {
+
+				}
+			}
+			break
+		}
+	}
+	return vol
+}
+
 type container struct {
 	name    string
 	id      string

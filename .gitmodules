@@ -1,3 +1,4 @@
 [submodule "compose"]
 	path = compose
 	url = https://github.com/docker/compose
+	branch = master
