@@ -49,7 +49,27 @@ type marker struct {
 	dir vdir
 }
 
-var markers = []*marker{}
+type markers []*marker
+
+var allmarkers = markers{}
+
+func (marks markers) getMarker(name string, path string, dir vdir) *marker {
+	var mark *marker
+	for _, marker := range marks {
+		if marker.mp.name == name && marker.mp.path == path {
+			mark = marker
+			break
+		}
+	}
+	if mark == nil {
+		mark = &marker{mp: &mpath{name: name, path: path}, dir: dir}
+	}
+	if mark.dir != dir {
+		// TODO: move dir and ln -s mark.dir dir
+		fmt.Printf("Mark container named '%s' for path '%s' as link to '%s' (from '%s')\n", name, path, mark.dir, dir)
+	}
+	return mark
+}
 
 type volume struct {
 	path string
@@ -65,7 +85,7 @@ func (v *volume) String() string {
 	return "vol '" + string(v.dir) + "'"
 }
 
-func (vols volumes) getVolume(vd vdir, path string) *volume {
+func (vols volumes) getVolume(vd vdir, path string, name string) *volume {
 	var vol *volume
 	for _, volume := range vols {
 		if string(volume.dir) == string(vd) {
@@ -78,11 +98,7 @@ func (vols volumes) getVolume(vd vdir, path string) *volume {
 			}
 			// TODO check marker
 			if vol.mark == nil {
-
-			} else {
-				if string(vol.mark.dir) != string(vol.dir) {
-
-				}
+				vol.mark = allmarkers.getMarker(name, vol.path, vol.dir)
 			}
 			break
 		}
@@ -157,7 +173,7 @@ func readVolumes() {
 							fmt.Printf("Invalid marker (readlink no vdir) detected: '%s'\n", dir)
 							mustcmd("sudo rm " + fdir)
 						} else {
-							markers = append(markers, &marker{mp, vd})
+							allmarkers = append(allmarkers, &marker{mp, vd})
 						}
 					}
 				}
@@ -179,7 +195,7 @@ func readVolumes() {
 			mustcmd("sudo rm " + fdir)
 		}
 	}
-	fmt.Printf("volumes: %v\nmarkers: %v\n", allvolumes, markers)
+	fmt.Printf("volumes: %v\nmarkers: %v\n", allvolumes, allmarkers)
 }
 
 func readContainer() {
@@ -210,6 +226,7 @@ func readContainer() {
 						break
 					}
 					var newvol *volume
+					// TODO uses allvolumes.getVolume here
 					for _, volume := range allvolumes {
 						if string(volume.dir) == string(vd) {
 							newvol = volume
@@ -252,7 +269,7 @@ func checkContainers() {
 	for _, container := range containers {
 		for _, volume := range container.volumes {
 			if volume.mark == nil {
-				for _, mark := range markers {
+				for _, mark := range allmarkers {
 					if volume.accept(mark) {
 						fmt.Printf("Set mark '%v' to volume '%v' of container '%v'\n", mark, volume, container)
 						volume.mark = mark
