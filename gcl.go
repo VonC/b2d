@@ -68,6 +68,7 @@ func (marks markers) getMarker(name string, path string, dir vdir) *marker {
 		// TODO: move dir and ln -s mark.dir dir
 		fmt.Printf("Mark container named '%s' for path '%s' as link to '%s' (from '%s')\n", name, path, mark.dir, dir)
 	}
+	// TODO: check that link exists
 	return mark
 }
 
@@ -96,12 +97,15 @@ func (vols volumes) getVolume(vd vdir, path string, name string) *volume {
 			if vol.path != path {
 				fmt.Printf("Invalid volume path detected: '%s' (vs. container volume path '%s')\n", vol.path, path)
 			}
-			// TODO check marker
 			if vol.mark == nil {
 				vol.mark = allmarkers.getMarker(name, vol.path, vol.dir)
 			}
 			break
 		}
+	}
+	if vol == nil {
+		// TODO make marker
+		vol = &volume{path: path, dir: vd}
 	}
 	return vol
 }
@@ -225,32 +229,7 @@ func readContainer() {
 						fmt.Printf("Invalid volume folder detected: '%s'\n", vfs)
 						break
 					}
-					var newvol *volume
-					// TODO uses allvolumes.getVolume here
-					for _, volume := range allvolumes {
-						if string(volume.dir) == string(vd) {
-							newvol = volume
-							if newvol.path == "" {
-								newvol.path = path
-							}
-							if newvol.path != path {
-								fmt.Printf("Invalid volume path detected: '%s' (vs. container volume path '%s')\n", newvol.path, path)
-							}
-							// TODO check marker
-							if newvol.mark == nil {
-
-							} else {
-								if string(newvol.mark.dir) != string(newvol.dir) {
-
-								}
-							}
-							break
-						}
-					}
-					if newvol == nil {
-						// TODO make marker
-						newvol = &volume{path: path, dir: vd}
-					}
+					newvol := allvolumes.getVolume(vd, path, name)
 					cont.volumes = append(cont.volumes, newvol)
 				}
 			}
