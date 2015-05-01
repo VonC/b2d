@@ -287,9 +287,14 @@ func checkVolumes() {
 
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
 func main() {
+	fmt.Println("### 1/4 readVolumes     ###")
 	readVolumes()
+	fmt.Println("### 2/4 readContainer   ###")
 	readContainer()
+	fmt.Println("### 3/4 checkContainers ###")
 	checkContainers()
+	fmt.Println("### 4/4 checkVolumes    ###")
 	checkVolumes()
+	fmt.Println("---      All done       ---")
 	os.Exit(0)
 }
