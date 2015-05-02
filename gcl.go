@@ -86,7 +86,6 @@ func (marks markers) getMarker(name string, path string, dir vdir) *marker {
 }
 
 type volume struct {
-	path string
 	dir  vdir
 	mark *marker
 }
@@ -96,7 +95,7 @@ type volumes []*volume
 var allvolumes = volumes{}
 
 func (v *volume) String() string {
-	return "vol '" + string(v.dir) + "'"
+	return fmt.Sprintf("vol '%s'<%v>", v.dir.trunc(), v.mark)
 }
 
 func (vols volumes) getVolume(vd vdir, path string, name string) *volume {
@@ -104,21 +103,21 @@ func (vols volumes) getVolume(vd vdir, path string, name string) *volume {
 	for _, volume := range vols {
 		if string(volume.dir) == string(vd) {
 			vol = volume
-			if vol.path == "" {
-				vol.path = path
-			}
-			if vol.path != path {
-				fmt.Printf("Invalid volume path detected: '%s' (vs. container volume path '%s')\n", vol.path, path)
+			if vol.mark == nil {
+				vol.mark = allmarkers.getMarker(name, path, vol.dir)
 			}
 			if vol.mark == nil {
-				vol.mark = allmarkers.getMarker(name, vol.path, vol.dir)
+				return nil
 			}
 			break
 		}
 	}
 	if vol == nil {
-		// TODO make marker
-		vol = &volume{path: path, dir: vd}
+		vol = &volume{dir: vd}
+		vol.mark = allmarkers.getMarker(name, path, vol.dir)
+		if vol.mark == nil {
+			return nil
+		}
 	}
 	return vol
 }
