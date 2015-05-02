@@ -14,7 +14,16 @@ type mpath struct {
 	name string
 	path string
 }
+
 type vdir string
+
+func (vd vdir) trunc() string {
+	s := string(vd)
+	if len(s) > 0 {
+		return s[:7]
+	}
+	return ""
+}
 
 var mpathre = regexp.MustCompile(`^\.(.*)###(.*)$`)
 var vdirre = regexp.MustCompile(`^[a-f0-9]{64}$`)
@@ -47,6 +56,10 @@ func newvdir(vd string) vdir {
 type marker struct {
 	mp  *mpath
 	dir vdir
+}
+
+func (mk *marker) String() string {
+	return fmt.Sprintf("marker '%s'<%s->%s>", mk.dir.trunc(), mk.mp.name, mk.mp.path)
 }
 
 type markers []*marker
