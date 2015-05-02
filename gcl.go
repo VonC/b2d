@@ -69,9 +69,14 @@ var allmarkers = markers{}
 func (marks markers) getMarker(name string, path string, dir vdir) *marker {
 	var mark *marker
 	for _, marker := range marks {
-		if marker.mp.name == name && marker.mp.path == path {
-			mark = marker
-			break
+		if marker.mp.name == name {
+			if marker.mp.path == path {
+				mark = marker
+				break
+			} else {
+				fmt.Printf("Invalid marker path detected: '%s' (vs. container volume path '%s')\n", marker.mp.path, path)
+				return nil
+			}
 		}
 	}
 	if mark == nil {
