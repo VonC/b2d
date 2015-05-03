@@ -256,6 +256,7 @@ func readContainer() {
 	fmt.Printf("containers: %v\n", containers)
 }
 
+// TODO check if check steps are still necessary
 func (v *volume) accept(m *marker) bool {
 	// TODO
 	return false
