@@ -262,26 +262,6 @@ func (v *volume) accept(m *marker) bool {
 	return false
 }
 
-func checkContainers() {
-	for _, container := range containers {
-		for _, volume := range container.volumes {
-			if volume.mark == nil {
-				for _, mark := range allmarkers {
-					if volume.accept(mark) {
-						fmt.Printf("Set mark '%v' to volume '%v' of container '%v'\n", mark, volume, container)
-						volume.mark = mark
-						// TODO check if ln is needed
-					}
-				}
-			}
-			if volume.mark == nil {
-				// TODO check if vfs folder exist.
-				// If it does, make the marker
-			}
-		}
-	}
-}
-
 func (c *container) accept(v *volume) bool {
 	// TODO
 	return false
@@ -305,13 +285,11 @@ func checkVolumes() {
 
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
 func main() {
-	fmt.Println("### 1/4 readVolumes     ###")
+	fmt.Println("### 1/3 readVolumes     ###")
 	readVolumes()
-	fmt.Println("### 2/4 readContainer   ###")
+	fmt.Println("### 2/3 readContainer   ###")
 	readContainer()
-	fmt.Println("### 3/4 checkContainers ###")
-	checkContainers()
-	fmt.Println("### 4/4 checkVolumes    ###")
+	fmt.Println("### 3/3 checkVolumes    ###")
 	checkVolumes()
 	fmt.Println("---      All done       ---")
 	os.Exit(0)
