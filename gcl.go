@@ -82,11 +82,17 @@ func (marks markers) getMarker(name string, path string, dir vdir) *marker {
 	if mark == nil {
 		mark = &marker{mp: &mpath{name: name, path: path}, dir: dir}
 	}
+	ldir := mark.dir
 	if mark.dir != dir {
-		// TODO: move dir and ln -s mark.dir dir
+		// move dir and ln -s mark.dir dir
+		ldir = dir
+		cmd(fmt.Sprintf("sudo move /mnt/sda1/var/lib/docker/vfs/dir/%s /mnt/sda1/var/lib/docker/vfs/dir/_%s", dir, dir))
 		fmt.Printf("Mark container named '%s' for path '%s' as link to '%s' (from '%s')\n", name, path, mark.dir, dir)
 	}
-	// TODO: check that link exists
+	_, err := cmd(fmt.Sprintf("sudo ls -1L /mnt/sda1/var/lib/docker/vfs/dir/%s", mark.mp.String()))
+	if err != nil {
+		mustcmd(fmt.Sprintf("sudo ln -s %s /mnt/sda1/var/lib/docker/vfs/dir/%s", ldir, mark.mp.String()))
+	}
 	return mark
 }
 
