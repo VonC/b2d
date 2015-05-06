@@ -258,43 +258,19 @@ func readContainer() {
 			}
 		}
 		containers = append(containers, cont)
+		if len(cont.volumes) == 0 {
+			fmt.Printf("Orphan container detected: '%s'\n", cont)
+		}
 	}
 	fmt.Printf("containers: %v\n", containers)
 }
 
-func (c *container) accept(v *volume) bool {
-	for _, vol := range c.volumes {
-		if vol == v {
-			return true
-		}
-	}
-	return false
-}
-
-func checkVolumes() {
-	for _, volume := range allvolumes {
-		orphan := true
-		for _, container := range containers {
-			if container.accept(volume) {
-				orphan = false
-				break
-			}
-		}
-		if orphan {
-			fmt.Printf("Orphan detected, volume '%v'\n", volume)
-			// TODO rm if necessary or at least mv _xxx
-		}
-	}
-}
-
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
 func main() {
-	fmt.Println("### 1/3 readVolumes     ###")
+	fmt.Println("### 1/2 readVolumes     ###")
 	readVolumes()
-	fmt.Println("### 2/3 readContainer   ###")
+	fmt.Println("### 2/2 readContainer   ###")
 	readContainer()
-	fmt.Println("### 3/3 checkVolumes    ###")
-	checkVolumes()
 	fmt.Println("---      All done       ---")
 	os.Exit(0)
 }
