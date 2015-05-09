@@ -3,11 +3,21 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"testing"
 )
 
 func testcmd(cmd string) (string, error) {
-	return fmt.Sprintf("test '%s'", cmd), errors.New("unknown command")
+	switch {
+	case cmd == "sudo ls -a1F /mnt/sda1/var/lib/docker/vfs/dir":
+		return "", nil
+	case cmd == "docker ps -aq --no-trunc":
+		return "", nil
+	case strings.HasPrefix(cmd, "docker inspect -f '{{ .Name }},{{ range $key, $value := .Volumes }}{{ $key }},{{ $value }}##~#{{ end }}' "):
+		return "", nil
+	default:
+		return fmt.Sprintf("test '%s'", cmd), errors.New("unknown command")
+	}
 }
 
 type volspecs []string
