@@ -100,8 +100,9 @@ func (marks markers) getMarker(name string, path string, dir vdir) *marker {
 }
 
 type volume struct {
-	dir  vdir
-	mark *marker
+	dir      vdir
+	mark     *marker
+	orphaned bool
 }
 
 type volumes []*volume
@@ -123,15 +124,17 @@ func (vols volumes) getVolume(vd vdir, path string, name string) *volume {
 			if vol.mark == nil {
 				return nil
 			}
+			vol.orphaned = false
 			break
 		}
 	}
 	if vol == nil {
-		vol = &volume{dir: vd}
+		vol = &volume{dir: vd, orphaned: true}
 		vol.mark = allmarkers.getMarker(name, path, vol.dir)
 		if vol.mark == nil {
 			return nil
 		}
+		vol.orphaned = false
 	}
 	return vol
 }
@@ -220,7 +223,7 @@ func readVolumes() {
 				fmt.Printf("Invalid volume folder detected: '%s'\n", dir)
 				mustcmd("sudo rm " + fdir)
 			} else {
-				allvolumes = append(allvolumes, &volume{dir: vd})
+				allvolumes = append(allvolumes, &volume{dir: vd, orphaned: true})
 			}
 		} else {
 			fdir := fmt.Sprintf("/mnt/sda1/var/lib/docker/vfs/dir/%s", dir)
@@ -276,6 +279,11 @@ func readContainer() {
 func main() {
 	readVolumes()
 	readContainer()
+	for _, vol := range allvolumes {
+		if vol.orphaned {
+			orphanedVolumes = append(orphanedVolumes, vol)
+		}
+	}
 }
 
 // Containers returns all detected containers
