@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
@@ -279,6 +278,4 @@ func main() {
 	readVolumes()
 	fmt.Println("### 2/2 readContainer   ###")
 	readContainer()
-	fmt.Println("---      All done       ---")
-	os.Exit(0)
 }
