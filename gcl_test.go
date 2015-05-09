@@ -28,16 +28,36 @@ type Test struct {
 }
 
 var tests = []Test{
-	Test{"empty vfs", []string{}, []int{0}},
+	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}},
+	Test{"two volumes", []string{"a/", "b/"}, []int{0, 0, 2, 2, 0}},
 }
+var currenttest Test
 
 // TestContainers test different vfs scenarios
 func TestContainers(t *testing.T) {
 	cmd = testcmd
 	for i, test := range tests {
+		currenttest = test
 		main()
-		if len(containers) != test.res[0] {
-			t.Errorf("Test %d: '%s' expected '%d' containers, got '%d'", i, test.title, test.res[0], len(containers))
+		tc := Containers()
+		toc := OrphanedContainers()
+		tv := Volumes()
+		tov := OrphanedVolumes()
+		tm := Markers()
+		if len(tc) != test.res[0] {
+			t.Errorf("Test %d: '%s' expected '%d' containers, got '%d'", i, test.title, test.res[0], len(tc))
+		}
+		if len(toc) != test.res[1] {
+			t.Errorf("Test %d: '%s' expected '%d' orphaned containers, got '%d'", i, test.title, test.res[1], len(toc))
+		}
+		if len(tv) != test.res[2] {
+			t.Errorf("Test %d: '%s' expected '%d' volumles, got '%d'", i, test.title, test.res[2], len(tv))
+		}
+		if len(tov) != test.res[3] {
+			t.Errorf("Test %d: '%s' expected '%d' orphaned volumes, got '%d'", i, test.title, test.res[3], len(tov))
+		}
+		if len(tm) != test.res[4] {
+			t.Errorf("Test %d: '%s' expected '%d' markers, got '%d'", i, test.title, test.res[4], len(tm))
 		}
 	}
 }
