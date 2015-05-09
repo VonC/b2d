@@ -165,7 +165,11 @@ func mustcmd(acmd string) string {
 	return string(out)
 }
 
-func cmd(cmd string) (string, error) {
+type fcmd func(cmd string) (string, error)
+
+var cmd = execcmd
+
+func execcmd(cmd string) (string, error) {
 	fmt.Println(cmd)
 	out, err := exec.Command("sh", "-c", cmd).Output()
 	return strings.TrimSpace(string(out)), err

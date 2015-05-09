@@ -1,8 +1,14 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"testing"
 )
+
+func testcmd(cmd string) (string, error) {
+	return fmt.Sprintf("test '%s'", cmd), errors.New("unknown command")
+}
 
 type volspecs []string
 type Test struct {
@@ -17,6 +23,7 @@ var tests = []Test{
 
 // TestContainers test different vfs scenarios
 func TestContainers(t *testing.T) {
+	cmd = testcmd
 	for i, test := range tests {
 		main()
 		if len(containers) != test.res[0] {
