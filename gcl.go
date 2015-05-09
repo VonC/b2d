@@ -179,7 +179,7 @@ func readVolumes() {
 	vollines := strings.Split(out, "\n")
 	for _, volline := range vollines {
 		dir := volline
-		if dir == "./" || dir == "../" {
+		if dir == "./" || dir == "../" || dir == "" {
 			continue
 		}
 		if strings.HasSuffix(dir, "@") {
@@ -236,6 +236,9 @@ func readContainer() {
 	contlines := strings.Split(out, "\n")
 	// fmt.Println(contlines)
 	for _, contline := range contlines {
+		if contline == "" {
+			continue
+		}
 		id := contline
 		res := mustcmd("docker inspect -f '{{ .Name }},{{ range $key, $value := .Volumes }}{{ $key }},{{ $value }}##~#{{ end }}' " + id)
 		// fmt.Println("res1: '" + res + "'")
