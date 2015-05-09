@@ -177,7 +177,6 @@ func execcmd(cmd string) (string, error) {
 func readVolumes() {
 	out := mustcmd("sudo ls -a1F /mnt/sda1/var/lib/docker/vfs/dir")
 	vollines := strings.Split(out, "\n")
-	// fmt.Println(vollines)
 	for _, volline := range vollines {
 		dir := volline
 		if dir == "./" || dir == "../" {
@@ -229,7 +228,6 @@ func readVolumes() {
 			mustcmd("sudo rm " + fdir)
 		}
 	}
-	fmt.Printf("volumes: %v\nmarkers: %v\n", allvolumes, allmarkers)
 }
 
 func readContainer() {
@@ -269,13 +267,10 @@ func readContainer() {
 			fmt.Printf("Orphan container detected: '%s'\n", cont)
 		}
 	}
-	fmt.Printf("containers: %v\n", containers)
 }
 
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
 func main() {
-	fmt.Println("### 1/2 readVolumes     ###")
 	readVolumes()
-	fmt.Println("### 2/2 readContainer   ###")
 	readContainer()
 }
