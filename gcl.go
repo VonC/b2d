@@ -140,10 +140,11 @@ func (vols volumes) getVolume(vd vdir, path string, name string) *volume {
 }
 
 type container struct {
-	name    string
-	id      string
-	stopped bool
-	volumes []*volume
+	name     string
+	id       string
+	stopped  bool
+	orphaned bool
+	volumes  []*volume
 }
 
 func (c *container) trunc() string {
@@ -264,13 +265,18 @@ func readContainer() {
 						break
 					}
 					newvol := allvolumes.getVolume(vd, path, name)
-					cont.volumes = append(cont.volumes, newvol)
+					if newvol != nil {
+						cont.volumes = append(cont.volumes, newvol)
+					} else {
+						cont.orphaned = true
+					}
+
 				}
 			}
 		}
 		containers = append(containers, cont)
-		if len(cont.volumes) == 0 {
-			fmt.Printf("Orphan container detected: '%s'\n", cont)
+		if cont.orphaned {
+			orphanedContainers = append(orphanedContainers, cont)
 		}
 	}
 }
