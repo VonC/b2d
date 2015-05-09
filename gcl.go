@@ -277,3 +277,36 @@ func main() {
 	readVolumes()
 	readContainer()
 }
+
+// Containers returns all detected containers
+func Containers() []*container {
+	return containers
+}
+
+var orphanedContainers = []*container{}
+
+// OrphanedContainers returns all detected containers with missing volumes
+// They are not orphaned if they have no volumes
+// They are orphaned if they have volumes which don't exist
+func OrphanedContainers() []*container {
+	return orphanedContainers
+}
+
+// Volumes returns all detected volumes
+func Volumes() volumes {
+	return allvolumes
+}
+
+var orphanedVolumes = volumes{}
+
+// OrphanedVolumes returns all detected volumes with missing containers
+// They are orphaned because no container reference them directly
+// or through a marker
+func OrphanedVolumes() volumes {
+	return orphanedVolumes
+}
+
+// Markers returns all detected or created markers
+func Markers() markers {
+	return allmarkers
+}
