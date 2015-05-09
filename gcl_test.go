@@ -10,7 +10,7 @@ import (
 func testcmd(cmd string) (string, error) {
 	switch {
 	case cmd == "sudo ls -a1F /mnt/sda1/var/lib/docker/vfs/dir":
-		return "", nil
+		return currenttest.vs.ls(), nil
 	case cmd == "docker ps -aq --no-trunc":
 		return "", nil
 	case strings.HasPrefix(cmd, "docker inspect -f '{{ .Name }},{{ range $key, $value := .Volumes }}{{ $key }},{{ $value }}##~#{{ end }}' "):
@@ -25,6 +25,21 @@ type Test struct {
 	title string
 	vs    volspecs
 	res   []int
+}
+
+func (vs volspecs) ls() string {
+	if len(vs) == 0 {
+		return ""
+	}
+	res := ""
+	for i, spec := range vs {
+		if strings.HasSuffix(spec, "/") {
+			spec = spec[:len(spec)-1]
+			res = res + spec + strings.Repeat(fmt.Sprintf("%d", i), 64-len(spec)) + "/\n"
+		}
+	}
+	fmt.Println(len(res))
+	return res
 }
 
 var tests = []Test{
