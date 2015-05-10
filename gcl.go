@@ -158,7 +158,9 @@ func (c *container) String() string {
 	return "cnt '" + c.name + "' (" + c.trunc() + ")" + fmt.Sprintf("[%v] - %d vol", c.stopped, len(c.volumes))
 }
 
-var containers = []*container{}
+type containers []*container
+
+var allcontainers = containers{}
 
 func mustcmd(acmd string) string {
 	out, err := cmd(acmd)
@@ -274,7 +276,7 @@ func readContainer() {
 				}
 			}
 		}
-		containers = append(containers, cont)
+		allcontainers = append(allcontainers, cont)
 		if cont.orphaned {
 			orphanedContainers = append(orphanedContainers, cont)
 		}
@@ -294,7 +296,7 @@ func main() {
 
 // Containers returns all detected containers
 func Containers() []*container {
-	return containers
+	return allcontainers
 }
 
 var orphanedContainers = []*container{}
