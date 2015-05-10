@@ -263,7 +263,7 @@ func readContainer() {
 				if strings.Contains(vfs, "/var/lib/docker/vfs/dir/") {
 					vd := newvdir(filepath.Base(vfs))
 					if vd == "" {
-						fmt.Printf("Invalid volume folder detected: '%s'\n", vfs)
+						fmt.Printf("Invalid container volume folder detected: '%s'\n", vfs)
 						break
 					}
 					newvol := allvolumes.getVolume(vd, path, name)
