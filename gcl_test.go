@@ -38,13 +38,13 @@ func (vs volspecs) ls() string {
 			res = res + spec + strings.Repeat(fmt.Sprintf("%d", i), 64-len(spec)) + "/\n"
 		}
 	}
-	fmt.Println(len(res))
 	return res
 }
 
 var tests = []Test{
 	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}},
-	Test{"two volumes", []string{"a/", "b/"}, []int{0, 0, 2, 2, 0}},
+	Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}},
+	Test{"orphan markers must be deleted", []string{"ca,/path/a@", "cb,/path/b@"}, []int{0, 0, 0, 0, 0}},
 }
 var currenttest Test
 
@@ -66,7 +66,7 @@ func TestContainers(t *testing.T) {
 			t.Errorf("Test %d: '%s' expected '%d' orphaned containers, got '%d'", i, test.title, test.res[1], len(toc))
 		}
 		if len(tv) != test.res[2] {
-			t.Errorf("Test %d: '%s' expected '%d' volumles, got '%d'", i, test.title, test.res[2], len(tv))
+			t.Errorf("Test %d: '%s' expected '%d' volumes, got '%d'", i, test.title, test.res[2], len(tv))
 		}
 		if len(tov) != test.res[3] {
 			t.Errorf("Test %d: '%s' expected '%d' orphaned volumes, got '%d'", i, test.title, test.res[3], len(tov))
