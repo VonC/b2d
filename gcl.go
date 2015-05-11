@@ -174,6 +174,8 @@ func initLists() {
 	allmarkers = markers{}
 	allvolumes = volumes{}
 	allcontainers = containers{}
+	orphanedContainers = containers{}
+	orphanedVolumes = volumes{}
 }
 
 type fcmd func(cmd string) (string, error)
