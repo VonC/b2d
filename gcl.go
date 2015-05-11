@@ -170,6 +170,12 @@ func mustcmd(acmd string) string {
 	return string(out)
 }
 
+func initLists() {
+	allmarkers = markers{}
+	allvolumes = volumes{}
+	allcontainers = containers{}
+}
+
 type fcmd func(cmd string) (string, error)
 
 var cmd = execcmd
@@ -285,6 +291,7 @@ func readContainer() {
 
 // docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go build gcl.go'
 func main() {
+	initLists()
 	readVolumes()
 	readContainer()
 	for _, vol := range allvolumes {
