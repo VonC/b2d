@@ -37,6 +37,11 @@ func (vs volspecs) ls() string {
 			spec = spec[:len(spec)-1]
 			res = res + spec + strings.Repeat(fmt.Sprintf("%d", i), 64-len(spec)) + "/\n"
 		}
+		if strings.HasSuffix(spec, "@") {
+			mp := "." + strings.Replace(spec, ";", "###", -1)
+			mp = strings.Replace(mp, "/", ",#,", -1)
+			res = res + mp + "\n"
+		}
 	}
 	return res
 }
@@ -44,7 +49,8 @@ func (vs volspecs) ls() string {
 var tests = []Test{
 	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}},
 	Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}},
-	Test{"orphan markers must be deleted", []string{"ca,/path/a@", "cb,/path/b@"}, []int{0, 0, 0, 0, 0}},
+	Test{"Invalid (ill-formed) markers must be deleted", []string{"cainv/path/a@"}, []int{0, 0, 0, 0, 0}},
+	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/a@", "cb;/path/b@"}, []int{0, 0, 0, 0, 0}},
 }
 var currenttest Test
 
@@ -74,5 +80,6 @@ func TestContainers(t *testing.T) {
 		if len(tm) != test.res[4] {
 			t.Errorf("Test %d: '%s' expected '%d' markers, got '%d'", i+1, test.title, test.res[4], len(tm))
 		}
+		fmt.Println("----------------")
 	}
 }
