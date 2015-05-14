@@ -15,6 +15,10 @@ func testcmd(cmd string) (string, error) {
 		return "", nil
 	case strings.HasPrefix(cmd, "docker inspect -f '{{ .Name }},{{ range $key, $value := .Volumes }}{{ $key }},{{ $value }}##~#{{ end }}' "):
 		return "", nil
+	case strings.HasPrefix(cmd, "sudo rm /mnt/sda1/var/lib/docker/vfs/dir/"):
+		deleted := cmd[len("sudo rm /mnt/sda1/var/lib/docker/vfs/dir/"):]
+		deletions = append(deletions, deleted)
+		return "", nil
 	default:
 		return fmt.Sprintf("test '%s'", cmd), errors.New("unknown command")
 	}
@@ -46,6 +50,7 @@ func (vs volspecs) ls() string {
 	return res
 }
 
+var deletions = []string{}
 var tests = []Test{
 	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}},
 	Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}},
@@ -59,6 +64,7 @@ func TestContainers(t *testing.T) {
 	cmd = testcmd
 	for i, test := range tests {
 		currenttest = test
+		deletions = []string{}
 		main()
 		tc := Containers()
 		toc := OrphanedContainers()
