@@ -89,3 +89,13 @@ func TestContainers(t *testing.T) {
 		fmt.Println("----------------")
 	}
 }
+
+func nbmarkers(tm markers) int {
+	res := len(tm)
+	for _, d := range deletions {
+		if strings.HasPrefix(d, ".") {
+			res = res - 1
+		}
+	}
+	return res
+}
