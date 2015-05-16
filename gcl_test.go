@@ -83,8 +83,8 @@ func TestContainers(t *testing.T) {
 		if len(tov) != test.res[3] {
 			t.Errorf("Test %d: '%s' expected '%d' orphaned volumes, got '%d'", i+1, test.title, test.res[3], len(tov))
 		}
-		if len(tm) != test.res[4] {
-			t.Errorf("Test %d: '%s' expected '%d' markers, got '%d'", i+1, test.title, test.res[4], len(tm))
+		if nbmarkers(tm) != test.res[4] {
+			t.Errorf("Test %d: '%s' expected '%d' markers, got '%d'", i+1, test.title, test.res[4], nbmarkers(tm))
 		}
 		fmt.Println("----------------")
 	}
