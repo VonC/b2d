@@ -54,8 +54,8 @@ var deletions = []string{}
 var tests = []Test{
 	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}},
 	Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}},
-	Test{"Invalid (ill-formed) markers must be deleted", []string{"cainv/path/a@"}, []int{0, 0, 0, 0, 0}},
-	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/a@", "cb;/path/b@"}, []int{0, 0, 0, 0, 0}},
+	Test{"Invalid (ill-formed) markers must be deleted", []string{"cainv/path/a@"}, []int{0, 0, 0, 0, -1}},
+	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/a@", "cb;/path/b@"}, []int{0, 0, 0, 0, -2}},
 }
 var currenttest Test
 
