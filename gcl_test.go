@@ -19,6 +19,11 @@ func testcmd(cmd string) (string, error) {
 		deleted := cmd[len("sudo rm /mnt/sda1/var/lib/docker/vfs/dir/"):]
 		deletions = append(deletions, deleted)
 		return "", nil
+	case strings.HasPrefix(cmd, "sudo readlink /mnt/sda1/var/lib/docker/vfs/dir/"):
+		if strings.Contains(cmd, ",nonexistent") {
+			return "", errors.New("non-existent linked folder")
+		}
+		return "", nil
 	default:
 		return fmt.Sprintf("test '%s'", cmd), errors.New("unknown command")
 	}
@@ -55,7 +60,7 @@ var tests = []Test{
 	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}},
 	Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}},
 	Test{"Invalid (ill-formed) markers must be deleted", []string{"cainv/path/a@"}, []int{0, 0, 0, 0, -1}},
-	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/a@", "cb;/path/b@"}, []int{0, 0, 0, 0, -2}},
+	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/nonexistenta@", "cb;/path/nonexistentb@"}, []int{0, 0, 0, 0, -2}},
 }
 var currenttest Test
 
