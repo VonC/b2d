@@ -25,6 +25,7 @@ func testcmd(cmd string) (string, error) {
 		}
 		return "", nil
 	default:
+		currentT.Fatalf("test '%s': unknown command!\n", cmd)
 		return fmt.Sprintf("test '%s'", cmd), errors.New("unknown command")
 	}
 }
@@ -63,10 +64,12 @@ var tests = []Test{
 	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/nonexistenta@", "cb;/path/nonexistentb@"}, []int{0, 0, 0, 0, -2}},
 }
 var currenttest Test
+var currentT *testing.T
 
 // TestContainers test different vfs scenarios
 func TestContainers(t *testing.T) {
 	cmd = testcmd
+	currentT = t
 	for i, test := range tests {
 		currenttest = test
 		deletions = []string{}
