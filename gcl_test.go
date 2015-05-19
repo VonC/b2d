@@ -8,6 +8,7 @@ import (
 )
 
 func testcmd(cmd string) (string, error) {
+	fmt.Println("(T) " + cmd)
 	switch {
 	case cmd == "sudo ls -a1F /mnt/sda1/var/lib/docker/vfs/dir":
 		return currenttest.vs.ls(), nil
