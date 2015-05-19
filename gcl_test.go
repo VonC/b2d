@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -23,6 +24,11 @@ func testcmd(cmd string) (string, error) {
 	case strings.HasPrefix(cmd, "sudo readlink /mnt/sda1/var/lib/docker/vfs/dir/"):
 		if strings.Contains(cmd, ",nonexistent") {
 			return "", errors.New("non-existent linked folder")
+		}
+		r := regexp.MustCompile(`.*\$([^#]+)###.*`)
+		ss := r.FindStringSubmatch(cmd)
+		if len(ss) == 2 {
+			return ss[1], nil
 		}
 		return "", nil
 	case strings.HasPrefix(cmd, "sudo ls /mnt/sda1/var/lib/docker/vfs/dir/"):
