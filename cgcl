@@ -1,4 +1,4 @@
 #!/bin/sh
 
-docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go test -v gcl.go gcl_test.go && go test -coverprofile=coverage.out gcl.go gcl_test.go  && read -p "type any key" && grep -v -e " 1$" coverage.out |more'
+docker run --rm -i -t -v `pwd`:`pwd` -w `pwd` --entrypoint="/bin/bash" go -c 'go test -v gcl.go gcl_test.go && go test -coverprofile=coverage.out gcl.go gcl_test.go  && read -s -n 1 -p "c for coverage lines" key; if [[ $key = "c" ]]; then grep -v -e " 1$" coverage.out |more ; else echo "" ; fi'
  
