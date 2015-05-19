@@ -24,6 +24,11 @@ func testcmd(cmd string) (string, error) {
 			return "", errors.New("non-existent linked folder")
 		}
 		return "", nil
+	case strings.HasPrefix(cmd, "sudo ls /mnt/sda1/var/lib/docker/vfs/dir/"):
+		if cmd == "sudo ls /mnt/sda1/var/lib/docker/vfs/dir/" {
+			return "", errors.New("non-ls linked folder")
+		}
+		return "", nil
 	default:
 		currentT.Fatalf("test '%s': unknown command!\n", cmd)
 		return fmt.Sprintf("test '%s'", cmd), errors.New("unknown command")
