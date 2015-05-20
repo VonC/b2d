@@ -87,6 +87,7 @@ func TestContainers(t *testing.T) {
 	for i, test := range tests {
 		currenttest = test
 		deletions = []string{}
+		fmt.Println("------ vvv " + test.title + " vvv ------")
 		main()
 		tc := Containers()
 		toc := OrphanedContainers()
@@ -108,7 +109,8 @@ func TestContainers(t *testing.T) {
 		if nbmarkers(tm) != test.res[4] {
 			t.Errorf("Test %d: '%s' expected '%d' markers, got '%d'", i+1, test.title, test.res[4], nbmarkers(tm))
 		}
-		fmt.Println("----------------")
+		fmt.Println("------ ^^^ " + test.title + " ^^^ ------")
+		fmt.Println("----------")
 	}
 }
 
