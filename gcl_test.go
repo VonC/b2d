@@ -28,7 +28,9 @@ func testcmd(cmd string) (string, error) {
 		r := regexp.MustCompile(`.*\$([^#]+)###.*`)
 		ss := r.FindStringSubmatch(cmd)
 		if len(ss) == 2 {
-			return ss[1], nil
+			folder := ss[1]
+			folder = folder + strings.Repeat("1", 64-len(folder))
+			return folder, nil
 		}
 		return "", nil
 	case strings.HasPrefix(cmd, "sudo ls /mnt/sda1/var/lib/docker/vfs/dir/"):
