@@ -78,6 +78,7 @@ var tests = []Test{
 	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/nonexistenta@", "cb;/path/nonexistentb@"}, []int{0, 0, 0, 0, -2}},
 	Test{"Invalid (no ls) markers must be deleted", []string{"ca;/path/nolsa@", "cb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}},
 	Test{"Invalid (no vdir) markers must be deleted", []string{"ca$novdira;/path/nolsa@", "cb$novdirb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}},
+	Test{"two valid markers", []string{"ca$fa;/path/vola@", "cb$fb;/path/volb@"}, []int{0, 0, 0, 0, 2}},
 }
 var currenttest Test
 var currentT *testing.T
