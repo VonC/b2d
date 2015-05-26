@@ -112,6 +112,9 @@ func TestContainers(t *testing.T) {
 		if nbmarkers(tm) != test.res[4] {
 			t.Errorf("Test %d: '%s' expected '%d' markers, got '%d'", i+1, test.title, test.res[4], nbmarkers(tm))
 		}
+		if i == 6 && tm[0].String() != "marker 'fa11111'<ca$fa->/path/vola>" {
+			t.Errorf("Test %d: '%s' expected marker '%s', got '%s'", i+1, test.title, "marker 'fa11111'<ca$fa->/path/vola>", tm[0].String())
+		}
 		fmt.Println("------ ^^^ " + test.title + " ^^^ ------")
 		fmt.Println("----------")
 	}
