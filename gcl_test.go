@@ -49,6 +49,7 @@ type Test struct {
 	title string
 	vs    volspecs
 	res   []int
+	strs  []string
 }
 
 func (vs volspecs) ls() string {
@@ -72,13 +73,13 @@ func (vs volspecs) ls() string {
 
 var deletions = []string{}
 var tests = []Test{
-	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}},
-	Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}},
-	Test{"Invalid (ill-formed) markers must be deleted", []string{"cainv/path/a@"}, []int{0, 0, 0, 0, -1}},
-	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/nonexistenta@", "cb;/path/nonexistentb@"}, []int{0, 0, 0, 0, -2}},
-	Test{"Invalid (no ls) markers must be deleted", []string{"ca;/path/nolsa@", "cb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}},
-	Test{"Invalid (no vdir) markers must be deleted", []string{"ca$novdira;/path/nolsa@", "cb$novdirb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}},
-	Test{"two valid markers", []string{"ca$fa;/path/vola@", "cb$fb;/path/volb@"}, []int{0, 0, 0, 0, 2}},
+	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}, []string{}},
+	Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}, []string{}},
+	Test{"Invalid (ill-formed) markers must be deleted", []string{"cainv/path/a@"}, []int{0, 0, 0, 0, -1}, []string{}},
+	Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/nonexistenta@", "cb;/path/nonexistentb@"}, []int{0, 0, 0, 0, -2}, []string{}},
+	Test{"Invalid (no ls) markers must be deleted", []string{"ca;/path/nolsa@", "cb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}, []string{}},
+	Test{"Invalid (no vdir) markers must be deleted", []string{"ca$novdira;/path/nolsa@", "cb$novdirb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}, []string{}},
+	Test{"two valid markers", []string{"ca$fa;/path/vola@", "cb$fb;/path/volb@"}, []int{0, 0, 0, 0, 2}, []string{"marker 'fa11111'<ca$fa->/path/vola>", "marker 'fb11111'<cb$fb->/path/volb>"}},
 }
 var currenttest Test
 var currentT *testing.T
