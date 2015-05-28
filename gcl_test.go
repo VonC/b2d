@@ -114,6 +114,10 @@ func TestContainers(t *testing.T) {
 			t.Errorf("Test %d: '%s' expected '%d' markers, got '%d'", i+1, test.title, test.res[4], nbmarkers(tm))
 		}
 
+		for _, v := range tv {
+			vs := v.String()
+			check(vs, "volume", &test, t, i)
+		}
 		for _, m := range tm {
 			ms := m.String()
 			check(ms, "marker", &test, t, i)
