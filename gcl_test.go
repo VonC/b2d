@@ -122,10 +122,6 @@ func TestContainers(t *testing.T) {
 			ms := m.String()
 			check(ms, "marker", &test, t, i)
 		}
-		/*
-			if i == 6 && tm[0].String() != "marker 'fa11111'<ca$fa->/path/vola>" {
-				t.Errorf("Test %d: '%s' expected marker '%s', got '%s'", i+1, test.title, "marker 'fa11111'<ca$fa->/path/vola>", tm[0].String())
-			}*/
 		fmt.Println("------ ^^^ " + test.title + " ^^^ ------")
 		fmt.Println("----------")
 	}
