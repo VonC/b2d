@@ -150,3 +150,13 @@ func nbmarkers(tm markers) int {
 	}
 	return res
 }
+
+func nbvolumes(vm volumes) int {
+	res := len(vm)
+	for _, d := range deletions {
+		if !strings.HasPrefix(d, ".") {
+			res = res - 1
+		}
+	}
+	return res
+}
