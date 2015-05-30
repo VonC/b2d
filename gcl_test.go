@@ -80,6 +80,7 @@ var tests = []Test{
 	Test{"Invalid (no ls) markers must be deleted", []string{"ca;/path/nolsa@", "cb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}, []string{}},
 	Test{"Invalid (no vdir) markers must be deleted", []string{"ca$novdira;/path/nolsa@", "cb$novdirb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}, []string{}},
 	Test{"two valid markers", []string{"ca$fa;/path/vola@", "cb$fb;/path/volb@"}, []int{0, 0, 0, 0, 2}, []string{"marker 'fa11111'<ca$fa->/path/vola>", "marker 'fb11111'<cb$fb->/path/volb>"}},
+	Test{"Invalid (bad name) volume", []string{"inva/"}, []int{0, 0, -1, 0, 0}, []string{}},
 }
 var currenttest Test
 var currentT *testing.T
