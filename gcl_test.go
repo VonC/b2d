@@ -58,14 +58,17 @@ func (vs volspecs) ls() string {
 	}
 	res := ""
 	for i, spec := range vs {
-		if strings.HasSuffix(spec, "/") {
+		switch {
+		case strings.HasSuffix(spec, "/"):
 			spec = spec[:len(spec)-1]
 			res = res + spec + strings.Repeat(fmt.Sprintf("%d", i), 64-len(spec)) + "/\n"
-		}
-		if strings.HasSuffix(spec, "@") {
+		case strings.HasSuffix(spec, "@"):
 			mp := "." + strings.Replace(spec, ";", "###", -1)
 			mp = strings.Replace(mp, "/", ",#,", -1)
 			res = res + mp + "\n"
+
+		default:
+			res = res + spec + "\n"
 		}
 	}
 	return res
