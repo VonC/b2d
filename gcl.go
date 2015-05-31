@@ -188,6 +188,7 @@ func execcmd(cmd string) (string, error) {
 	return strings.TrimSpace(string(out)), err
 }
 
+// Looks for volume folder or marker symlinks in /var/lib/docker/vfs/dir
 func readVolumes() {
 	out := mustcmd("sudo ls -a1F /mnt/sda1/var/lib/docker/vfs/dir")
 	vollines := strings.Split(out, "\n")
