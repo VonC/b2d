@@ -84,6 +84,20 @@ func (vs volspecs) ls() string {
 	return res
 }
 
+func (cs contspecs) ps() string {
+	if len(cs) == 0 {
+		return ""
+	}
+	res := ""
+	for _, spec := range cs {
+		switch {
+		default:
+			res = res + spec + "\n"
+		}
+	}
+	return res
+}
+
 var deletions = []string{}
 var tests = []Test{
 	Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}, []string{}},
