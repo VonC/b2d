@@ -110,7 +110,7 @@ var tests = []Test{
 	Test{"Invalid (bad name) volume", []string{"inva/"}, []int{0, 0, -1, 0, 0}, []string{}},
 	Test{"Invalid file in volume vfs dir", []string{"invf"}, []int{0, 0, -1, 0, 0}, []string{}},
 }
-var currenttest Test
+var currenttest *Test
 var currentT *testing.T
 
 // TestContainers test different vfs scenarios
@@ -145,11 +145,11 @@ func TestContainers(t *testing.T) {
 
 		for _, v := range tv {
 			vs := v.String()
-			check(vs, "volume", &test, t, i)
+			check(vs, "volume", test, t, i)
 		}
 		for _, m := range tm {
 			ms := m.String()
-			check(ms, "marker", &test, t, i)
+			check(ms, "marker", test, t, i)
 		}
 		fmt.Println("------ ^^^ " + test.title + " ^^^ ------")
 		fmt.Println("----------")
