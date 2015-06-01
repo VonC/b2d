@@ -45,11 +45,21 @@ func testcmd(cmd string) (string, error) {
 }
 
 type volspecs []string
+type contspecs []string
 type Test struct {
 	title string
 	vs    volspecs
+	cs    contspecs
 	res   []int
 	strs  []string
+}
+
+func newTest(title string) *Test {
+	return &Test{title: title, res: []int{0, 0, 0, 0, 0}}
+}
+func (t *Test) setc(cs contspecs) *Test {
+	t.cs = cs
+	return t
 }
 
 func (vs volspecs) ls() string {
