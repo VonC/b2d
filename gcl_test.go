@@ -20,7 +20,7 @@ func testcmd(cmd string) (string, error) {
 		}
 		return res, nil
 	case strings.HasPrefix(cmd, "docker inspect -f '{{ .Name }},{{ range $key, $value := .Volumes }}{{ $key }},{{ $value }}##~#{{ end }}' "):
-		return "", nil
+		return currenttest.cs.inspectVolumes(), nil
 	case strings.HasPrefix(cmd, "sudo rm /mnt/sda1/var/lib/docker/vfs/dir/"):
 		deleted := cmd[len("sudo rm /mnt/sda1/var/lib/docker/vfs/dir/"):]
 		deletions = append(deletions, deleted)
@@ -88,7 +88,7 @@ func (vs volspecs) ls() string {
 	return res
 }
 
-func (cs contspecs) ps() string {
+func (cs contspecs) inspectVolumes() string {
 	if len(cs) == 0 {
 		return ""
 	}
@@ -96,7 +96,10 @@ func (cs contspecs) ps() string {
 	for _, spec := range cs {
 		switch {
 		default:
-			res = res + spec + "\n"
+			if res != "" {
+				res = res + "##~#"
+			}
+			res = res + spec
 		}
 	}
 	return res
