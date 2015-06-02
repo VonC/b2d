@@ -20,7 +20,7 @@ func testcmd(cmd string) (string, error) {
 		}
 		return res, nil
 	case strings.HasPrefix(cmd, "docker inspect -f '{{ .Name }},{{ range $key, $value := .Volumes }}{{ $key }},{{ $value }}##~#{{ end }}' "):
-		return currenttest.cs.inspectVolumes(), nil
+		return currenttest.inspectVolumes(), nil
 	case strings.HasPrefix(cmd, "sudo rm /mnt/sda1/var/lib/docker/vfs/dir/"):
 		deleted := cmd[len("sudo rm /mnt/sda1/var/lib/docker/vfs/dir/"):]
 		deletions = append(deletions, deleted)
@@ -56,6 +56,7 @@ type Test struct {
 	cs    contspecs
 	res   []int
 	strs  []string
+	ci    int
 }
 
 func newTest(title string) *Test {
@@ -88,20 +89,12 @@ func (vs volspecs) ls() string {
 	return res
 }
 
-func (cs contspecs) inspectVolumes() string {
-	if len(cs) == 0 {
+func (t *Test) inspectVolumes() string {
+	if len(t.cs) == 0 {
 		return ""
 	}
-	res := ""
-	for _, spec := range cs {
-		switch {
-		default:
-			if res != "" {
-				res = res + "##~#"
-			}
-			res = res + spec
-		}
-	}
+	res := t.cs[t.ci]
+	t.ci = t.ci + 1
 	return res
 }
 
