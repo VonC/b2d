@@ -57,7 +57,7 @@ type Test struct {
 func newTest(title string) *Test {
 	return &Test{title: title, res: []int{0, 0, 0, 0, 0}}
 }
-func (t *Test) setc(cs contspecs) *Test {
+func (t *Test) setContainersPs(cs contspecs) *Test {
 	t.cs = cs
 	return t
 }
@@ -102,7 +102,7 @@ var deletions = []string{}
 var tests = []*Test{
 	newTest("empty vfs"),
 	newTest("2 valid containers").
-		setc([]string{"contA", "contB"}),
+		setContainersPs([]string{"contA", "contB"}),
 	/*
 		Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}, []string{}},
 		Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}, []string{"vol 'fa00000'<<nil>>", "vol 'fb11111'<<nil>>"}},
