@@ -14,7 +14,11 @@ func testcmd(cmd string) (string, error) {
 	case cmd == "sudo ls -a1F /mnt/sda1/var/lib/docker/vfs/dir":
 		return currenttest.vs.ls(), nil
 	case cmd == "docker ps -aq --no-trunc":
-		return currenttest.cs.ps(), nil
+		res := ""
+		for _, _ = range currenttest.cs {
+			res = res + "x\n"
+		}
+		return res, nil
 	case strings.HasPrefix(cmd, "docker inspect -f '{{ .Name }},{{ range $key, $value := .Volumes }}{{ $key }},{{ $value }}##~#{{ end }}' "):
 		return "", nil
 	case strings.HasPrefix(cmd, "sudo rm /mnt/sda1/var/lib/docker/vfs/dir/"):
