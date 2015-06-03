@@ -67,6 +67,44 @@ func (t *Test) setContainersPs(cs contspecs) *Test {
 	return t
 }
 
+type setterRes interface {
+	setResAt(index int) *Test
+}
+
+type result struct {
+	res int
+	t   *Test
+}
+
+type resultOne struct {
+	t *Test
+}
+
+func (t *Test) expects(number int) *result {
+	return &result{t: t, res: number}
+}
+
+func (t *Test) expectOne() *resultOne {
+	return &resultOne{t: t}
+}
+
+func (r *result) setResAt(index int) *Test {
+	r.t.res[index] = r.res
+	return r.t
+}
+func (r *resultOne) setResAt(index int) *Test {
+	r.t.res[index] = 1
+	return r.t
+}
+
+func (r *result) containers() *Test {
+	return r.setResAt(0)
+}
+
+func (ro resultOne) container() *Test {
+	return ro.setResAt(0)
+}
+
 func (vs volspecs) ls() string {
 	if len(vs) == 0 {
 		return ""
