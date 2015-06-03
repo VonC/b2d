@@ -140,7 +140,8 @@ var deletions = []string{}
 var tests = []*Test{
 	newTest("empty vfs"),
 	newTest("2 valid containers without any volume").
-		setContainersPs([]string{"/contA,", "/contB,"}),
+		setContainersPs([]string{"/contA,", "/contB,"}).
+		expects(2).containers(),
 	/*
 		Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}, []string{}},
 		Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}, []string{"vol 'fa00000'<<nil>>", "vol 'fb11111'<<nil>>"}},
