@@ -105,6 +105,11 @@ func (ro resultOne) container() *Test {
 	return ro.setResAt(0)
 }
 
+func (t *Test) mustProduce(strs []string) *Test {
+	t.strs = strs
+	return t
+}
+
 func (vs volspecs) ls() string {
 	if len(vs) == 0 {
 		return ""
@@ -141,7 +146,8 @@ var tests = []*Test{
 	newTest("empty vfs"),
 	newTest("2 valid containers without any volume").
 		setContainersPs([]string{"/contA,", "/contB,"}).
-		expects(2).containers(),
+		expects(2).containers().
+		mustProduce([]string{"cnt 'contA' (x)[false] - 0 vol", "cnt 'contB' (x)[false] - 0 vol"}),
 	/*
 		Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}, []string{}},
 		Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}, []string{"vol 'fa00000'<<nil>>", "vol 'fb11111'<<nil>>"}},
