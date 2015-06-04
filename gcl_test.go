@@ -193,6 +193,10 @@ func TestContainers(t *testing.T) {
 			t.Errorf("Test %d: '%s' expected '%d' markers, got '%d'", i+1, test.title, test.res[4], nbmarkers(tm))
 		}
 
+		for _, c := range tc {
+			cs := c.String()
+			check(cs, "container", test, t, i)
+		}
 		for _, v := range tv {
 			vs := v.String()
 			check(vs, "volume", test, t, i)
@@ -215,7 +219,7 @@ func check(s string, tmsg string, test *Test, t *testing.T, i int) {
 		}
 	}
 	if !found {
-		t.Errorf("Test %d: '%s' expected %s '%s', not found", i+1, test.title, tmsg, s)
+		t.Errorf("Test %d: '%s' expected %s >%s<, not found", i+1, test.title, tmsg, s)
 	}
 
 }
