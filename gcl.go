@@ -148,10 +148,14 @@ type container struct {
 }
 
 func (c *container) trunc() string {
-	if len(c.id) > 0 {
+	switch {
+	case len(c.id) == 0:
+		return ""
+	case len(c.id) > 6:
 		return c.id[:7]
+	default:
+		return c.id
 	}
-	return ""
 }
 
 func (c *container) String() string {
