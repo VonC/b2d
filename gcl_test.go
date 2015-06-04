@@ -66,6 +66,10 @@ func (t *Test) setContainersPs(cs contspecs) *Test {
 	t.cs = cs
 	return t
 }
+func (t *Test) setVolumesLs(vs volspecs) *Test {
+	t.vs = vs
+	return t
+}
 
 type setterRes interface {
 	setResAt(index int) *Test
@@ -99,6 +103,13 @@ func (r *resultOne) setResAt(index int) *Test {
 
 func (r *result) containers() *Test {
 	return r.setResAt(0)
+}
+
+func (r *result) volumes() *Test {
+	return r.setResAt(2)
+}
+func (r *result) orphanedVolumes() *Test {
+	return r.setResAt(3)
 }
 
 func (ro resultOne) container() *Test {
@@ -148,8 +159,12 @@ var tests = []*Test{
 		setContainersPs([]string{"/contA,", "/contB,"}).
 		expects(2).containers().
 		mustProduce([]string{"cnt 'contA' (x)[false] - 0 vol", "cnt 'contB' (x)[false] - 0 vol"}),
+	newTest("2 valid volumes").
+		setVolumesLs([]string{"fa/", "fb/"}).
+		expects(2).volumes().
+		expects(2).orphanedVolumes().
+		mustProduce([]string{"vol 'fa00000'<<nil>>", "vol 'fb11111'<<nil>>"}),
 	/*
-		Test{"empty vfs", []string{}, []int{0, 0, 0, 0, 0}, []string{}},
 		Test{"two volumes", []string{"fa/", "fb/"}, []int{0, 0, 2, 2, 0}, []string{"vol 'fa00000'<<nil>>", "vol 'fb11111'<<nil>>"}},
 		Test{"Invalid (ill-formed) markers must be deleted", []string{"cainv/path/a@"}, []int{0, 0, 0, 0, -1}, []string{}},
 		Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/nonexistenta@", "cb;/path/nonexistentb@"}, []int{0, 0, 0, 0, -2}, []string{}},
