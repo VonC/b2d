@@ -170,11 +170,16 @@ var tests = []*Test{
 	newTest("Invalid (ill-formed) markers must be deleted").
 		setVolumesLs([]string{"cainv/path/a@"}).
 		expects(-1).markers(),
+	newTest("Invalid (no readlink) markers must be deleted").
+		setVolumesLs([]string{"ca;/path/nonexistenta@", "cb;/path/nonexistentb@"}).
+		expects(-2).markers(),
+	newTest("Invalid (no ls) markers must be deleted").
+		setVolumesLs([]string{"ca;/path/nolsa@", "cb;/path/nolsb@"}).
+		expects(-2).markers(),
+	newTest("Invalid (no vdir) markers must be deleted").
+		setVolumesLs([]string{"ca$novdira;/path/nolsa@", "cb$novdirb;/path/nolsb@"}).
+		expects(-2).markers(),
 	/*
-		Test{"Invalid (ill-formed) markers must be deleted", []string{"cainv/path/a@"}, []int{0, 0, 0, 0, -1}, []string{}},
-		Test{"Invalid (no readlink) markers must be deleted", []string{"ca;/path/nonexistenta@", "cb;/path/nonexistentb@"}, []int{0, 0, 0, 0, -2}, []string{}},
-		Test{"Invalid (no ls) markers must be deleted", []string{"ca;/path/nolsa@", "cb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}, []string{}},
-		Test{"Invalid (no vdir) markers must be deleted", []string{"ca$novdira;/path/nolsa@", "cb$novdirb;/path/nolsb@"}, []int{0, 0, 0, 0, -2}, []string{}},
 		Test{"two valid markers", []string{"ca$fa;/path/vola@", "cb$fb;/path/volb@"}, []int{0, 0, 0, 0, 2}, []string{"marker 'fa11111'<ca$fa->/path/vola>", "marker 'fb11111'<cb$fb->/path/volb>"}},
 		Test{"Invalid (bad name) volume", []string{"inva/"}, []int{0, 0, -1, 0, 0}, []string{}},
 		Test{"Invalid file in volume vfs dir", []string{"invf"}, []int{0, 0, -1, 0, 0}, []string{}},
