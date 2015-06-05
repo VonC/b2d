@@ -189,6 +189,10 @@ var tests = []*Test{
 	newTest("Invalid file in volume vfs dir").
 		setVolumesLs([]string{"invf"}).
 		expects(-1).volumes(),
+	newTest("2 valid containers with container-only volumes").
+		setContainersPs([]string{"/contA,/local/path1A,f1a##~#/local/path2A,f2a##~#", "/contB,/local/path1B,f1b#~#/local/path2B,f2b##~#/local/path3B,f3b##~#"}).
+		expects(2).containers().
+		mustProduce([]string{"cnt 'contA' (x)[false] - 0 vol", "cnt 'contB' (x)[false] - 0 vol"}),
 }
 var currenttest *Test
 var currentT *testing.T
