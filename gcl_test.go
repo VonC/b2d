@@ -179,8 +179,11 @@ var tests = []*Test{
 	newTest("Invalid (no vdir) markers must be deleted").
 		setVolumesLs([]string{"ca$novdira;/path/nolsa@", "cb$novdirb;/path/nolsb@"}).
 		expects(-2).markers(),
+	newTest("two valid markers").
+		setVolumesLs([]string{"ca$fa;/path/vola@", "cb$fb;/path/volb@"}).
+		expects(2).markers().
+		mustProduce([]string{"marker 'fa11111'<ca$fa->/path/vola>", "marker 'fb11111'<cb$fb->/path/volb>"}),
 	/*
-		Test{"two valid markers", []string{"ca$fa;/path/vola@", "cb$fb;/path/volb@"}, []int{0, 0, 0, 0, 2}, []string{"marker 'fa11111'<ca$fa->/path/vola>", "marker 'fb11111'<cb$fb->/path/volb>"}},
 		Test{"Invalid (bad name) volume", []string{"inva/"}, []int{0, 0, -1, 0, 0}, []string{}},
 		Test{"Invalid file in volume vfs dir", []string{"invf"}, []int{0, 0, -1, 0, 0}, []string{}},
 	*/
