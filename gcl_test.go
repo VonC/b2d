@@ -146,13 +146,27 @@ func (vs volspecs) ls() string {
 	return res
 }
 
+// /local/path1B,f1b##~#/local/path2B,f2b##~#/local/path3B,f3b##~#
+// =>
+// /local/path1B,/var/lib/docker/vfs/dir/f1b##~#/local/path2B,/var/lib/docker/vfs/dir/f2b##~#/local/path3B,/var/lib/docker/vfs/dir/f3b##~#
+var re = regexp.MustCompile(",([^,#]+)##~#")
+
 func (t *Test) inspectVolumes() string {
 	if len(t.cs) == 0 {
 		return ""
 	}
 	res := t.cs[t.ci]
+	res = re.ReplaceAllStringFunc(res, volstring)
+	res = re.ReplaceAllString(res, ",/var/lib/docker/vfs/dir/$1##~#")
 	t.ci = t.ci + 1
 	return res
+}
+
+func volstring(volname string) string {
+	suffix := "##~#"
+	volname = volname[1:]
+	volname = volname[:len(volname)-len(suffix)]
+	return "," + volname + strings.Repeat("0", 64-len(volname)) + suffix
 }
 
 var deletions = []string{}
@@ -190,7 +204,7 @@ var tests = []*Test{
 		setVolumesLs([]string{"invf"}).
 		expects(-1).volumes(),
 	newTest("2 valid containers with container-only volumes").
-		setContainersPs([]string{"/contA,/local/path1A,f1a##~#/local/path2A,f2a##~#", "/contB,/local/path1B,f1b#~#/local/path2B,f2b##~#/local/path3B,f3b##~#"}).
+		setContainersPs([]string{"/contA,/local/path1A,f1a##~#/local/path2A,f2a##~#", "/contB,/local/path1B,f1b##~#/local/path2B,f2b##~#/local/path3B,f3b##~#"}).
 		expects(2).containers().
 		mustProduce([]string{"cnt 'contA' (x)[false] - 0 vol", "cnt 'contB' (x)[false] - 0 vol"}),
 }
