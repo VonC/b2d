@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # curl https://raw.githubusercontent.com/VonC/compileEverything/master/openldap/slapdd.tpl -o /home/docker/b2d/openldap/slapdd
-docker build -t openldap /home/docker/b2d/openldap
+docker build -t openldap $HOME/b2d/openldap
