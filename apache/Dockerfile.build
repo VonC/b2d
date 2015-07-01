@@ -22,5 +22,5 @@ RUN make
 RUN checkinstall --pkgname=apache2-4 --pkgversion="2.4.10" --backup=no --deldoc=yes --fstrans=no --default
 RUN mkdir $HOME/deb && mv *.deb $HOME/deb
 VOLUME /root/deb
-ENTRYPOINT echo
-CMD "Data Volume Container for apache /root/deb"
+ENTRYPOINT ["echo"]
+CMD ["\"Data Volume Container for apache /root/deb\""]
