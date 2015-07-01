@@ -13,4 +13,4 @@ RUN chmod +x /usr/local/bin/httpd-foreground
 EXPOSE 80
 EXPOSE 443
 
-CMD ["httpd-foreground"]
+ENTRYPOINT ["httpd-foreground"]
