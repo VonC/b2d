@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 docker build -t apache.deb -f $HOME/b2d/apache/Dockerfile.build $HOME/b2d/apache
 docker inspect apache.deb.cont > /dev/null 2>&1 || docker run -d -t --name=apache.deb.cont apache.deb
