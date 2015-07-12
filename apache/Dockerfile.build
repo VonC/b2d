@@ -24,7 +24,7 @@ COPY mod_auth_form.c.patch /usr/local/src/mod_auth_form.c.patch
 RUN patch -r - -N modules/aaa/mod_authn_core.c < ../mod_authn_core.c.patch ; true
 RUN patch -r - -N modules/aaa/mod_auth_form.c < ../mod_auth_form.c.patch ; true
 RUN ./buildconf
-RUN ./configure --with-included-apr --enable-mpm=worker --enable-suexec --enable-rewrite --enable-ssl=shared --enable-ssl --enable-proxy --enable-proxy-connect --enable-proxy-ftp --enable-proxy-http --with-ldap --enable-ldap --enable-authnz-ldap --enable-authn-alias --enable-mods-shared=all
+RUN ./configure --with-included-apr --enable-mpm=worker --enable-suexec --enable-rewrite --enable-ssl=shared --enable-ssl --enable-proxy --enable-proxy-connect --enable-proxy-ftp --enable-proxy-http --with-ldap --enable-ldap --enable-authnz-ldap --enable-authn-alias --with-crypto --enable-mods-shared=all
 RUN make
 RUN checkinstall --pkgname=apache2-4 --pkgversion="2.4.10" --backup=no --deldoc=yes --fstrans=no --default
 RUN mkdir $HOME/deb && mv *.deb $HOME/deb
