@@ -1,9 +1,10 @@
 #! /bin/sh
 
-docker build -t apache.deb -f $HOME/b2d/apache/Dockerfile.build $HOME/b2d/apache
+docker build -t apache.deb -f $HOME/b2d/apache/Dockerfile.build $HOME/b2d/apache && (
 docker inspect apache.deb.cont > /dev/null 2>&1 || docker run -d -t --name=apache.deb.cont apache.deb
 docker inspect apache.inst.cont > /dev/null 2>&1 || docker run -it --name=apache.inst.cont --volumes-from apache.deb.cont --entrypoint "/bin/sh" git -c "dpkg -i /root/deb/apache2-4_2.4.10-1_amd64.deb"
 if [[ "$(docker images -q apache.inst 2> /dev/null)" == "" ]]; then
   docker commit apache.inst.cont apache.inst
 fi
 docker build -t apache $HOME/b2d/apache
+)
