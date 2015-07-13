@@ -19,6 +19,11 @@ RUN ln -s /usr/local/apache2/bin/envvars envvars
 RUN mkdir /usr/local/apache2/logs
 RUN ./update_cnf.sh
 
+COPY o.cnf ./
+COPY gen_ssl_key_and_crt.sh ./
+RUN chmod +x gen_ssl_key_and_crt.sh
+RUN chown -R git:git /home/git/apache
+
 ENV HTTPD_PREFIX /usr/local/apache2
 ENV PATH $PATH:$HTTPD_PREFIX/bin
 
@@ -31,6 +36,8 @@ EXPOSE 80
 EXPOSE 443
 
 USER git
+WORKDIR $HOME_GIT/apache
+RUN ./gen_ssl_key_and_crt.sh
 WORKDIR ${HOME_GIT}
 ENTRYPOINT ["/bin/sh", "-c"]
 #ENTRYPOINT ["httpd-foreground"]
