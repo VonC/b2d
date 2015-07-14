@@ -27,6 +27,8 @@ RUN adduser --system --group --shell /bin/sh git \
 COPY profile /home/git/.profile
 COPY bashrc /home/git/.bashrc
 COPY bash_aliases /home/git/.bash_aliases
+RUN mkdir /home/git/.ssh
+COPY curl-ca-bundle.crt /home/git/.ssh/
 RUN chown -R git:git /home/git
 ENV PATH="$PATH:/home/git/bin"
 WORKDIR /home/git
