@@ -29,7 +29,7 @@ if [[ ! -e "${passphrasekey}" ]]; then
   openssl genrsa -des3 -passout pass:${fqnpassword} -out "${passphrasekey}" 1024
   openssl rsa -passin pass:${fqnpassword} -in "${passphrasekey}" -out "${key}"
   openssl req -new -config "${cnf}" -extensions "${ext}" -x509 -days 730 -key "${key}" -out "${cert}"
-  cat "${cert}" >> "${H}/.ssh/curl-ca-bundle.crt"
+  cat "${cert}" >> "${HOME}/.ssh/curl-ca-bundle.crt"
 fi
 ln -fs "${a_fqn}.key" "${apache}/key"
 ln -fs "${a_fqn}.crt" "${apache}/crt"
