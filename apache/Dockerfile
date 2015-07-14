@@ -1,7 +1,7 @@
 FROM apache.inst:latest
 
 MAINTAINER VonC <vonc@laposte.net>
-#USER git
+USER root
 ENV HOME_GIT /home/git
 WORKDIR $HOME_GIT
 RUN mkdir apache
@@ -16,6 +16,8 @@ RUN chmod +x  ctld
 RUN ln -s /usr/local/apache2/conf/httpd.conf cnf1
 RUN ln -s ${HOME_GIT}/apache/env.conf cnf
 RUN ln -s /usr/local/apache2/bin/envvars envvars
+RUN ln -s a_global_ca.crt ${HOME_GIT}/apache/global_ca.crt
+RUN ln -s ../.ssh/curl-ca-bundle.crt ${HOME_GIT}/apache/a_global_ca.crt
 RUN mkdir /usr/local/apache2/logs
 RUN ./update_cnf.sh
 
