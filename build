@@ -4,5 +4,5 @@ $HOME/b2d/git/build
 $HOME/b2d/go/build
 $HOME/b2d/gitolite/build
 $HOME/b2d/gcc/build
-$HOME/b2d/apache/build
 $HOME/b2d/openldap/build
+$HOME/b2d/apache/build
