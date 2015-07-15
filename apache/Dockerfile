@@ -5,6 +5,7 @@ USER root
 ENV HOME_GIT /home/git
 WORKDIR $HOME_GIT
 RUN mkdir apache
+RUN mkdir apache/log
 WORKDIR $HOME_GIT/apache
 COPY env.conf ./
 COPY update_cnf.sh  ./
@@ -18,7 +19,9 @@ RUN ln -s ${HOME_GIT}/apache/env.conf cnf
 RUN ln -s /usr/local/apache2/bin/envvars envvars
 RUN ln -s a_global_ca.crt ${HOME_GIT}/apache/global_ca.crt
 RUN ln -s ../.ssh/curl-ca-bundle.crt ${HOME_GIT}/apache/a_global_ca.crt
+RUN ln -s /usr/local/apache2/bin/rotatelogs ${HOME_GIT}/bin/rotatelogs
 RUN mkdir /usr/local/apache2/logs
+RUN ln -s /usr/local/apache2/logs ${HOME_GIT}/apache/logs
 RUN ./update_cnf.sh
 
 COPY o.cnf ./
