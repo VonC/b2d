@@ -29,7 +29,7 @@ if %errorlevel% == 1 (
 	echo "Boot2Docker is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
-echo.%PATH%| findstr /C:"Git" 1>nul
+echo.%PATH%| findstr /i /C:"Git" 1>nul
 if %errorlevel% == 1 (
 	echo "Git is not found in PATH: check your ..\env.bat"
 	exit /B 1
