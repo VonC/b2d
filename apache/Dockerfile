@@ -23,6 +23,8 @@ RUN ln -s /usr/local/apache2/bin/rotatelogs ${HOME_GIT}/bin/rotatelogs
 RUN mkdir /usr/local/apache2/logs
 RUN ln -s /usr/local/apache2/logs ${HOME_GIT}/apache/logs
 RUN ./update_cnf.sh
+RUN ln -s /usr/share/gitweb ${HOME_GIT}/gitweb
+RUN mkdir ${HOME_GIT}/cgit
 
 COPY o.cnf ./
 COPY gen_ssl_key_and_crt.sh ./
@@ -42,7 +44,6 @@ EXPOSE 8433
 EXPOSE 8443
 EXPOSE 8453
 EXPOSE 8463
-
 USER git
 WORKDIR $HOME_GIT/apache
 RUN ./gen_ssl_key_and_crt.sh
