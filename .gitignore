@@ -1,3 +1,4 @@
 /dfsmudge.sh
 /gcl
 coverage.out
+*.stackdump
