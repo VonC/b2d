@@ -47,6 +47,5 @@ EXPOSE 8463
 USER git
 WORKDIR $HOME_GIT/apache
 RUN ./gen_ssl_key_and_crt.sh
-WORKDIR ${HOME_GIT}
 ENTRYPOINT ["/bin/sh", "-c"]
 #ENTRYPOINT ["httpd-foreground"]
