@@ -53,9 +53,11 @@ EXPOSE 8443
 EXPOSE 8453
 EXPOSE 8463
 WORKDIR $HOME_GIT/apache
+USER git
+RUN ./gen_ssl_key_and_crt.sh
+USER root
 COPY env.conf ./
 RUN chown -R git:git /home/git/apache
 USER git
-RUN ./gen_ssl_key_and_crt.sh
 ENTRYPOINT ["/bin/sh", "-c"]
 #ENTRYPOINT ["httpd-foreground"]
