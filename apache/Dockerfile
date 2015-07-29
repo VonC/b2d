@@ -7,7 +7,6 @@ WORKDIR $HOME_GIT
 RUN mkdir apache
 RUN mkdir apache/log
 WORKDIR $HOME_GIT/apache
-COPY env.conf ./
 COPY update_cnf.sh  ./
 COPY ctld ./
 RUN chown -R git:git /home/git/apache
@@ -44,8 +43,10 @@ EXPOSE 8433
 EXPOSE 8443
 EXPOSE 8453
 EXPOSE 8463
-USER git
 WORKDIR $HOME_GIT/apache
+COPY env.conf ./
+RUN chown -R git:git /home/git/apache
+USER git
 RUN ./gen_ssl_key_and_crt.sh
 ENTRYPOINT ["/bin/sh", "-c"]
 #ENTRYPOINT ["httpd-foreground"]
