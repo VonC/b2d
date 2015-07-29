@@ -3,3 +3,4 @@
 coverage.out
 *.stackdump
 *.old
+*_log_*
