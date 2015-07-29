@@ -22,7 +22,6 @@ RUN ln -s /usr/local/apache2/bin/rotatelogs ${HOME_GIT}/bin/rotatelogs
 RUN mkdir /usr/local/apache2/logs
 RUN ln -s /usr/local/apache2/logs ${HOME_GIT}/apache/logs
 RUN ./update_cnf.sh
-RUN ln -s /usr/share/gitweb ${HOME_GIT}/gitweb
 RUN mkdir ${HOME_GIT}/cgit
 
 COPY o.cnf ./
@@ -32,6 +31,16 @@ RUN chown -R git:git /home/git/apache
 
 ENV HTTPD_PREFIX /usr/local/apache2
 ENV PATH $PATH:$HTTPD_PREFIX/bin
+
+RUN mkdir ${HOME_GIT}/gitweb
+WORKDIR ${HOME_GIT}/gitweb
+COPY gitweb/* ./
+RUN ln -s /usr/share/gitweb gitweb
+RUN ln -s ../Semantic-UI Semantic-UI
+RUN ln -s gitweb/static static
+RUN ln -s gitweb/gitweb.cgi gitweb.cgi
+RUN ln -s gitweb-favicon.png favicon.ico
+RUN ln -s gitweb.conf.pl cnf
 
 WORKDIR $HTTPD_PREFIX
 
