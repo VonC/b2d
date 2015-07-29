@@ -2,3 +2,4 @@
 /gcl
 coverage.out
 *.stackdump
+*.old
