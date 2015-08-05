@@ -28,6 +28,7 @@ COPY o.cnf ./
 COPY gen_ssl_key_and_crt.sh ./
 RUN chmod +x gen_ssl_key_and_crt.sh
 RUN chown -R git:git /home/git/apache
+RUN chown -R git:git /usr/local/apache2/logs
 
 ENV HTTPD_PREFIX /usr/local/apache2
 ENV PATH $PATH:$HTTPD_PREFIX/bin
