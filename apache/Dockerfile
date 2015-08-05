@@ -8,6 +8,8 @@ RUN git clone https://github.com/Semantic-Org/Semantic-UI -b 0.9.1 --depth=1 Sem
 RUN mkdir apache
 RUN mkdir apache/log
 WORKDIR $HOME_GIT/apache
+COPY gen_ssl_key_and_crt.sh ./
+RUN chmod +x gen_ssl_key_and_crt.sh
 COPY update_cnf.sh  ./
 COPY ctld ./
 RUN chown -R git:git /home/git/apache
@@ -26,13 +28,15 @@ RUN ./update_cnf.sh
 RUN mkdir ${HOME_GIT}/cgit
 
 COPY o.cnf ./
-COPY gen_ssl_key_and_crt.sh ./
-RUN chmod +x gen_ssl_key_and_crt.sh
 RUN chown -R git:git /home/git/apache
 RUN chown -R git:git /usr/local/apache2/logs
 
 ENV HTTPD_PREFIX /usr/local/apache2
 ENV PATH $PATH:$HTTPD_PREFIX/bin
+
+USER git
+RUN ./gen_ssl_key_and_crt.sh
+USER root
 
 RUN mkdir ${HOME_GIT}/gitweb
 WORKDIR ${HOME_GIT}/gitweb
@@ -55,9 +59,6 @@ EXPOSE 8443
 EXPOSE 8453
 EXPOSE 8463
 WORKDIR $HOME_GIT/apache
-USER git
-RUN ./gen_ssl_key_and_crt.sh
-USER root
 COPY env.conf ./
 RUN chown -R git:git /home/git/apache
 USER git
