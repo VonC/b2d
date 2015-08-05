@@ -12,13 +12,15 @@ COPY gen_ssl_key_and_crt.sh ./
 RUN chmod +x gen_ssl_key_and_crt.sh
 COPY update_cnf.sh  ./
 COPY ctld ./
-RUN chown -R git:git /home/git/apache
+RUN mkdir logins
 RUN ln -s  ${HOME_GIT}/apache/ctld  ${HOME_GIT}/bin/ctld
 RUN chmod +x update_cnf.sh
 RUN chmod +x  ctld
 RUN ln -s /usr/local/apache2/conf/httpd.conf cnf1
 RUN ln -s ${HOME_GIT}/apache/env.conf cnf
 RUN ln -s /usr/local/apache2/bin/envvars envvars
+RUN chown -R git:git /home/git/apache
+
 RUN ln -s a_global_ca.crt ${HOME_GIT}/apache/global_ca.crt
 RUN ln -s ../.ssh/curl-ca-bundle.crt ${HOME_GIT}/apache/a_global_ca.crt
 RUN ln -s /usr/local/apache2/bin/rotatelogs ${HOME_GIT}/bin/rotatelogs
