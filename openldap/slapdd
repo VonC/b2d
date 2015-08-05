@@ -1,6 +1,6 @@
 #! /bin/bash
-
-gldap=$HOME/git/openldap
+H=/home/git
+gldap=$H/openldap
 SLAPD="$(which slapd) -s0"
 CONF1="${gldap}/slapd.1.conf"
 LVL=0x4105
