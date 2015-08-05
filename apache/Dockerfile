@@ -4,6 +4,7 @@ MAINTAINER VonC <vonc@laposte.net>
 USER root
 ENV HOME_GIT /home/git
 WORKDIR $HOME_GIT
+RUN git clone https://github.com/Semantic-Org/Semantic-UI -b 0.9.1 --depth=1 Semantic-UI
 RUN mkdir apache
 RUN mkdir apache/log
 WORKDIR $HOME_GIT/apache
@@ -57,7 +58,6 @@ WORKDIR $HOME_GIT/apache
 USER git
 RUN ./gen_ssl_key_and_crt.sh
 USER root
-RUN git clone https://github.com/Semantic-Org/Semantic-UI -b 0.9.1 --depth=1 ../Semantic-UI
 COPY env.conf ./
 RUN chown -R git:git /home/git/apache
 USER git
