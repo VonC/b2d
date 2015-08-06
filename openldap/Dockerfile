@@ -40,4 +40,5 @@ RUN chmod +x /home/git/openldap/ini_ldap_db.sh
 RUN chown -R git:git /home/git
 WORKDIR /home/git
 USER git
-RUN /home/git/openldap/ini_ldap_db.sh
+RUN mkdir openldap/db.1.a
+RUN /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh

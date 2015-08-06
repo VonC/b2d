@@ -4,13 +4,7 @@ H=/home/git
 openldap="${H}/openldap"
 if [[ ! -e "${openldap}/db.1.a" ]] ; then mkdir -p "${openldap}/db.1.a" ; fi
 
-slapdd stop
 slapdd start
-
-echo "Before wait: $(date)"
-read -t2 -n1 -r -p "Waiting a few seconds for ldap to start..." key
-echo -e "\nAfter wait : $(date)"
-
 slapdd status
 
 bj=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p ${PORT_LDAP_TEST} 'uid=bjensen' uid)
@@ -50,5 +44,3 @@ if [[ "${extusr}" == "" ]] ; then
   extusr=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p ${PORT_LDAP_TEST} 'uid=projextusr1' uid)
   echo "extusr='${extusr}'"
 fi
-
-slapdd stop
