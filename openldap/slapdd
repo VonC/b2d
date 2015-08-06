@@ -60,8 +60,8 @@ case "$1" in
     echo $LDAPSEARCH -b "cn=monitor" -s base -h $LOCALHOST -p $PORT1 'objectclass=*'
     $LDAPSEARCH -b "cn=monitor" -s base -h $LOCALHOST -p $PORT1 'objectclass=*'
   fi
-  if [[ "${afps}" != "${aps}" ]] ; then
-    echo "Warning, the slapd pid recorded is not the same: ${afps}"
+  if [[ "${afps}" != "${aps}" && "${afps}" != "" ]] ; then
+    echo "Warning, the slapd pid recorded is not the same: '${afps}'"
   fi
   ;;
 *)
