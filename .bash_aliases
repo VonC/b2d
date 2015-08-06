@@ -29,3 +29,5 @@ alias din='docker inspect'
 alias dc='docker run --rm -i -t -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`:`pwd` -w `pwd` docker-compose'
 
 alias gl='git log --oneline --decorate --graph -10 --all --branches'
+alias b='./build'
+alias r='./run'
