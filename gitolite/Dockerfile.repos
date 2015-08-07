@@ -12,4 +12,4 @@ VOLUME /home/git/repositories
 VOLUME /home/git/repositories2
 
 ENTRYPOINT ["/bin/sh", "-c"]
-CMD ["echo","Data Volume Container for gitolite repos"]
+CMD ["echo Data Volume Container for gitolite repos"]
