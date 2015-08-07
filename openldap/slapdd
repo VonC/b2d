@@ -32,6 +32,7 @@ case "$1" in
 'start')
   if [[ "$aps" == "" ]] ; then
     echo starting slapd
+    echo $SLAPD -f $CONF1 -h "$URI1" -d $LVL $TIMING in logs "${LOG1}"
     $SLAPD -f $CONF1 -h "$URI1" -d $LVL $TIMING &> "${LOG1}" &
   else
     echo "slapd already started, process ${aps}"

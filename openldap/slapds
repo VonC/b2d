@@ -1,0 +1,10 @@
+#! /bin/bash
+H=/home/git
+gldap=$H/openldap
+SLAPD="$(which slapd) -s0"
+CONF1="${gldap}/slapd.1.conf"
+LVL=0x4105
+URI1="ldap://localhost:$PORT_LDAP_TEST/ ldap://$(hostname):$PORT_LDAP_TEST/"
+LOG1="${gldap}/slapd.1.log"
+
+$SLAPD -f $CONF1 -h "$URI1" -d $LVL $TIMING &> "${LOG1}"

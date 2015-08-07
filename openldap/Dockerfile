@@ -12,6 +12,8 @@ RUN  apt-get -yq update \
 # curl https://raw.githubusercontent.com/VonC/compileEverything/master/openldap/slapdd.tpl -o $HOME/b2d/openldap/slapdd
 COPY slapdd /home/git/bin/slapdd
 RUN chmod +x  /home/git/bin/slapdd
+COPY slapds /home/git/bin/slapds
+RUN chmod +x  /home/git/bin/slapds
 
 RUN mkdir -p /home/git/openldap
 RUN ln -s a_global_ca.crt /home/git/openldap/global_ca.crt
@@ -42,3 +44,5 @@ WORKDIR /home/git
 USER git
 RUN mkdir openldap/db.1.a
 RUN /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh
+ENTRYPOINT ["sh", "-c"]
+CMD ["slapds"]
