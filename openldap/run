@@ -1,0 +1,3 @@
+#! /bin/sh
+. ../.bash_aliases
+d run -d --name openldap openldap
