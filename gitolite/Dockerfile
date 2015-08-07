@@ -6,11 +6,19 @@ MAINTAINER VonC <vonc@laposte.net>
 # ENV https_proxy http://<user>:<pwd>@proxy.company:80
 # ENV no_proxy .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
 
-RUN mkdir /home/git/gitolite ; chown -R git:git /home/git/gitolite
 
-USER git
-RUN cd /home/git; git clone https://github.com/sitaramc/gitolite github;
+RUN mkdir /home/git/gitolite
 RUN mkdir -p /home/git/.gitolite/logs
-# RUN git -C /home/git/github checkout v3.6.2
-RUN /home/git/github/install -to /home/git/gitolite
-RUN USER=git /home/git/gitolite/gitolite setup -a git
+COPY install_or_update_gitolite.sh /home/git/bin/
+RUN chmod +x /home/git/bin/install_or_update_gitolite.sh
+RUN chown -R git:git /home/git
+WORKDIR /home/git
+USER git
+RUN git clone https://github.com/sitaramc/gitolite /home/git/gitolite/github
+RUN /home/git/bin/install_or_update_gitolite.sh
+
+VOLUME /home/git/gitolite
+VOLUME /home/git/.gitolite
+
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["echo Data Volume Container for gitolite installation"]
