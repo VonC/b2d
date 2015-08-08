@@ -4,9 +4,21 @@ if [ "$(docker images -q gitolite.repos 2> /dev/null)" = "" ]; then
   docker build -t gitolite.repos -f $HOME/b2d/gitolite/Dockerfile.repos $HOME/b2d/gitolite || exit 1
 fi
 docker inspect gitolite.repos.cont > /dev/null 2>&1 || docker create --name="gitolite.repos.cont" gitolite.repos
-if [ ! -f grepo ]; then
-	echo ok
+grpath=$(docker inspect -f '{{ index .Volumes "/home/git/repositories" }}' gitolite.repos.cont)
+if [ ! -f grepos ]; then
+	echo "grepos: new container"
+	echo ${grpath}>grepos
 else
-	echo ko
+	echo "grepos: existing container"
+	fgrpath=$(cat grepos)
+	if [ "${grepos}" == "${fgrepos}" ]; then
+		echo "grepos: same path"
+	else
+		echo "grepos: different paths"
+		echo "(file '${fgrepos}') vs."
+		echo "(cont '${grepos}')"
+	  rm -Rf ${grepos}
+	  mv ${fgrepos} ${grepos}
+	fi
 fi
 # docker inspect gitolite > /dev/null 2>&1 || docker build -t gitolite $HOME/b2d/gitolite || exit $?
