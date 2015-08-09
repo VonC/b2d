@@ -22,4 +22,8 @@ else
 		echo ${grpath}>grepos
 	fi
 fi
-# docker inspect gitolite > /dev/null 2>&1 || docker build -t gitolite $HOME/b2d/gitolite || exit $?
+
+if [ "$(docker images -q gitolite 2> /dev/null)" = "" ]; then
+  docker build -t gitolite $HOME/b2d/gitolite || exit 1
+fi
+docker inspect gitolite.cont > /dev/null 2>&1 || docker create --name="gitolite.cont" gitolite
