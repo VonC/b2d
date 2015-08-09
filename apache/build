@@ -1,5 +1,9 @@
 #! /bin/sh
 
+if [ "$(docker images -q apache 2> /dev/null)" != "" ]; then
+  exit 0
+fi
+
 if [ "$(docker images -q apache.deb 2> /dev/null)" = "" ]; then
   docker build -t apache.deb -f $HOME/b2d/apache/Dockerfile.build $HOME/b2d/apache || exit 1
 fi
