@@ -5,3 +5,4 @@ coverage.out
 *.old*
 *_log_*
 *.crt
+/gitolite/grepos
