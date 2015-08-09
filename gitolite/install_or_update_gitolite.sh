@@ -39,6 +39,10 @@ if [[ "${glc}" == "" ]] ; then
   # sed -i "${a}i\    GROUPLIST_PGM                  => 'gitolite-ldap'," "${H}/.gitolite.rc"
 fi
 
+cp /home/git/.gitolite.rc ${gtl}
+cp /home/git/.ssh/gitoliteadm ${gtl}
+cp /home/git/.ssh/gitoliteadm.pub ${gtl}
+
 #sshd start
 
 #if [[ ! -e "${gtl}/ga" ]]; then
