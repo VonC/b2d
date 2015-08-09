@@ -1,5 +1,5 @@
 #! /bin/sh
 . ../.bash_aliases
-d create --name gitolite gitolite
-d create --name gitolite.repos gitolite.repos
+dr --name gitolite.test gitolite bash
+# d create --name gitolite.repos gitolite.repos
 echo test
