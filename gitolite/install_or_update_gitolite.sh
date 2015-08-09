@@ -9,7 +9,7 @@ mkdir -p "${gtl}/bin"
 "${github}/install" -to "${gtl}/bin"
 ssh-keygen -t rsa -f "${H}/.ssh/gitoliteadm" -C "Gitolite Admin access (not interactive)" -q -P ""
 
-GITOLITE_HTTP_HOME= ${gtl}/bin/gitolite setup -pk "${H}/.ssh/gitoliteadm.pub"
+USER=git GITOLITE_HTTP_HOME= ${gtl}/bin/gitolite setup -pk "${H}/.ssh/gitoliteadm.pub"
 sed -i "s,\"/projects.list\",\"/gitolite/projects.list\",g" "${H}/.gitolite.rc"
 sed -i "22a\    GITWEB_PROJECTS_LIST        => '$HOME/gitolite/projects.list'," "${H}/.gitolite.rc"
 sed -i "s,0077,0007,g" "${H}/.gitolite.rc"
