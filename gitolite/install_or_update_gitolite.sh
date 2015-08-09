@@ -36,7 +36,7 @@ if [[ "${glc}" == "" ]] ; then
   a=$(grep -n ");" "${H}/.gitolite.rc")
   a=${a%%:*}
   echo $a
-  sed -i "${a}i\    GROUPLIST_PGM                  => 'gitolite-ldap'," "${H}/.gitolite.rc"
+  # sed -i "${a}i\    GROUPLIST_PGM                  => 'gitolite-ldap'," "${H}/.gitolite.rc"
 fi
 
 #sshd start
