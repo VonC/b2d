@@ -11,14 +11,15 @@ if [ ! -f grepos ]; then
 else
 	echo "grepos: existing container"
 	fgrpath=$(cat grepos)
-	if [ "${grepos}" == "${fgrepos}" ]; then
+	if [ "${grpath}" == "${fgrpath}" ]; then
 		echo "grepos: same path"
 	else
 		echo "grepos: different paths"
-		echo "(file '${fgrepos}') vs."
-		echo "(cont '${grepos}')"
-	  rm -Rf ${grepos}
-	  mv ${fgrepos} ${grepos}
+		echo "(file '${fgrpath}') vs."
+		echo "(cont '${grpath}')"
+		rm -Rf ${grpath}
+		mv ${fgrpath} ${grpath}
+		echo ${grpath}>grepos
 	fi
 fi
 # docker inspect gitolite > /dev/null 2>&1 || docker build -t gitolite $HOME/b2d/gitolite || exit $?
