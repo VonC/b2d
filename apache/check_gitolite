@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ ! -e /home/git/.gitolite.rc]; then
+	ln -s /home/git/gitolite/.gitolite.rc /home/git/.gitolite.rc
+fi
+if [ ! -e /home/git/.ssh/gitoliteadm]; then
+	ln -s /home/git/gitolite/gitoliteadm /home/git/.ssh/gitoliteadm
+fi
+if [ ! -e /home/git/.ssh/gitoliteadm.pub]; then
+	ln -s /home/git/gitolite/gitoliteadm.pub /home/git/.ssh/gitoliteadm.pub
+fi
+if [ ! -e /home/git/.ssh/authorized_keys]; then
+	ln -s /home/git/gitolite/authorized_keys /home/git/.ssh/authorized_keys
+fi

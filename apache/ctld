@@ -47,6 +47,7 @@ HTTPD="/usr/local/apache2/bin/httpd"
 if test -f "/home/git/apache/envvars"; then
   . "/home/git/apache/envvars"
 fi
+check_gitolite
 #
 # a command that outputs a formatted text version of the HTML at the
 # url given on the command line.  Designed for lynx, however other
