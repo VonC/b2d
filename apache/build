@@ -11,5 +11,6 @@ if [ "$(docker images -q apache.inst 2> /dev/null)" = "" ]; then
 	docker inspect apache.deb.cont > /dev/null 2>&1 || docker run -d -t --name=apache.deb.cont apache.deb
 	docker inspect apache.inst.cont > /dev/null 2>&1 || docker run -u root -it --name=apache.inst.cont --volumes-from apache.deb.cont --entrypoint "/bin/sh" openldap -c "dpkg -i /root/deb/apache2-4_2.4.10-1_amd64.deb"
 	docker commit apache.inst.cont apache.inst
+	docker rm apache.deb.cont apache.inst.cont
 fi
 docker build -t apache $HOME/b2d/apache
