@@ -2,7 +2,7 @@
 # Per-repo authorization based on gitolite ACL
 
 BEGIN { 
-$ENV{HOME} = "@H@"; 
+$ENV{HOME} = "/home/git";
 $ENV{GL_BINDIR} = "$ENV{HOME}/gitolite/bin"; 
 $ENV{GL_LIBDIR} = "$ENV{GL_BINDIR}/lib"; 
 $ENV{GL_USER} = $cgi->remote_user || "gitweb"; 
