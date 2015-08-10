@@ -12,10 +12,13 @@ COPY gen_ssl_key_and_crt.sh ./
 RUN chmod +x gen_ssl_key_and_crt.sh
 COPY update_cnf.sh  ./
 COPY ctld ./
+COPY check_gitolite ./
 RUN mkdir logins
 RUN ln -s  ${HOME_GIT}/apache/ctld  ${HOME_GIT}/bin/ctld
+RUN ln -s  ${HOME_GIT}/apache/check_gitolite  ${HOME_GIT}/bin/check_gitolite
 RUN chmod +x update_cnf.sh
 RUN chmod +x  ctld
+RUN chmod +x  check_gitolite
 RUN ln -s /usr/local/apache2/conf/httpd.conf cnf1
 RUN ln -s ${HOME_GIT}/apache/env.conf cnf
 RUN ln -s /usr/local/apache2/bin/envvars envvars
