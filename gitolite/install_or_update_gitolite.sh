@@ -42,6 +42,7 @@ fi
 cp /home/git/.gitolite.rc ${gtl}
 cp /home/git/.ssh/gitoliteadm ${gtl}
 cp /home/git/.ssh/gitoliteadm.pub ${gtl}
+cp /home/git/.ssh/authorized_keys ${gtl}
 
 #sshd start
 
