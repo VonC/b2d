@@ -1,7 +1,9 @@
 #! /bin/sh
 
+cd $HOME/b2d/apache
 if [ "$(docker images -q apache 2> /dev/null)" != "" ]; then
-  exit 0
+	./getcrt
+	exit 0
 fi
 
 if [ "$(docker images -q apache.deb 2> /dev/null)" = "" ]; then
@@ -13,4 +15,4 @@ if [ "$(docker images -q apache.inst 2> /dev/null)" = "" ]; then
 	docker commit apache.inst.cont apache.inst
 	docker rm apache.deb.cont apache.inst.cont
 fi
-docker build -t apache $HOME/b2d/apache
+docker build -t apache $HOME/b2d/apache && ./getcrt
