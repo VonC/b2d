@@ -1,0 +1,4 @@
+git -c http.sslCAInfo=%USERPROFILE%\prog\b2d\apache\crt ls-remote https://p:p@localhost:8553/hgit/testing
+curl --cacert crt https://gitoliteadm:gitoliteadm@localhost:8553/hgit/
+git -c http.sslCAInfo=%USERPROFILE%\prog\b2d\apache\crt ls-remote https://gitoliteadm:gitoliteadm@localhost:8553/hgi
+t/gitolite-admin
