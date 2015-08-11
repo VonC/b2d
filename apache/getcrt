@@ -1,0 +1,12 @@
+#! /bin/sh
+. ../.bash_aliases
+cd $HOME/b2d/apache
+rm -f crt key
+docker run --rm -i -v ${HOME}/b2d/apache:/apache apache sh << COMMANDS
+pwd
+cp crt /apache
+cp key /apache
+echo Changing owner from \$(id -u):\$(id -g) to $(id -u):$(id -u)
+chown -R $(id -u):$(id -u) /apache/crt
+chown -R $(id -u):$(id -u) /apache/key
+COMMANDS
