@@ -67,5 +67,5 @@ WORKDIR $HOME_GIT/apache
 COPY env.conf ./
 RUN chown -R git:git /home/git/apache
 USER git
-ENTRYPOINT ["/bin/sh", "-c"]
-#ENTRYPOINT ["httpd-foreground"]
+ENTRYPOINT ["apachectl"]
+CMD ["-DFOREGROUND"]
