@@ -6,3 +6,5 @@ coverage.out
 *_log_*
 *.crt
 /gitolite/grepos
+/apache/crt
+/apache/key
