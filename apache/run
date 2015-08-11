@@ -5,4 +5,4 @@ cd $HOME/b2d/gitolite
 cd $HOME/b2d/openldap
 ./run
 cd $HOME/b2d/apache
-docker inspect apache.cont > /dev/null 2>&1 || dr --name apache.cont -p 8543:8543 -p 8553:8553 --link openldap.cont:openldap.apache.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont apache bash
+docker inspect apache.cont > /dev/null 2>&1 || docker run -it -d --name apache.cont -p 8543:8543 -p 8553:8553 --link openldap.cont:openldap.apache.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont apache
