@@ -5,4 +5,4 @@ cd ../gitolite
 cd ../openldap
 ./run
 cd ../apache
-docker inspect apache.cont > /dev/null 2>&1 || dr --name apache.cont -p 8543:8543 --link openldap.cont:openldap.apache.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont apache bash
+docker inspect apache.cont > /dev/null 2>&1 || dr --name apache.cont -p 8543:8543 -p 8553:8553 --link openldap.cont:openldap.apache.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont apache bash
