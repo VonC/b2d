@@ -1,7 +1,7 @@
 #! /bin/sh
 . ../.bash_aliases
-ec=$(docker inspect -f '{{ .State.ExitCode }}' openldap.cont 2> /dev/null)
-if [[ "${ec}" != "0" && "${ec}" != "" ]]; then
+ec=$(docker inspect -f '{{ .State.Running }}' openldap.cont 2> /dev/null)
+if [[ "${ec}" == "false" ]]; then
 	docker rm openldap.cont
 fi
 docker inspect openldap.cont > /dev/null 2>&1 || d run -d --name openldap.cont openldap
