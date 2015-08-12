@@ -50,8 +50,10 @@ RUN ln -s /usr/share/gitweb gitweb
 RUN ln -s ../Semantic-UI Semantic-UI
 RUN ln -s gitweb/static static
 RUN ln -s gitweb/gitweb.cgi gitweb.cgi
+RUN cp gitweb/gitweb.cgi gitweb.cgi.ori
 RUN ln -s gitweb-favicon.png favicon.ico
 RUN ln -s gitweb.conf.pl cnf
+RUN sed -i "s#print \"</body>#print \"<script src=\\\\\"jquery.min.js\\\\\"></script>\\\\n<script src=\\\\\"document_ready.js\\\\\"></script>\\\\n<script>if (top != self) top.location=location</script>\\\\n</body>#" "/home/git/gitweb/gitweb/gitweb.cgi"
 
 WORKDIR $HTTPD_PREFIX
 
