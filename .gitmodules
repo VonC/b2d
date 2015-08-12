@@ -2,3 +2,6 @@
 	path = compose
 	url = https://github.com/docker/compose
 	branch = master
+[submodule "compileEverything"]
+	path = compileEverything
+	url = https://VonC@github.com/VonC/compileEverything
