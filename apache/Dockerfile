@@ -65,5 +65,6 @@ WORKDIR $HOME_GIT/apache
 COPY env.conf ./
 RUN chown -R git:git /home/git/apache
 USER git
-ENTRYPOINT ["apachectl"]
-CMD ["-DFOREGROUND"]
+# Define default command.
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["apachectl -DFOREGROUND"]
