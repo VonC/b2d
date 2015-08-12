@@ -1,0 +1,4 @@
+#! /bin/sh
+. ../.bash_aliases
+cd $HOME/b2d/apache
+docker inspect apache.cont > /dev/null 2>&1 && docker kill apache.cont && docker rm apache.cont
