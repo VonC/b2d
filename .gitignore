@@ -8,3 +8,5 @@ coverage.out
 /gitolite/grepos
 /apache/crt
 /apache/key
+/nginx/crt
+/nginx/key
