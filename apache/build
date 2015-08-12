@@ -11,4 +11,4 @@ if [ "$(docker images -q apache.inst 2> /dev/null)" = "" ]; then
 	docker commit apache.inst.cont apache.inst
 	docker rm apache.deb.cont apache.inst.cont
 fi
-docker build -t apache $HOME/b2d/apache && drmiad && ./getcrt
+docker build -t apache $HOME/b2d/apache && drmiad 2> /dev/null && ./getcrt
