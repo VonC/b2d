@@ -1,0 +1,8 @@
+#! /bin/sh
+
+. ../.bash_aliases
+cd $HOME/b2d/nginx
+cp -f ../apache/crt crt
+cp -f ../apache/key key
+docker build -t nginx $HOME/b2d/nginx
+drmiad 2> /dev/null

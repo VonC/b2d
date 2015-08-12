@@ -1,0 +1,6 @@
+#! /bin/sh
+. ../.bash_aliases
+cd $HOME/b2d/apache
+./run
+cd $HOME/b2d/nginx
+docker inspect nginx.cont > /dev/null 2>&1 || docker run -it -d --name nginx.cont -p 80:80 -p 443:443 --link apache.cont:nginx.apache.cont nginx
