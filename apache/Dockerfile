@@ -58,11 +58,9 @@ WORKDIR $HTTPD_PREFIX
 COPY httpd-foreground /usr/local/bin/
 RUN chmod +x /usr/local/bin/httpd-foreground
 
-EXPOSE 8091
-EXPOSE 8433
-EXPOSE 8443
-EXPOSE 8453
-EXPOSE 8463
+# EXPOSE 8091
+EXPOSE 8543
+EXPOSE 8553
 WORKDIR $HOME_GIT/apache
 COPY env.conf ./
 RUN chown -R git:git /home/git/apache
