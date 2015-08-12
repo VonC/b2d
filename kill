@@ -1,0 +1,6 @@
+#! /bin/sh
+. .bash_aliases
+cd $HOME/b2d/nginx
+k
+cd $HOME/b2d/apache
+k
