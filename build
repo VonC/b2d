@@ -1,8 +1,10 @@
 #! /bin/sh
 
-$HOME/b2d/git/build
-$HOME/b2d/go/build
-$HOME/b2d/gitolite/build
-$HOME/b2d/gcc/build
-$HOME/b2d/openldap/build
-$HOME/b2d/apache/build
+cd $HOME/b2d/git && $HOME/b2d/git/build
+cd $HOME/b2d/go && $HOME/b2d/go/build
+cd $HOME/b2d/gitolite && $HOME/b2d/gitolite/build
+cd $HOME/b2d/gcc $HOME/b2d/gcc/build
+cd $HOME/b2d/openldap && $HOME/b2d/openldap/build
+cd $HOME/b2d/apache && $HOME/b2d/apache/build
+cd $HOME/b2d/nginx && $HOME/b2d/nginx/build
+cd $HOME/b2d
