@@ -2,6 +2,12 @@
 
 # Apache ports
 #  gitweb for web gui interface:
-@PORT_HTTP_GITWEB@ = 9443
+@PORT_HTTP_GITWEB@ = 9043
 #  hgit for git clone:
-@PORT_HTTP_HGIT@   = 9453
+@PORT_HTTP_HGIT@   = 9053
+
+# NGiNX ports
+#   for https:
+@PORT_NGINX_HTTPS@=9443
+#   for http :
+@PORT_NGINX_HTTP@=9080
