@@ -13,7 +13,7 @@ fi
 
 apache_cont="apache.cont"
 apache_openldap_cont="apache.openldap.cont"
-gitolite_cont="${gitolite_cont}"
+gitolite_cont="gitolite.cont"
 gitolite_repos_cont="gitolite.repos.cont"
 envs_cnf="envs.cnf"
 
@@ -28,5 +28,7 @@ port_gitweb=$(sed -n "s#^\s*@PORT_HTTP_GITWEB@\s*=\s*##p" ../${envs_cnf})
 if [ "${port_gitweb}" == "" ]; then echo "missing @PORT_HTTP_GITWEB@ in '$HOME/b2d/${envs_cnf}'"; exit 0; fi
 port_hgit=$(sed -n "s#^\s*@PORT_HTTP_HGIT@\s*=\s*##p" ../${envs_cnf})
 if [ "${port_hgit}" == "" ]; then echo "missing @PORT_HTTP_HGIT@ in '$HOME/b2d/${envs_cnf}'"; exit 0; fi
+
+echo "docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -p ${port_hgit}:8553 --link openldap.cont:apache.openldap.cont --volumes-from ${gitolite_repos_cont} --volumes-from ${gitolite_cont} apache"
 
 docker inspect ${apache_cont} > /dev/null 2>&1 || docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -p ${port_hgit}:8553 --link openldap.cont:apache.openldap.cont --volumes-from ${gitolite_repos_cont} --volumes-from ${gitolite_cont} apache
