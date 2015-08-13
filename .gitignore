@@ -5,7 +5,7 @@ coverage.out
 *.old*
 *_log_*
 *.crt
-/gitolite/grepos
+/gitolite/grepos*
 /apache/crt
 /apache/key
 /nginx/crt
