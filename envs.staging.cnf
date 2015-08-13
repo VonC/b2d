@@ -1,0 +1,7 @@
+# Staging environment
+
+# Apache ports
+#  gitweb for web gui interface:
+@PORT_HTTP_GITWEB@ = 7443
+#  hgit for git clone:
+@PORT_HTTP_HGIT@   = 7453
