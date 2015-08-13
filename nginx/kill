@@ -1,6 +1,6 @@
 #! /bin/sh
-. ../.bash_aliases
 cd $HOME/b2d/nginx
+. ../.bash_aliases
 
 nginx_cont="nginx.cont"
 
@@ -8,4 +8,5 @@ if [ "${1}" != "" ]; then
 	nginx_cont="nginx.${1}.cont"
 fi
 
-docker inspect ${nginx_cont} > /dev/null 2>&1 && docker kill ${nginx_cont} && docker rm ${nginx_cont}
+docker inspect ${nginx_cont} > /dev/null 2>&1 && docker kill ${nginx_cont} 2> /dev/null
+docker inspect ${nginx_cont} > /dev/null 2>&1 && docker rm ${nginx_cont}
