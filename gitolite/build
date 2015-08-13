@@ -1,21 +1,19 @@
 #! /bin/sh
 
-gitolite_repos="gitolite.repos"
 gitolite_cont="gitolite.cont"
 gitolite_repos_cont="gitolite.repos.cont"
 grepos="grepos"
 
 if [[ "${1}" != "" && "${1}" != "bash" ]]; then
-	gitolite_repos="gitolite.repos.${1}"
 	gitolite_cont="gitolite.${1}.cont"
 	gitolite_repos_cont="gitolite.repos.${1}.cont"
 	grepos="grepos.${1}"
 fi
 
-if [ "$(docker images -q ${gitolite_repos} 2> /dev/null)" = "" ]; then
-  docker build -t ${gitolite_repos} -f $HOME/b2d/gitolite/Dockerfile.repos $HOME/b2d/gitolite || exit 1
+if [ "$(docker images -q gitolite.repos 2> /dev/null)" = "" ]; then
+  docker build -t gitolite.repos -f $HOME/b2d/gitolite/Dockerfile.repos $HOME/b2d/gitolite || exit 1
 fi
-docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 || docker create --name="${gitolite_repos_cont}" ${gitolite_repos}
+docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 || docker create --name="${gitolite_repos_cont}" gitolite.repos
 grpath=$(docker inspect -f '{{ index .Volumes "/home/git/repositories" }}' ${gitolite_repos_cont})
 if [ ! -f $HOME/b2d/gitolite/${grepos} ]; then
 	echo "${grepos}: new container"
