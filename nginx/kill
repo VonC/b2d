@@ -2,10 +2,14 @@
 cd $HOME/b2d/nginx
 . ../.bash_aliases
 
-nginx_cont="nginx.cont"
+env=${1}
+if [[ "${env}" == "all" || "${env}" == "ALL" ]]; then
+	env=""
+fi
 
-if [ "${1}" != "" ]; then
-	nginx_cont="nginx.${1}.cont"
+nginx_cont="nginx.cont"
+if [ "${env}" != "" ]; then
+	nginx_cont="nginx.${env}.cont"
 fi
 
 docker inspect ${nginx_cont} > /dev/null 2>&1 && docker kill ${nginx_cont} 2> /dev/null
