@@ -7,4 +7,5 @@ if [ "${1}" != "" ]; then
 	apache_cont="apache.${1}.cont"
 fi
 
-docker inspect  ${apache_cont} > /dev/null 2>&1 && docker kill  ${apache_cont} && docker rm  ${apache_cont}
+docker inspect  ${apache_cont} > /dev/null 2>&1 && docker kill ${apache_cont} 2> /dev/null
+docker inspect  ${apache_cont} > /dev/null 2>&1 && docker rm ${apache_cont}
