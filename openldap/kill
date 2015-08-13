@@ -1,0 +1,6 @@
+#! /bin/sh
+cd $HOME/b2d/openldap
+. ../.bash_aliases
+
+docker inspect openldap.cont > /dev/null 2>&1 && docker kill openldap.cont 2> /dev/null
+docker inspect openldap.cont > /dev/null 2>&1 && docker rm openldap.cont
