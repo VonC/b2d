@@ -32,3 +32,20 @@ alias gl='git log --oneline --decorate --graph -10 --all --branches'
 alias b='./build'
 alias r='./run'
 alias k='./kill'
+alias rba='./run bash'
+
+alias bb='./build blessed'
+alias rb='./run blessed'
+alias kb='./kill blessed'
+
+alias bs='./build staging'
+alias rs='./run staging'
+alias ks='./kill staging'
+
+alias be='./build external'
+alias re='./run external'
+alias ke='./kill external'
+
+alias bi='./build internal'
+alias ri='./run internal'
+alias ki='./kill internal'
