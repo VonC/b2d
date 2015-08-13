@@ -21,7 +21,6 @@ if [ "${1}" != "" ]; then
 	apache_cont="apache.${1}.cont"
 	gitolite_cont="gitolite.${1}.cont"
 	gitolite_repos_cont="gitolite.repos.${1}.cont"
-	grepos="grepos.${1}"
 	envs_cnf="envs.${1}.cnf"
 fi
 
