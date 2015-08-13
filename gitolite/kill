@@ -1,0 +1,10 @@
+#! /bin/sh
+. ../.bash_aliases
+cd $HOME/b2d/gitolite
+
+gitolite_cont="gitolite.cont"
+if [[ "${1}" != "" && "${1}" != "bash" ]]; then
+	gitolite_cont="gitolite.${1}.cont"
+fi
+
+docker inspect ${gitolite_cont} > /dev/null 2>&1 docker rm ${gitolite_cont}
