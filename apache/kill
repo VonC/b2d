@@ -2,9 +2,14 @@
 . ../.bash_aliases
 cd $HOME/b2d/apache
 
+env=${1}
+if [[ "${env}" == "all" || "${env}" == "ALL" ]]; then
+	env=""
+fi
+
 apache_cont="apache.cont"
-if [ "${1}" != "" ]; then
-	apache_cont="apache.${1}.cont"
+if [ "${env}" != "" ]; then
+	apache_cont="apache.${env}.cont"
 fi
 
 docker inspect  ${apache_cont} > /dev/null 2>&1 && docker kill ${apache_cont} 2> /dev/null
