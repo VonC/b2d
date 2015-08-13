@@ -1,20 +1,32 @@
 #! /bin/sh
 
-if [ "$(docker images -q gitolite.repos 2> /dev/null)" = "" ]; then
-  docker build -t gitolite.repos -f $HOME/b2d/gitolite/Dockerfile.repos $HOME/b2d/gitolite || exit 1
+gitolite_repos="gitolite.repos"
+gitolite_cont="gitolite.cont"
+gitolite_repos_cont="gitolite.repos.cont"
+grepos="grepos"
+
+if [[ "${1}" != "" && "${1}" != "bash" ]]; then
+	gitolite_repos="gitolite.repos.${1}"
+	gitolite_cont="gitolite.${1}.cont"
+	gitolite_repos_cont="gitolite.repos.${1}.cont"
+	grepos="grepos.${1}"
 fi
-docker inspect gitolite.repos.cont > /dev/null 2>&1 || docker create --name="gitolite.repos.cont" gitolite.repos
-grpath=$(docker inspect -f '{{ index .Volumes "/home/git/repositories" }}' gitolite.repos.cont)
-if [ ! -f $HOME/b2d/gitolite/grepos ]; then
-	echo "grepos: new container"
-	echo ${grpath}>$HOME/b2d/gitolite/grepos
+
+if [ "$(docker images -q ${gitolite_repos} 2> /dev/null)" = "" ]; then
+  docker build -t ${gitolite_repos} -f $HOME/b2d/gitolite/Dockerfile.repos $HOME/b2d/gitolite || exit 1
+fi
+docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 || docker create --name="${gitolite_repos_cont}" ${gitolite_repos}
+grpath=$(docker inspect -f '{{ index .Volumes "/home/git/repositories" }}' ${gitolite_repos_cont})
+if [ ! -f $HOME/b2d/gitolite/${grepos} ]; then
+	echo "${grepos}: new container"
+	echo ${grpath}>$HOME/b2d/gitolite/${grepos}
 else
-	echo "grepos: existing container"
-	fgrpath=$(cat $HOME/b2d/gitolite/grepos)
+	echo "${grepos}: existing container"
+	fgrpath=$(cat $HOME/b2d/gitolite/${grepos})
 	if [ "${grpath}" == "${fgrpath}" ]; then
-		echo "grepos: same path"
+		echo "${grepos}: same path"
 	else
-		echo "grepos: different paths"
+		echo "${grepos}: different paths"
 		echo "(file '${fgrpath}') vs."
 		echo "(cont '${grpath}')"
 		if sudo [ ! -d "${fgrpath}" ]; then
@@ -27,10 +39,10 @@ else
 		fi
 		sudo rm -Rf ${grpath}
 		sudo mv ${fgrpath} ${grpath}
-		echo "${grpath} in $HOME/b2d/gitolite/grepos"
-		rm -f $HOME/b2d/gitolite/grepos
-		echo ${grpath}>$HOME/b2d/gitolite/grepos
-		echo "new grepos: $(cat $HOME/b2d/gitolite/grepos)"
+		echo "${grpath} in $HOME/b2d/gitolite/${grepos}"
+		rm -f $HOME/b2d/gitolite/${grepos}
+		echo ${grpath}>$HOME/b2d/gitolite/${grepos}
+		echo "new ${grepos}: $(cat $HOME/b2d/gitolite/${grepos})"
 	fi
 fi
 
@@ -38,16 +50,16 @@ if [ "$(docker images -q gitolite 2> /dev/null)" = "" ]; then
   docker build -t gitolite $HOME/b2d/gitolite || exit 1
 fi
 
-fgrpath=$(cat $HOME/b2d/gitolite/grepos)
+fgrpath=$(cat $HOME/b2d/gitolite/${grepos})
 echo "test '${fgrpath}'"
 
 empty=$(sudo ls ${fgrpath} 2> /dev/null)
 if [ "${empty}" = "" ] ; then
 	echo "empty folder '${fgrpath}'"
     docker rm gitolite.setup.cont 2> /dev/null
-    docker run -it --rm --name gitolite.setup.cont --volumes-from gitolite.repos.cont gitolite "USER=git GITOLITE_HTTP_HOME= /home/git/gitolite/bin/gitolite setup -pk /home/git/.ssh/gitoliteadm.pub"
+    docker run -it --rm --name gitolite.setup.cont --volumes-from ${gitolite_repos_cont} gitolite "USER=git GITOLITE_HTTP_HOME= /home/git/gitolite/bin/gitolite setup -pk /home/git/.ssh/gitoliteadm.pub"
 else
 	echo "NOT empty folder '${fgrpath}'"
 fi
 
-docker inspect gitolite.cont > /dev/null 2>&1 || docker create --name="gitolite.cont" gitolite
+docker inspect ${gitolite_cont} > /dev/null 2>&1 || docker create --name="${gitolite_cont}" gitolite
