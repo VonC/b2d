@@ -1,4 +1,10 @@
 #! /bin/sh
 . ../.bash_aliases
 cd $HOME/b2d/apache
-docker inspect apache.cont > /dev/null 2>&1 && docker kill apache.cont && docker rm apache.cont
+
+apache_cont="apache.cont"
+if [ "${1}" != "" ]; then
+	apache_cont="apache.${1}.cont"
+fi
+
+docker inspect  ${apache_cont} > /dev/null 2>&1 && docker kill  ${apache_cont} && docker rm  ${apache_cont}
