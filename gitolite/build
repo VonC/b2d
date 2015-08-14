@@ -1,6 +1,7 @@
 #! /bin/sh
 
-cd $HOME/b2d/gitolite
+cd $(readlink -f $HOME/b2d/gitolite)
 
-docker build -t gitolite.repos -f Dockerfile.repos $HOME/b2d/gitolite || exit 1
-docker build -t gitolite $HOME/b2d/gitolite || exit 1
+docker build -t gitolite.repos -f Dockerfile.repos . || exit 1
+docker build -t gitolite . || exit 1
+drmiad 2> /dev/null
