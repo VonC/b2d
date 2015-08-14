@@ -2,5 +2,10 @@
 cd $HOME/b2d/openldap
 . ../.bash_aliases
 
+used=$(docker ps --format "{{.Image}}"|grep -E "(^apache$|^nginx$)")
+if [ "${used}" != "" ]; then
+	echo "kill openldap: other apache or nginx still there"
+	exit 0
+fi
 docker inspect openldap.cont > /dev/null 2>&1 && docker kill openldap.cont 2> /dev/null
 docker inspect openldap.cont > /dev/null 2>&1 && docker rm openldap.cont
