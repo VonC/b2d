@@ -1,5 +1,69 @@
 #! /bin/sh
 . ../.bash_aliases
-dr --name gitolite.test gitolite bash
-# d create --name gitolite.repos gitolite.repos
-echo test
+
+if [ "${1}" == "bash" ]; then
+	docker inspect gitolite.repos.test.cont > /dev/null 2>&1 || docker create --name="gitolite.repos.test.cont" gitolite.repos /bin/true
+	docker run -it --rm  --name gitolite.test --volumes-from gitolite.repos.test.cont gitolite bash
+	docker inspect gitolite.repos.test.cont > /dev/null 2>&1 && docker rm gitolite.repos.test.cont
+	exit 0
+fi
+
+gitolite_cont="gitolite.cont"
+gitolite_repos_cont="gitolite.repos.cont"
+grepos="grepos"
+
+if [[ "${1}" != "" ]]; then
+	gitolite_cont="gitolite.${1}.cont"
+	gitolite_repos_cont="gitolite.repos.${1}.cont"
+	grepos="grepos.${1}"
+fi
+
+docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 || docker create --name="${gitolite_repos_cont}" gitolite.repos /bin/true
+grpath=$(docker inspect -f '{{ (index .Mounts 0).Source }}' ${gitolite_repos_cont} 2> /dev/null)
+if [ "${grpath}" == "" ]; then
+	echo "unable to find volume for data repo container '${gitolite_repos_cont}'"
+	exit 1
+fi
+
+if [ ! -f $HOME/b2d/gitolite/${grepos} ]; then
+	echo "${grepos}: new container"
+	echo ${grpath}>$HOME/b2d/gitolite/${grepos}
+else
+	echo "${grepos}: existing container"
+	fgrpath=$(cat $HOME/b2d/gitolite/${grepos})
+	if [ "${grpath}" == "${fgrpath}" ]; then
+		echo "${grepos}: same path"
+	else
+		echo "${grepos}: different paths"
+		echo "(file '${fgrpath}') vs."
+		echo "(cont '${grpath}')"
+		if sudo [ ! -d "${fgrpath}" ]; then
+			echo "NON-EXISTING f grepo path: '${fgrpath}'"
+			exit 1
+		fi
+		if sudo [ ! -d "${grpath}" ]; then
+			echo "NON-EXISTING grepo path: '${grpath}'"
+			exit 1
+		fi
+		sudo rm -Rf ${grpath}
+		sudo mv ${fgrpath} ${grpath}
+		echo "${grpath} in $HOME/b2d/gitolite/${grepos}"
+		rm -f $HOME/b2d/gitolite/${grepos}
+		echo ${grpath}>$HOME/b2d/gitolite/${grepos}
+		echo "new ${grepos}: $(cat $HOME/b2d/gitolite/${grepos})"
+	fi
+fi
+
+fgrpath=$(cat $HOME/b2d/gitolite/${grepos})
+echo "test '${fgrpath}'"
+
+empty=$(sudo ls ${fgrpath} 2> /dev/null)
+if [ "${empty}" = "" ] ; then
+	echo "empty folder '${fgrpath}'"
+    docker rm gitolite.setup.cont 2> /dev/null
+    docker run -it --rm --name gitolite.setup.cont --volumes-from ${gitolite_repos_cont} gitolite "USER=git GITOLITE_HTTP_HOME= /home/git/gitolite/bin/gitolite setup -pk /home/git/.ssh/gitoliteadm.pub"
+else
+	echo "NOT empty folder '${fgrpath}'"
+fi
+
+docker inspect ${gitolite_cont} > /dev/null 2>&1 || docker create --name="${gitolite_cont}" gitolite
