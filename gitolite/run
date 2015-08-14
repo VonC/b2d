@@ -19,40 +19,9 @@ if [[ "${1}" != "" ]]; then
 fi
 
 docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 || docker create --name="${gitolite_repos_cont}" gitolite.repos /bin/true
-grpath=$(docker inspect -f '{{ (index .Mounts 0).Source }}' ${gitolite_repos_cont} 2> /dev/null)
-if [ "${grpath}" == "" ]; then
-	echo "unable to find volume for data repo container '${gitolite_repos_cont}'"
-	exit 1
-fi
 
-if [ ! -f $HOME/b2d/gitolite/${grepos} ]; then
-	echo "${grepos}: new container"
-	echo ${grpath}>$HOME/b2d/gitolite/${grepos}
-else
-	echo "${grepos}: existing container"
-	fgrpath=$(cat $HOME/b2d/gitolite/${grepos})
-	if [ "${grpath}" == "${fgrpath}" ]; then
-		echo "${grepos}: same path"
-	else
-		echo "${grepos}: different paths"
-		echo "(file '${fgrpath}') vs."
-		echo "(cont '${grpath}')"
-		if sudo [ ! -d "${fgrpath}" ]; then
-			echo "NON-EXISTING f grepo path: '${fgrpath}'"
-			exit 1
-		fi
-		if sudo [ ! -d "${grpath}" ]; then
-			echo "NON-EXISTING grepo path: '${grpath}'"
-			exit 1
-		fi
-		sudo rm -Rf ${grpath}
-		sudo mv ${fgrpath} ${grpath}
-		echo "${grpath} in $HOME/b2d/gitolite/${grepos}"
-		rm -f $HOME/b2d/gitolite/${grepos}
-		echo ${grpath}>$HOME/b2d/gitolite/${grepos}
-		echo "new ${grepos}: $(cat $HOME/b2d/gitolite/${grepos})"
-	fi
-fi
+. ../updateDataContainerPath
+updatePath ${gitolite_repos_cont} "$HOME/b2d/gitolite" ${grepos}
 
 fgrpath=$(cat $HOME/b2d/gitolite/${grepos})
 echo "test '${fgrpath}'"

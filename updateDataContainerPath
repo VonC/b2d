@@ -1,0 +1,47 @@
+#! /bin/sh -x
+
+updatePath() {
+	
+	cntname="${1}"
+	fpath="${2}"
+	fname="${3}"
+
+	grpath=$(docker inspect -f '{{ (index .Mounts 0).Source }}' ${cntname} 2> /dev/null)
+	if [ "${grpath}" == "" ]; then
+		echo "unable to find volume for data repo container '${cntname}'"
+		exit 1
+	fi
+
+	if [ ! -f "${fpath}/${fname}" ]; then
+		echo "${fname}: new container"
+		echo ${grpath}>"${fpath}/${fname}"
+	else
+		echo "${fname}: existing container"
+		fgrpath=$(cat "${fpath}/${fname}")
+		if [ "${grpath}" == "${fgrpath}" ]; then
+			echo "${fname}: same path"
+		else
+			echo "${fname}: different paths"
+			echo "(file '${fgrpath}') vs."
+			echo "(cont '${grpath}')"
+			if sudo [ ! -d "${fgrpath}" ]; then
+				echo "NON-EXISTING f grepo path: '${fgrpath}'"
+				exit 1
+			fi
+			if sudo [ ! -d "${grpath}" ]; then
+				echo "NON-EXISTING grepo path: '${grpath}'"
+				exit 1
+			fi
+			# echo "sudo rm -Rf \"${grpath}\""
+			sudo rm -Rf "${grpath}"
+			# echo "sudo mv \"${fgrpath}\" \"${grpath}\""
+			sudo mv "${fgrpath}" "${grpath}"
+			echo "${grpath} in \"${fpath}/${fname}\""
+			# echo "rm -f \"${fpath}/${fname}\""
+			rm -f "${fpath}/${fname}"
+			echo ${grpath}>"${fpath}/${fname}"
+			echo "new ${fname}: $(cat "${fpath}/${fname}")"
+		fi
+	fi
+
+}
