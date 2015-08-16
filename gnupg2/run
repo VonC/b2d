@@ -1,0 +1,17 @@
+#! /bin/sh
+. ../.bash_aliases
+
+if [ "${1}" == "bash" ]; then
+	docker run -it --rm  --name gnupg2.test gnupg2 bash
+	exit 0
+fi
+
+gnupg2_cont="gnupg2.cont"
+grepos="gnupg2data"
+
+if [[ "${1}" != "" ]]; then
+	gnupg2_cont="gnupg2.${1}.cont"
+	grepos="${grepos}.${1}"
+fi
+
+docker inspect ${gnupg2_cont} > /dev/null 2>&1 || docker create --name="${gnupg2_cont}" gnupg2

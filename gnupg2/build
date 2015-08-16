@@ -1,0 +1,6 @@
+#! /bin/sh
+
+cd $(readlink -f $HOME/b2d/gnupg2)
+. ../.bash_aliases
+docker build -t gnupg2 . || exit 1
+drmiad 2> /dev/null

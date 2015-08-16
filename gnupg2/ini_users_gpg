@@ -1,0 +1,108 @@
+#!/bin/bash
+
+g="${H}/.gnupg"
+
+function fix_unattended () {
+  local name="${1}"
+  local tmp_unattended="${name}".tmp.unattended
+  touch $tmp_unattended
+  while read line 
+  do
+    echo $line >> ${tmp_unattended}
+    if [[ $line == *"Expire"* ]]
+    then 
+       echo "Passphrase: ${name}pp1" >> ${tmp_unattended}
+    fi
+  done < "${name}".unattended
+}
+
+fix_unattended "projextrdr"
+
+function add_key() {
+
+  local name="${1}"
+  local passphrase="${1}pp1"
+
+  if [[ $(gpg2 -k | grep "${name}") == "" ]]; then
+   # GNUPG 2.1.X  put passphrase in unattended file 
+     gpg2 --batch --yes --no-tty  --gen-key "${name}".tmp.unattended 
+  fi
+  if [[ $(gpg2 -k | grep "${name}") == "" ]]; then
+    echo "No key generated for ${name}"
+    exit 1
+  fi
+  if [[ ! -e "${g}/${name}.privatekey.asc" ]]; then
+ #    gpg  --export-secret-keys --armor ${name} > "${g}/${name}.privatekey.asc"
+    gpg --pinentry-mode loopback --passphrase-fd 0 --export-secret-keys --armor ${name} <<< ${passphrase}> "${g}/${name}.privatekey.asc"
+  fi
+  if [[ ! -e "${g}/${name}.publickey.asc" ]]; then
+    gpg --export --armor ${name} > "${g}/${name}.publickey.asc"
+  fi
+  echo $passphrase
+}
+
+function get_machine_from_url(){
+  local url="${1}"
+  local _machine="${2}"
+  local machine="${url#https://}"
+  machine="${machine#*@}"
+  machine="${machine%%/*}"
+  machine="${machine%%/*}"
+  machine="${machine%%:*}"
+  eval ${_machine}="'${machine}'"
+}
+
+f=$(gpg --batch -q -d "${g}/users.netrc.asc" 2>/dev/null)
+#f=$(gpg --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< ${passphrase} 2>/dev/null)
+
+
+NEWLINE=$'\n'
+
+function update_f() {
+  local af="${1}"
+  local name="${2}"
+  local machine="${3}"
+  local password="${4}"
+  local _f="f"
+  # http://stackoverflow.com/questions/3005963/how-can-i-have-a-newline-in-a-string-in-sh
+  NEWLINE=$'\n'
+  if [[ "${password}" == "" ]]; then password="${name}"; fi
+  # http://stackoverflow.com/questions/229551/string-contains-in-bash
+  if [[ "${af/machine ${machine} protocol https login ${name}/}" == "${af}" ]] ; then
+    af="${af}machine ${machine} protocol https login ${name} password ${password}${NEWLINE}"
+    echo -n "af='${af}'"
+  fi
+  eval ${_f}="'${af}'"
+}
+
+passphrase=$(add_key  "projextrdr")
+fenv="${H}/.envs.private"
+source "${H}/sbin/usrcmd/get_tpl_value"
+
+function add_user() {
+  local user="${1}"
+  local password="${2}"
+  # SSi: 18/Feb/2015 : bug: cannot decrypt without passphrase. Replacing line below by another line using the pinendty mode
+  #local f=$(gpg --batch -q -d "${g}/users.netrc.asc" 2>/dev/null)
+  local f=$(gpg  --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< ${passphrase} 2>/dev/null)
+  if [[ "${f}" != "" ]]; then f="${f}${NEWLINE}"; fi
+
+  get_tpl_value "${fenv}" "@UPSTREAM_URL_HGIT@" upstream_url_hgit
+  if [[ "${upstream_url_hgit}" != "" ]]; then
+    get_machine_from_url "${upstream_url_hgit}" upstream
+    echo "upstream='${upstream}', for user '${user}': ====="
+    update_f "${f}" "${user}" "${upstream}" "${password}"
+    echo "f='${f}'"
+  fi
+
+  get_tpl_value "${fenv}" "@DOWNSTREAM_URL_HGIT@" downstream_url_hgit
+  if [[ "${downstream_url_hgit}" != "" ]]; then
+    get_machine_from_url "${downstream_url_hgit}" downstream
+    echo "downstream='${downstream}'"
+    update_f "${f}" "${user}" "${downstream}" "${password}"
+    echo "f='${f}'"
+  fi
+  gpg -ea -r projextrdr <<< "${f}" > "${g}/users.netrc.asc"
+}
+
+add_user "projextrdr"

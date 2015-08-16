@@ -1,0 +1,25 @@
+#! /bin/sh
+cd $HOME/b2d/gnupg2
+. ../.bash_aliases
+
+if [ "${1}" == "bash" ]; then
+	docker inspect gnupg2.test > /dev/null 2>&1 && docker rm gnupg2.test
+	exit 0
+fi
+
+env=${1}
+all=${2}
+if [[ "${env}" == "all" || "${env}" == "ALL" ]]; then
+	all=${env}
+	env=""
+fi
+
+gnupg2_cont="gnupg2.cont"
+if [[ "${env}" != "" && "${env}" != "bash" ]]; then
+	gnupg2_cont="gnupg2.${env}.cont"
+fi
+
+
+if [[ "${all}" == "all" || "${all}" == "ALL" ]]; then
+	docker inspect ${gnupg2_cont} > /dev/null 2>&1 && docker rm ${gnupg2_cont}
+fi
