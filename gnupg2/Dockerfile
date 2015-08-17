@@ -19,7 +19,7 @@ COPY .envs.example /home/git/.envs.private
 COPY projextrdr.unattended /home/git/.gnupg/
 
 RUN chown -R git:git /home/git
-WORKDIR /home/git
+WORKDIR /home/git/.gnupg
 USER git
 ENV H=/home/git
 
