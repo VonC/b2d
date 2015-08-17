@@ -16,6 +16,7 @@ RUN chmod +x /home/git/sbin/usrcmd/get_tpl_value
 COPY ini_users_gpg /home/git/bin/
 RUN chmod +x /home/git/bin/ini_users_gpg
 COPY .envs.example /home/git/.envs.private
+COPY projextrdr.unattended /home/git/.gnupg/
 
 RUN chown -R git:git /home/git
 WORKDIR /home/git
