@@ -1,11 +1,11 @@
-# staging|external
-machine upstream.fully.qualified.name
+# staging
+machine staging
 login gitoliteadm
-password xxxx
+password gitoliteadm
 
-@UPSTREAM_URL_HGIT@=https://upstream.fully.qualified.name:yy443/hgit/
-@UPSTREAM_NAME@=staging|external
-@LOCAL_GA_BRANCH@=(master or master-ext)
+@UPSTREAM_URL_HGIT@=https://staging:8443/hgit/
+@UPSTREAM_NAME@=staging
+@LOCAL_GA_BRANCH@=master_ext
 
 # branch used by public repo for internal contribution
 @LOCAL_BRANCH@=master
@@ -14,10 +14,8 @@ password xxxx
 @EXT_BRANCH_NAME@=master_ext
 
 # remote branch used to publish internal commits to upstream repo
-@UPSTREAM_BRANCH@=master_xxx
+@UPSTREAM_BRANCH@=master_internal
 
 # login for pushing upstream
 @USER_PUSH@=projextrdr
-
-# url to push back commits detected from external
-@DOWNSTREAM_URL_HGIT@=https://downstream.fully.qualified.name:yy443/hgit/
+@USER_PUSH_PASSWORD@=projextrdr
