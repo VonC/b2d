@@ -33,6 +33,7 @@ alias b='./build'
 alias r='./run'
 alias k='./kill'
 alias rba='./run bash'
+alias kba='./kill bash'
 
 alias bb='./build blessed'
 alias rb='./run blessed'
