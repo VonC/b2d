@@ -25,10 +25,11 @@ function add_key() {
   local passphrase="${1}pp1"
 
   if [[ $(gpg2 -k | grep "${name}") == "" ]]; then
+   # See http://stackoverflow.com/a/26024403/6309
+    dd if=/dev/random of=/dev/null bs=1 count=1024 >/dev/null
    # GNUPG 2.1.X  put passphrase in unattended file 
-   # https://bugs.launchpad.net/ubuntu/+source/gnupg/+bug/706011
-   # http://serverfault.com/questions/471412/gpg-gen-key-hangs-at-gaining-enough-entropy-on-centos-6
-     EXTRAOPTIONS="-r /dev/urandom" gpg2 --batch --yes --no-tty  --gen-key "${name}".tmp.unattended
+     gpg2 --batch --yes --no-tty  --gen-key "${name}".tmp.unattended
+     gpg2 --batch --yes --no-tty  --gen-key "${name}".tmp.unattended
   fi
   if [[ $(gpg2 -k | grep "${name}") == "" ]]; then
     echo "No key generated for ${name}"
