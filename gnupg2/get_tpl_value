@@ -7,6 +7,8 @@ function get_tpl_value() {
   local _value="$3"
   local avalue=""
 
+  # echo "get_tpl_value: look for key '${akey}' in file '${aparamfile}'"
+
   if [[ ! -e "${aparamfile}" ]] ; then return 0 ; fi
   while read line; do
     local rvalue=${line#*=}
@@ -16,11 +18,13 @@ function get_tpl_value() {
       # echo "key: '${rkey}' - akey '${akey}'"
       if [[ "${rkey}" == "${akey}" ]] ; then
         avalue="${rvalue}"
-        # echo "avalue='${avalue}'"
+         # echo "avalue='${avalue}'"
+         eval ${_value}="'${avalue}'"
+         return 0
       fi
     fi
   done < "${aparamfile}"
 
   # echo "avalueF='${avalue}'"
-  eval ${_value}="'${avalue}'"
+  eval ${_value}=""
 }
