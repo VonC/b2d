@@ -37,10 +37,10 @@ function add_key() {
   fi
   if [[ ! -e "${g}/${name}.privatekey.asc" ]]; then
  #    gpg  --export-secret-keys --armor ${name} > "${g}/${name}.privatekey.asc"
-    gpg --pinentry-mode loopback --passphrase-fd 0 --export-secret-keys --armor ${name} <<< ${passphrase}> "${g}/${name}.privatekey.asc"
+    gpg2 --pinentry-mode loopback --passphrase-fd 0 --export-secret-keys --armor ${name} <<< ${passphrase}> "${g}/${name}.privatekey.asc"
   fi
   if [[ ! -e "${g}/${name}.publickey.asc" ]]; then
-    gpg --export --armor ${name} > "${g}/${name}.publickey.asc"
+    gpg2 --export --armor ${name} > "${g}/${name}.publickey.asc"
   fi
   echo $passphrase
 }
@@ -56,8 +56,8 @@ function get_machine_from_url(){
   eval ${_machine}="'${machine}'"
 }
 
-f=$(gpg --batch -q -d "${g}/users.netrc.asc" 2>/dev/null)
-#f=$(gpg --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< ${passphrase} 2>/dev/null)
+f=$(gpg2 --batch -q -d "${g}/users.netrc.asc" 2>/dev/null)
+#f=$(gpg2 --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< ${passphrase} 2>/dev/null)
 
 
 NEWLINE=$'\n'
@@ -88,7 +88,7 @@ function add_user() {
   local password="${2}"
   # SSi: 18/Feb/2015 : bug: cannot decrypt without passphrase. Replacing line below by another line using the pinendty mode
   #local f=$(gpg --batch -q -d "${g}/users.netrc.asc" 2>/dev/null)
-  local f=$(gpg  --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< ${passphrase} 2>/dev/null)
+  local f=$(gpg2  --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< ${passphrase} 2>/dev/null)
   if [[ "${f}" != "" ]]; then f="${f}${NEWLINE}"; fi
 
   get_tpl_value "${fenv}" "@UPSTREAM_URL_HGIT@" upstream_url_hgit
@@ -106,7 +106,7 @@ function add_user() {
     update_f "${f}" "${user}" "${downstream}" "${password}"
     echo "f='${f}'"
   fi
-  gpg -ea -r projextrdr <<< "${f}" > "${g}/users.netrc.asc"
+  gpg2 -ea -r projextrdr <<< "${f}" > "${g}/users.netrc.asc"
 }
 
 add_user "projextrdr"
