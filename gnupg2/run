@@ -2,7 +2,7 @@
 . ../.bash_aliases
 
 if [ "${1}" == "bash" ]; then
-	docker run -it --rm  --name gnupg2.test gnupg2 bash
+	docker run -it --rm -v /dev/urandom:/dev/random --name gnupg2.test gnupg2 bash
 	exit 0
 fi
 
