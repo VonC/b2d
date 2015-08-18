@@ -87,6 +87,7 @@ source "${H}/sbin/usrcmd/get_tpl_value"
 function add_user() {
   local user="${1}"
   local password="${2}"
+  if [[ "${user}" == "" ]]; then return 0; fi
   # SSi: 18/Feb/2015 : bug: cannot decrypt without passphrase. Replacing line below by another line using the pinendty mode
   #local f=$(gpg --batch -q -d "${g}/users.netrc.asc" 2>/dev/null)
   local f=$(gpg2  --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< ${passphrase} 2>/dev/null)
