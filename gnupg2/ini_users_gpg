@@ -112,3 +112,18 @@ function add_user() {
 }
 
 add_user "projextrdr"
+
+get_tpl_value "${fenv}" "@USER_GA_PUSH@" user_ga_push
+get_tpl_value "${fenv}" "@USER_GA_PUSH_PASSWORD@" user_ga_push_password
+add_user "${user_ga_push}" "${user_ga_push_password}"
+
+get_tpl_value "${fenv}" "@USER_PUSH@" user_push
+get_tpl_value "${fenv}" "@USER_PUSH_PASSWORD@" user_push_password
+add_user "${user_push}" "${user_push_password}"
+
+get_tpl_value "${fenv}" "@USER_PULL@" user_pull
+get_tpl_value "${fenv}" "@USER_PULL_PASSWORD@" user_pull_password
+add_user "${user_pull}" "${user_pull_password}"
+
+echo ${g}/users.netrc.asc:
+gpg2 --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< ${passphrase} 2>/dev/null
