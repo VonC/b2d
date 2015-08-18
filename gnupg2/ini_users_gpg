@@ -68,6 +68,7 @@ function update_f() {
   local machine="${3}"
   local password="${4}"
   local _f="f"
+  # echo "update f af='${af}', name='${name}', machine='${machine}', password='${password}'"
   # http://stackoverflow.com/questions/3005963/how-can-i-have-a-newline-in-a-string-in-sh
   NEWLINE=$'\n'
   if [[ "${password}" == "" ]]; then password="${name}"; fi
@@ -96,7 +97,7 @@ function add_user() {
     get_machine_from_url "${upstream_url_hgit}" upstream
     echo "upstream='${upstream}', for user '${user}': ====="
     update_f "${f}" "${user}" "${upstream}" "${password}"
-    echo "f='${f}'"
+    # echo "f='${f}'"
   fi
 
   get_tpl_value "${fenv}" "@DOWNSTREAM_URL_HGIT@" downstream_url_hgit
@@ -104,7 +105,7 @@ function add_user() {
     get_machine_from_url "${downstream_url_hgit}" downstream
     echo "downstream='${downstream}'"
     update_f "${f}" "${user}" "${downstream}" "${password}"
-    echo "f='${f}'"
+    # echo "f='${f}'"
   fi
   gpg2 -ea -r projextrdr <<< "${f}" > "${g}/users.netrc.asc"
 }
