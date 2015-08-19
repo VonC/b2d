@@ -13,6 +13,7 @@ RUN  apt-get -yq update \
   && apt-get -yqq install software-properties-common
 
 RUN  add-apt-repository ppa:git-core/ppa \
+  && add-apt-repository ppa:hloeung/gnupg2 \
   && apt-get -yq update \
   && apt-get -yqq install \
      wget \
@@ -21,7 +22,8 @@ RUN  add-apt-repository ppa:git-core/ppa \
      git \
      openssl \
      ldap-utils \
-     iputils-ping
+     iputils-ping \
+     gnupg2
 RUN adduser --system --group --shell /bin/sh git \
  && mkdir /home/git/bin
 COPY profile /home/git/.profile
