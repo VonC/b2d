@@ -1,9 +1,10 @@
 #! /bin/sh
 
+cd $(readlink -f $HOME/b2d/apache)
 . ../.bash_aliases
 
 if [ "$(docker images -q apache.deb 2> /dev/null)" = "" ]; then
-  docker build -t apache.deb -f $HOME/b2d/apache/Dockerfile.build $HOME/b2d/apache || exit 1
+  docker build -t apache.deb -f Dockerfile.build . || exit 1
 fi
 if [ "$(docker images -q apache.inst 2> /dev/null)" = "" ]; then
 	docker inspect apache.deb.cont > /dev/null 2>&1 || docker run -d -t --name=apache.deb.cont apache.deb
@@ -11,4 +12,4 @@ if [ "$(docker images -q apache.inst 2> /dev/null)" = "" ]; then
 	docker commit apache.inst.cont apache.inst
 	docker rm apache.deb.cont apache.inst.cont
 fi
-docker build -t apache $HOME/b2d/apache && drmiad 2> /dev/null && ./getcrt
+docker build -t apache . && drmiad 2> /dev/null && ./getcrt
