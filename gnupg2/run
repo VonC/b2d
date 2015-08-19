@@ -1,7 +1,7 @@
 #! /bin/sh
 . ../.bash_aliases
 
-if [ "${1}" == "bash" ]; then
+if [ "${1}" = "bash" ]; then
 	docker run -it --rm -v /dev/urandom:/dev/random --name gnupg2.test gnupg2 bash
 	exit 0
 fi
@@ -9,7 +9,7 @@ fi
 gnupg2_cont="gnupg2.cont"
 grepos="gnupg2data"
 
-if [[ "${1}" != "" ]]; then
+if [ "${1}" != "" ]; then
 	gnupg2_cont="gnupg2.${1}.cont"
 	grepos="${grepos}.${1}"
 fi
