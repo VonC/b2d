@@ -1,0 +1,6 @@
+#! /bin/sh
+
+if [ "${1}" = "bash" ]; then
+	docker run -it --rm --name git.test git bash
+	exit 0
+fi

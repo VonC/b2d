@@ -1,0 +1,8 @@
+#! /bin/sh
+cd $HOME/b2d/git
+. ../.bash_aliases
+
+if [ "${1}" = "bash" ]; then
+	docker inspect git.test > /dev/null 2>&1 && docker rm git.test
+	exit 0
+fi
