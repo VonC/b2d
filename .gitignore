@@ -10,3 +10,4 @@ coverage.out
 /apache/key
 /nginx/crt
 /nginx/key
+/gnupg2/gnupg2.path*
