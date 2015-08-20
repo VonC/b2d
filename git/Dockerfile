@@ -31,6 +31,9 @@ COPY bashrc /home/git/.bashrc
 COPY bash_aliases /home/git/.bash_aliases
 RUN mkdir /home/git/.ssh
 COPY curl-ca-bundle.crt /home/git/.ssh/
+RUN mkdir -p /home/git/sbin/usrcmd
+COPY get_tpl_value /home/git/sbin/usrcmd/
+RUN chmod +x /home/git/sbin/usrcmd/get_tpl_value
 RUN chown -R git:git /home/git
 ENV PATH="$PATH:/home/git/bin"
 WORKDIR /home/git

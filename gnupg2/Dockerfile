@@ -7,9 +7,6 @@ MAINTAINER VonC <vonc@laposte.net>
 # ENV no_proxy .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
 
 RUN mkdir /home/git/.gnupg
-RUN mkdir -p /home/git/sbin/usrcmd
-COPY get_tpl_value /home/git/sbin/usrcmd/
-RUN chmod +x /home/git/sbin/usrcmd/get_tpl_value
 COPY projextrdr.unattended /home/git/.gnupg/
 COPY gpg-agent.conf /home/git/.gnupg/
 
