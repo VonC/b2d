@@ -1,0 +1,36 @@
+#!/bin/bash
+echo "Display refs in post-receive of gitolite-adm"
+
+fenv="${H}/.envs.private"
+source "${H}/sbin/usrcmd/get_tpl_value"
+get_tpl_value "${fenv}" "@LOCAL_GA_BRANCH@" local_ga_branch
+echo "local_ga_branch='${local_ga_branch}'"
+get_tpl_value "${fenv}" "@UPSTREAM_NAME@" upstream_name
+echo "upstream_name='${upstream_name}'"
+
+if [[ "${local_ga_branch}" == "" || "${upstream_name}" == "" ]] ; then
+  echo "No '${fenv}' variables, meaning nothing to push to upstream gitolite-admin.git repo"
+  exit 0
+fi
+
+remote=$(xxgit=1 git remote -v|grep "${upstream_name}")
+if [[ "${remote}" == "" ]] ; then
+  echo "Remote '${upstream_name}' not set, so no push."
+  exit 0
+fi
+
+while read oldrev newrev ref
+do
+  branchname=${ref#refs/heads/}
+  echo "Gitolite-admin received commit on: '${ref}' => '${branchname}', vs local_ga_branch='${local_ga_branch}'"
+  if [[ "${branchname}" == "${local_ga_branch}" ]] ; then
+    if [[ -e "${fenv}" ]] ; then
+      echo "Commits on '${local_ga_branch} detected => pushing to ${upstream_name}".
+      git config --global --remove-section credential
+      cp "${fenv}" "${H}/.netrc"
+      git push -f ${upstream_name} ${local_ga_branch}:master
+      rm "${H}/.netrc"
+      git config --global credential.helper netrc
+    fi
+  fi
+done
