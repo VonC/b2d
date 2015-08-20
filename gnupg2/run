@@ -7,11 +7,26 @@ if [ "${1}" = "bash" ]; then
 fi
 
 gnupg2_cont="gnupg2.cont"
-grepos="gnupg2data"
+grepos="gnupg2.path"
 
 if [ "${1}" != "" ]; then
 	gnupg2_cont="gnupg2.${1}.cont"
-	grepos="${grepos}.${1}"
+	grepos="gnupg2.path.${1}"
 fi
 
-docker inspect ${gnupg2_cont} > /dev/null 2>&1 || docker create --name="${gnupg2_cont}" gnupg2
+
+docker inspect ${gnupg2_cont} > /dev/null 2>&1 || docker create --name="${gnupg2_cont}" gnupg2 /bin/true
+. ../updateDataContainerPath
+updatePath ${gnupg2_cont} "$HOME/b2d/gnupg2" ${grepos}
+
+fgrpath=$(cat $HOME/b2d/gnupg2/${grepos})
+echo "test '${fgrpath}'"
+
+empty=$(sudo ls "${fgrpath}/users.netrc.asc" 2> /dev/null)
+if [ "${empty}" = "" ] ; then
+	echo "no users.netrc.asc in '${fgrpath}'"
+    docker rm gnupg2.setup.cont 2> /dev/null
+    docker run -it --rm --name gnupg2.setup.cont -v "$HOME/b2d/envs/.envs.$1.private":/home/git/.envs.private -v /dev/urandom:/dev/random --volumes-from ${gnupg2_cont} gnupg2 "/home/git/.gnupg/ini_users_gpg"
+else
+	echo "users.netrc.asc already created '${fgrpath}'"
+fi
