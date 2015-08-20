@@ -1,0 +1,39 @@
+# external
+machine external
+
+# login used to push to upstream for public repos
+login projextrdr
+password projextrdr
+
+login gitoliteadm
+password gitoliteadm
+
+@UPSTREAM_URL_HGIT@=https://gitoliteadm@external:8443/hgit/
+@UPSTREAM_NAME@=external
+@LOCAL_GA_BRANCH@=master
+# login for pushing gitolite-admin
+@USER_GA_PUSH@=gitoliteadm
+
+# branch used by public repo for internal contribution
+@LOCAL_BRANCH@=master_bls
+
+# branch used locally to store external contribution
+@EXT_BRANCH_NAME@=master_ext
+
+# remote branch used to publish internal commits to upstream repo
+@UPSTREAM_BRANCH@=master_bls
+
+# login for pushing to repo xxx
+@USER_PUSH@=projextrdr
+
+# url to push back commits detected from external
+@DOWNSTREAM_URL_HGIT@=https://blessed:8443/hgit/
+@DOWNSTREAM_NAME@=blessed
+@USER_PULL@=projextrdr
+
+# information required on staging to pull from external
+@UPSTREAM_KEY@=e-rackspacealm-sy-01.systems.co.uk.hsbc_git_prod_gitadmin_ext
+@UPSTREAM_USER@=git
+@UPSTREAM_SERVER@=external
+@UPSTREAM_PORT@=2200
+@UPSTREAM_SHIPPINGBAY@=/home/git/shippingbay_external

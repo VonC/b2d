@@ -1,0 +1,23 @@
+# staging
+machine staging
+login gitoliteadm
+password gitoliteadm
+
+@UPSTREAM_URL_HGIT@=https://gitoliteadm@staging:8443/hgit/
+@UPSTREAM_NAME@=staging
+@LOCAL_GA_BRANCH@=master_ext
+# login for pushing gitolite-admin
+@USER_GA_PUSH@=gitoliteadm
+
+# branch used by public repo for internal contribution
+@LOCAL_BRANCH@=master
+
+# branch used locally to store external contribution
+@EXT_BRANCH_NAME@=master_ext
+
+# remote branch used to publish internal commits to upstream repo
+@UPSTREAM_BRANCH@=master_bls
+
+# login for pushing upstream
+@USER_PUSH@=projextrdr
+@USER_PUSH_PASSWORD@=projextrdr
