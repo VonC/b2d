@@ -1,6 +1,8 @@
 #!/bin/bash
 echo "Display refs in post-receive of gitolite-adm"
 
+H=/home/git
+
 fenv="${H}/.envs.private"
 source "${H}/sbin/usrcmd/get_tpl_value"
 get_tpl_value "${fenv}" "@LOCAL_GA_BRANCH@" local_ga_branch
@@ -13,7 +15,7 @@ if [[ "${local_ga_branch}" == "" || "${upstream_name}" == "" ]] ; then
   exit 0
 fi
 
-remote=$(xxgit=1 git remote -v|grep "${upstream_name}")
+remote=$(git remote -v|grep "${upstream_name}")
 if [[ "${remote}" == "" ]] ; then
   echo "Remote '${upstream_name}' not set, so no push."
   exit 0
