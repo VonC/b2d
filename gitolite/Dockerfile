@@ -6,18 +6,24 @@ MAINTAINER VonC <vonc@laposte.net>
 # ENV https_proxy http://<user>:<pwd>@proxy.company:80
 # ENV no_proxy .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
 
-
+WORKDIR /home/git
 RUN mkdir /home/git/gitolite
+RUN chown -R git:git /home/git
+USER git
+RUN git clone https://github.com/sitaramc/gitolite /home/git/gitolite/github
+
+USER root
 RUN mkdir -p /home/git/.gitolite/logs
-COPY install_or_update_gitolite.sh /home/git/bin/
 RUN mkdir -p /home/git/gitolite/hooks
 COPY hooks/ /home/git/gitolite/hooks/
 RUN chmod -R 755 /home/git/gitolite/hooks
-RUN chmod +x /home/git/bin/install_or_update_gitolite.sh
+COPY install_or_update_gitolite.sh /home/git/bin/
+RUN chmod 755 /home/git/bin/install_or_update_gitolite.sh
+COPY init_envs.sh /home/git/bin/
+RUN chmod 755 /home/git/bin/init_envs.sh
 RUN chown -R git:git /home/git
-WORKDIR /home/git
+
 USER git
-RUN git clone https://github.com/sitaramc/gitolite /home/git/gitolite/github
 RUN /home/git/bin/install_or_update_gitolite.sh
 
 VOLUME /home/git/gitolite
