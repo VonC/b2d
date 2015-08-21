@@ -32,7 +32,7 @@ password gitoliteadm
 @USER_PULL@=projextrdr
 
 # information required on staging to pull from external
-@UPSTREAM_KEY@=e-rackspacealm-sy-01.systems.co.uk.hsbc_git_prod_gitadmin_ext
+@UPSTREAM_KEY@=external.key
 @UPSTREAM_USER@=git
 @UPSTREAM_SERVER@=external
 @UPSTREAM_PORT@=2200
