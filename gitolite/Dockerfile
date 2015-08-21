@@ -21,6 +21,8 @@ COPY install_or_update_gitolite.sh /home/git/bin/
 RUN chmod 755 /home/git/bin/install_or_update_gitolite.sh
 COPY init_envs.sh /home/git/bin/
 RUN chmod 755 /home/git/bin/init_envs.sh
+COPY post-receive-gitolite-admin /home/git/gitolite/
+RUN chmod 755 /home/git/gitolite/post-receive-gitolite-admin
 RUN chown -R git:git /home/git
 
 USER git
