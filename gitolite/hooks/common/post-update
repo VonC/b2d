@@ -1,5 +1,7 @@
 #!/bin/bash
 
+H=/home/git
+
 source "${H}/sbin/usrcmd/get_tpl_value"
 
 # A local branch must be registered
