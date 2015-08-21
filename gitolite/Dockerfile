@@ -10,6 +10,9 @@ MAINTAINER VonC <vonc@laposte.net>
 RUN mkdir /home/git/gitolite
 RUN mkdir -p /home/git/.gitolite/logs
 COPY install_or_update_gitolite.sh /home/git/bin/
+RUN mkdir -p /home/git/gitolite/hooks
+COPY hooks/ /home/git/gitolite/hooks/
+RUN chmod -R 755 /home/git/gitolite/hooks
 RUN chmod +x /home/git/bin/install_or_update_gitolite.sh
 RUN chown -R git:git /home/git
 WORKDIR /home/git
