@@ -14,3 +14,10 @@ fi
 
 docker inspect  ${apache_cont} > /dev/null 2>&1 && docker kill ${apache_cont} 2> /dev/null
 docker inspect  ${apache_cont} > /dev/null 2>&1 && docker rm ${apache_cont}
+
+if [ "${env}" = "bash" ]; then
+	cd $HOME/b2d/openldap
+	kba
+	cd $HOME/b2d/gitolite
+	kba all
+fi
