@@ -1,7 +1,9 @@
 #! /bin/sh
 . ../.bash_aliases
-cd $HOME/b2d/gitolite
 if [ "${1}" != "bash" ]; then
+	cd $HOME/b2d/gitolite
+	./run $1
+	cd $HOME/b2d/gnupg2
 	./run $1
 fi
 cd $HOME/b2d/openldap
@@ -11,8 +13,10 @@ cd $HOME/b2d/apache
 if [ "${1}" == "bash" ]; then
 	cd $HOME/b2d/gitolite
 	./run
+	cd $HOME/b2d/gnupg2
+	./run
 	cd $HOME/b2d/apache
-	docker run -it --rm --volumes-from gitolite.repos.cont --volumes-from gitolite.cont apache bash
+	docker run -it --rm --volumes-from gitolite.repos.cont --volumes-from gitolite.cont --volumes-from gnupg2.cont apache bash
 	exit 0
 fi
 
@@ -20,12 +24,14 @@ apache_cont="apache.cont"
 apache_openldap_cont="apache.openldap.cont"
 gitolite_cont="gitolite.cont"
 gitolite_repos_cont="gitolite.repos.cont"
+gnupg2_cont="gnupg2.cont"
 envs_cnf="envs.cnf"
 
 if [ "${1}" != "" ]; then
 	apache_cont="apache.${1}.cont"
 	gitolite_cont="gitolite.${1}.cont"
 	gitolite_repos_cont="gitolite.repos.${1}.cont"
+	gnupg2_cont="gnupg2.${1}.cont"
 	envs_cnf="envs.${1}.cnf"
 fi
 
@@ -34,4 +40,4 @@ if [ "${port_gitweb}" == "" ]; then echo "missing @PORT_HTTP_GITWEB@ in '$HOME/b
 port_hgit=$(sed -n "s#^\s*@PORT_HTTP_HGIT@\s*=\s*##p" ../envs/${envs_cnf})
 if [ "${port_hgit}" == "" ]; then echo "missing @PORT_HTTP_HGIT@ in '$HOME/b2d/envs/${envs_cnf}'"; exit 0; fi
 
-docker inspect ${apache_cont} > /dev/null 2>&1 || docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -p ${port_hgit}:8553 --link openldap.cont:apache.openldap.cont --volumes-from ${gitolite_repos_cont} --volumes-from ${gitolite_cont} apache
+docker inspect ${apache_cont} > /dev/null 2>&1 || docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -p ${port_hgit}:8553 --link openldap.cont:apache.openldap.cont --volumes-from ${gitolite_repos_cont} --volumes-from ${gitolite_cont} --volumes-from ${gnupg2_cont} apache

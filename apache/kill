@@ -20,4 +20,6 @@ if [ "${env}" = "bash" ]; then
 	kba
 	cd $HOME/b2d/gitolite
 	kba all
+	cd $HOME/b2d/gnupg2
+	kba all
 fi
