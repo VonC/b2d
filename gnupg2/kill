@@ -2,7 +2,7 @@
 cd $HOME/b2d/gnupg2
 . ../.bash_aliases
 
-if [ "${1}" == "bash" ]; then
+if [ "${1}" = "bash" ] && [ "${2}" = "" ]; then
 	docker inspect gnupg2.test > /dev/null 2>&1 && docker rm gnupg2.test
 	exit 0
 fi
