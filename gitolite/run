@@ -35,7 +35,7 @@ else
 	echo "NOT empty folder '${fgrpath}'"
 fi
 
-remote=$(sudo grep remote $(cat $HOME/b2d/gitolite/${grepos})/gitolite-admin.git/config)
+remote=$(sudo ls ${fgrpath}/.init_envs.sh 2> /dev/null)
 if [ "${remote}" = "" ] ; then
 	echo "Remote is NOT defined for '${1}'"
     docker rm gitolite.setup.cont 2> /dev/null
@@ -43,6 +43,7 @@ if [ "${remote}" = "" ] ; then
     if [ "${1}" != "" ]; then envs=".envs.${1}.private"; fi
 		echo "'$HOME/b2d/envs/${envs}'"
     docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private --volumes-from ${gitolite_repos_cont} gitolite init_envs.sh
+    sudo touch ${fgrpath}/.init_envs.sh
 else
 	echo "Remote is defined for gitolite-admin in '${1}': '${remote}'"
 fi
