@@ -39,9 +39,12 @@ remote=$(sudo grep remote $(cat $HOME/b2d/gitolite/${grepos})/gitolite-admin.git
 if [ "${remote}" = "" ] ; then
 	echo "Remote is NOT defined for '${1}'"
     docker rm gitolite.setup.cont 2> /dev/null
-    docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/.envs.${1}.private:/home/git/.envs.private --volumes-from ${gitolite_repos_cont} gitolite init_envs.sh
+    envs=".envs.example.private"
+    if [ "${1}" != "" ]; then envs=".envs.${1}.private"; fi
+		echo "'$HOME/b2d/envs/${envs}'"
+    docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private --volumes-from ${gitolite_repos_cont} gitolite init_envs.sh
 else
 	echo "Remote is defined for gitolite-admin in '${1}': '${remote}'"
 fi
 
-# docker inspect ${gitolite_cont} > /dev/null 2>&1 || docker create --name="${gitolite_cont}" gitolite
+docker inspect ${gitolite_cont} > /dev/null 2>&1 || docker create --name="${gitolite_cont}" gitolite
