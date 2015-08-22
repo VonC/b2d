@@ -1,12 +1,17 @@
 #! /bin/sh
 . ../.bash_aliases
 cd $HOME/b2d/gitolite
-./run $1
+if [ "${1}" != "bash" ]; then
+	./run $1
+fi
 cd $HOME/b2d/openldap
 ./run $1
 cd $HOME/b2d/apache
 
 if [ "${1}" == "bash" ]; then
+	cd $HOME/b2d/gitolite
+	./run
+	cd $HOME/b2d/apache
 	docker run -it --rm --volumes-from gitolite.repos.cont --volumes-from gitolite.cont apache bash
 	exit 0
 fi
