@@ -17,7 +17,7 @@ if [ "${alll}" == "all" ]; then
 	cd $HOME/b2d/gitolite
 	k ${env}
 	cd $HOME/b2d/gnupg2
-	k ${env}
+	k ${env} all
 fi
 if [ "${all}" == "ALL" ]; then
 	cd $HOME/b2d/gitolite
