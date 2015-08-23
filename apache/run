@@ -42,19 +42,25 @@ if [ "${port_hgit}" == "" ]; then echo "missing @PORT_HTTP_HGIT@ in '$HOME/b2d/e
 
 docker inspect ${apache_cont} > /dev/null 2>&1 && exit 0
 
-alias drpache=docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -p ${port_hgit}:8553 --link openldap.cont:apache.openldap.cont --volumes-from ${gitolite_repos_cont} --volumes-from ${gitolite_cont} --volumes-from ${gnupg2_cont}
+docker inspect "openldap.cont" > /dev/null 2>&1 || echo "${apache_cont}/run: openldap.cont not started"; exit 1
+docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 || echo "${apache_cont}/run: gitolite_repos_cont: '${gitolite_repos_cont}' not created"; exit 1
+docker inspect ${gitolite_cont} > /dev/null 2>&1 || echo "${apache_cont}/run: gitolite_cont: '${gitolite_cont}' not created"; exit 1
 
-if [ -z "${upstream} "] && [ -z "${downstream}" ]; then
+alias drpache="docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -p ${port_hgit}:8553 --link openldap.cont:apache.openldap.cont --volumes-from ${gitolite_repos_cont} --volumes-from ${gitolite_cont} --volumes-from ${gnupg2_cont}"
+
+if [ -z "${upstream}" ] && [ -z "${downstream}" ]; then
 	drapache apache
 	exit 0
 fi
 
-if [ ! -z "${upstream} "] && [ -z "${downstream}" ]; then
+if [ ! -z "${upstream}" ] && [ -z "${downstream}" ]; then
+	docker inspect apache.${upstream}.cont > /dev/null 2>&1 || echo "${apache_cont}/run: apache.upstream.cont: 'apache.${upstream}.cont' not started"; exit 1
 	drapache --link apache.${upstream}.cont:apache.upstream.cont apache
 	exit 0
 fi
 
-if [ -z "${upstream} "] && [ ! -z "${downstream}" ]; then
+if [ -z "${upstream}" ] && [ ! -z "${downstream}" ]; then
+	docker inspect apache.${downstream}.cont > /dev/null 2>&1 || echo "${apache_cont}/run: apache.downstream.cont: 'apache.${downstream}.cont' not started"; exit 1
 	drapache --link apache.${downstream}.cont:apache.downstream.cont apache
 	exit 0
 fi
