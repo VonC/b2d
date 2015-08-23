@@ -44,17 +44,17 @@ docker inspect ${apache_cont} > /dev/null 2>&1 && exit 0
 
 alias drpache=docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -p ${port_hgit}:8553 --link openldap.cont:apache.openldap.cont --volumes-from ${gitolite_repos_cont} --volumes-from ${gitolite_cont} --volumes-from ${gnupg2_cont}
 
-if [ ! -z "${upstream} "] && [ ! -z "${downstream}" ]; then
+if [ -z "${upstream} "] && [ -z "${downstream}" ]; then
 	drapache apache
 	exit 0
 fi
 
-if [ -z "${upstream} "] && [ ! -z "${downstream}" ]; then
+if [ ! -z "${upstream} "] && [ -z "${downstream}" ]; then
 	drapache --link apache.${upstream}.cont:apache.upstream.cont apache
 	exit 0
 fi
 
-if [ !-z "${upstream} "] && [ -z "${downstream}" ]; then
+if [ -z "${upstream} "] && [ ! -z "${downstream}" ]; then
 	drapache --link apache.${downstream}.cont:apache.downstream.cont apache
 	exit 0
 fi
