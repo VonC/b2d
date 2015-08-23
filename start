@@ -3,3 +3,4 @@ cd $HOME/b2d/
 . .bash_aliases
 re
 upstream=external rs
+upstream=staging rb
