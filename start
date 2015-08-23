@@ -1,0 +1,7 @@
+#! /bin/sh
+cd $HOME/b2d/
+. .bash_aliases
+if [ ! -z "${external}" ]; then
+	echo "external is set"
+fi
+re
