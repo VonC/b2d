@@ -16,14 +16,14 @@ updatePath() {
 		echo "${fname}: new container"
 		echo ${grpath}>"${fpath}/${fname}"
 	else
-		echo "${fname}: existing container"
+		[ ! -z "${verbose}" ] && echo "${fname}: existing container"
 		fgrpath=$(cat "${fpath}/${fname}")
 		if [ "${grpath}" == "${fgrpath}" ]; then
-			echo "${fname}: same path"
+			[ ! -z "${verbose}" ] && echo "${fname}: same path"
 		else
-			echo "${fname}: different paths"
-			echo "(file '${fgrpath}') vs."
-			echo "(cont '${grpath}')"
+			[ ! -z "${verbose}" ] && echo "${fname}: different paths"
+			[ ! -z "${verbose}" ] && echo "(file '${fgrpath}') vs."
+			[ ! -z "${verbose}" ] && echo "(cont '${grpath}')"
 			if sudo [ ! -d "${fgrpath}" ]; then
 				echo "NON-EXISTING f grepo path: '${fgrpath}'"
 				exit 1
