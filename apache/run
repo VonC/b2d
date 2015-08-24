@@ -18,7 +18,7 @@ if [ "${1}" == "bash" ]; then
 	cd $HOME/b2d/apache
 	docker create -it --name apache.bash.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont --volumes-from gnupg2.cont apache bash
 	docker cp "$HOME/b2d/envs/.envs.example.private" apache.bash.cont:/home/git/.envs.private
-	docker cp apache.bash.cont:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/crt" || exit 1
+	docker cp apache.bash.cont:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/apache.bash.crt" || exit 1
 	docker start -a -i apache.bash.cont
 	exit 0
 fi
@@ -39,7 +39,7 @@ if [ "${1}" != "" ]; then
 	gnupg2_cont="gnupg2.${1}.cont"
 	envs_cnf="envs.${1}.cnf"
 	envs_private=".envs.${1}.private"
-	crt="${1}.crt"
+	crt="apache.${1}.crt"
 fi
 
 port_gitweb=$(sed -n "s#^\s*@PORT_HTTP_GITWEB@\s*=\s*##p" ../envs/${envs_cnf})
