@@ -65,6 +65,7 @@ fi
 if [ ! -z "${upstream}" ] && [ -z "${downstream}" ]; then
 	docker inspect apache.${upstream}.cont > /dev/null 2>&1 || { echo "${apache_cont}/run: apache.upstream.cont: 'apache.${upstream}.cont' not started"; exit 1; }
 	drapache --link apache.${upstream}.cont:apache.upstream.cont apache
+	docker cp "$HOME/b2d/apache/apache.${upstream}.crt" ${apache_cont}:/home/git/apache/apache.upstream.crt
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
 	docker cp ${apache_cont}:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/${crt}"
 	exit 0
@@ -73,6 +74,7 @@ fi
 if [ -z "${upstream}" ] && [ ! -z "${downstream}" ]; then
 	docker inspect apache.${downstream}.cont > /dev/null 2>&1 || { echo "${apache_cont}/run: apache.downstream.cont: 'apache.${downstream}.cont' not started"; exit 1; }
 	drapache --link apache.${downstream}.cont:apache.downstream.cont apache
+	docker cp "$HOME/b2d/apache/apache.${downstream}.crt" ${apache_cont}:/home/git/apache/apache.downstream.crt
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
 	docker cp ${apache_cont}:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/${crt}"
 	exit 0
