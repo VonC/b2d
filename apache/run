@@ -18,6 +18,7 @@ if [ "${1}" == "bash" ]; then
 	cd $HOME/b2d/apache
 	docker create -it --name apache.bash.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont --volumes-from gnupg2.cont apache bash
 	docker cp "$HOME/b2d/envs/.envs.example.private" apache.bash.cont:/home/git/.envs.private
+	docker cp apache.bash.cont:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/crt" || exit 1
 	docker start -a -i apache.bash.cont
 	exit 0
 fi
@@ -29,6 +30,7 @@ gitolite_repos_cont="gitolite.repos.cont"
 gnupg2_cont="gnupg2.cont"
 envs_cnf="envs.cnf"
 envs_private=".envs.example.private"
+crt="crt"
 
 if [ "${1}" != "" ]; then
 	apache_cont="apache.${1}.cont"
@@ -37,6 +39,7 @@ if [ "${1}" != "" ]; then
 	gnupg2_cont="gnupg2.${1}.cont"
 	envs_cnf="envs.${1}.cnf"
 	envs_private=".envs.${1}.private"
+	crt="${1}.crt"
 fi
 
 port_gitweb=$(sed -n "s#^\s*@PORT_HTTP_GITWEB@\s*=\s*##p" ../envs/${envs_cnf})
@@ -55,6 +58,7 @@ alias drapache="docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -
 if [ -z "${upstream}" ] && [ -z "${downstream}" ]; then
 	drapache apache
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
+	docker cp ${apache_cont}:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/${crt}"
 	exit 0
 fi
 
@@ -62,6 +66,7 @@ if [ ! -z "${upstream}" ] && [ -z "${downstream}" ]; then
 	docker inspect apache.${upstream}.cont > /dev/null 2>&1 || { echo "${apache_cont}/run: apache.upstream.cont: 'apache.${upstream}.cont' not started"; exit 1; }
 	drapache --link apache.${upstream}.cont:apache.upstream.cont apache
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
+	docker cp ${apache_cont}:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/${crt}"
 	exit 0
 fi
 
@@ -69,6 +74,7 @@ if [ -z "${upstream}" ] && [ ! -z "${downstream}" ]; then
 	docker inspect apache.${downstream}.cont > /dev/null 2>&1 || { echo "${apache_cont}/run: apache.downstream.cont: 'apache.${downstream}.cont' not started"; exit 1; }
 	drapache --link apache.${downstream}.cont:apache.downstream.cont apache
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
+	docker cp ${apache_cont}:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/${crt}"
 	exit 0
 fi
 
