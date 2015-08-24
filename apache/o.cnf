@@ -21,7 +21,7 @@ emailAddress           = git@email.com
 
 
 [ v3_ca ]
-subjectAltName         = DNS:localhost
+subjectAltName         = DNS:localhost, DNS:apache.cont, DNS:apache.upstream.cont, DNS:apache.downstream.cont, DNS:nginx.cont, DNS:nginx.upstream.cont, DNS:nginx.downstream.cont
 subjectKeyIdentifier   = hash
 authorityKeyIdentifier = keyid:always,issuer:always
 basicConstraints       = CA:TRUE
