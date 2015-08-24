@@ -16,7 +16,9 @@ if [ "${1}" == "bash" ]; then
 	cd $HOME/b2d/gnupg2
 	./run
 	cd $HOME/b2d/apache
-	docker run -it --rm --volumes-from gitolite.repos.cont --volumes-from gitolite.cont --volumes-from gnupg2.cont apache bash
+	docker create -it --name apache.bash.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont --volumes-from gnupg2.cont apache bash
+	docker cp "$HOME/b2d/envs/.envs.example.private" apache.bash.cont:/home/git/.envs.private
+	docker start -a -i apache.bash.cont
 	exit 0
 fi
 
