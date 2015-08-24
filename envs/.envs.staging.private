@@ -8,7 +8,7 @@ password projextrdr
 login gitoliteadm
 password gitoliteadm
 
-@UPSTREAM_URL_HGIT@=https://gitoliteadm@external:8443/hgit/
+@UPSTREAM_URL_HGIT@=https://gitoliteadm@apache.upstream.cont:8553/hgit/
 @UPSTREAM_NAME@=external
 @LOCAL_GA_BRANCH@=master
 # login for pushing gitolite-admin
@@ -27,7 +27,7 @@ password gitoliteadm
 @USER_PUSH@=projextrdr
 
 # url to push back commits detected from external
-@DOWNSTREAM_URL_HGIT@=https://blessed:8443/hgit/
+@DOWNSTREAM_URL_HGIT@=https://apache.downstream.cont:8553/hgit/
 @DOWNSTREAM_NAME@=blessed
 @USER_PULL@=projextrdr
 

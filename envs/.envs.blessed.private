@@ -3,7 +3,7 @@ machine staging
 login gitoliteadm
 password gitoliteadm
 
-@UPSTREAM_URL_HGIT@=https://gitoliteadm@staging:8443/hgit/
+@UPSTREAM_URL_HGIT@=https://gitoliteadm@apache.upstream.cont:8553/hgit/
 @UPSTREAM_NAME@=staging
 @LOCAL_GA_BRANCH@=master_ext
 # login for pushing gitolite-admin
