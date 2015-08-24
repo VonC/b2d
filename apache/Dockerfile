@@ -11,12 +11,15 @@ WORKDIR $HOME_GIT/apache
 COPY gen_ssl_key_and_crt.sh ./
 RUN chmod +x gen_ssl_key_and_crt.sh
 COPY update_cnf.sh  ./
+COPY update_curl-ca-bundle  ./
 COPY ctld ./
 COPY check_gitolite ./
 RUN mkdir logins
 RUN ln -s  ${HOME_GIT}/apache/ctld  ${HOME_GIT}/bin/ctld
 RUN ln -s  ${HOME_GIT}/apache/check_gitolite  ${HOME_GIT}/bin/check_gitolite
+RUN ln -s  ${HOME_GIT}/apache/update_curl-ca-bundle  ${HOME_GIT}/bin/update_curl-ca-bundle
 RUN chmod +x update_cnf.sh
+RUN chmod +x update_curl-ca-bundle
 RUN chmod +x  ctld
 RUN chmod +x  check_gitolite
 RUN ln -s /usr/local/apache2/conf/httpd.conf cnf1
@@ -30,6 +33,7 @@ RUN ln -s /usr/local/apache2/bin/rotatelogs ${HOME_GIT}/bin/rotatelogs
 RUN mkdir /usr/local/apache2/logs
 RUN ln -s /usr/local/apache2/logs ${HOME_GIT}/apache/logs
 RUN ./update_cnf.sh
+RUN ./update_curl-ca-bundle
 RUN mkdir ${HOME_GIT}/cgit
 
 COPY o.cnf ./
