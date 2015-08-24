@@ -36,11 +36,11 @@ updatePath() {
 			sudo rm -Rf "${grpath}"
 			# echo "sudo mv \"${fgrpath}\" \"${grpath}\""
 			sudo mv "${fgrpath}" "${grpath}"
-			echo "${grpath} in \"${fpath}/${fname}\""
+			[ ! -z "${verbose}" ] && echo "${grpath} in \"${fpath}/${fname}\""
 			# echo "rm -f \"${fpath}/${fname}\""
 			rm -f "${fpath}/${fname}"
 			echo ${grpath}>"${fpath}/${fname}"
-			echo "new ${fname}: $(cat "${fpath}/${fname}")"
+			[ ! -z "${verbose}" ] && echo "new ${fname}: $(cat "${fpath}/${fname}")"
 		fi
 	fi
 
