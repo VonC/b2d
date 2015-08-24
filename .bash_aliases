@@ -50,3 +50,5 @@ alias ke='./kill external'
 alias bi='./build internal'
 alias ri='./run internal'
 alias ki='./kill internal'
+
+deb() { docker exec -it $1 bash; }
