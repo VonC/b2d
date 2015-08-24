@@ -1,0 +1,28 @@
+#! /bin/bash
+
+cd /home/git/.ssh
+a=$(grep "apache.cont.crt" curl-ca-bundle.crt)
+if [ "${a}" == "" ]; then
+	echo "">> curl-ca-bundle.crt
+	echo "apache.cont.crt">> curl-ca-bundle.crt
+	echo "---------------">> curl-ca-bundle.crt
+	cat ../apache/crt>> curl-ca-bundle.crt
+fi
+
+a=$(grep "apache.upstream.crt" curl-ca-bundle.crt)
+if [ "${a}" == "" ] && [ -e ../apache/apache.upstream.crt ]; then
+	echo "">> curl-ca-bundle.crt
+	echo "apache.upstream.crt">> curl-ca-bundle.crt
+	echo "-------------------">> curl-ca-bundle.crt
+	cat ../apache/apache.upstream.crt>> curl-ca-bundle.crt
+fi
+
+a=$(grep "apache.downstream.crt" curl-ca-bundle.crt)
+if [ "${a}" == "" ] && [ -e ../apache/apache.downstream.crt ]; then
+	echo "">> curl-ca-bundle.crt
+	echo "apache.downstream.crt">> curl-ca-bundle.crt
+	echo "---------------------">> curl-ca-bundle.crt
+	cat ../apache/apache.downstream.crt>> curl-ca-bundle.crt
+fi
+
+HOME=/home/git git config --global http.sslCAInfo /home/git/.ssh/curl-ca-bundle.crt
