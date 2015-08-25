@@ -1,5 +1,5 @@
 # staging
-machine staging
+machine apache.upstream.cont
 login gitoliteadm
 password gitoliteadm
 

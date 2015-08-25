@@ -1,5 +1,5 @@
 # external
-machine external
+machine apache.upstream.cont
 
 # login used to push to upstream for public repos
 login projextrdr
