@@ -41,7 +41,8 @@ if [ "${remote}" = "" ] || [ ! -z "${force_init_env}" ]; then
     docker rm gitolite.setup.cont 2> /dev/null
     envs=".envs.example.private"
     if [ "${1}" != "" ]; then envs=".envs.${1}.private"; fi
-		echo "'$HOME/b2d/envs/${envs}'"
+	echo "use '$HOME/b2d/envs/${envs}'"
+	[ ! -z "${verbose}" ] && echo "docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private --volumes-from ${gitolite_repos_cont} gitolite"
     docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private --volumes-from ${gitolite_repos_cont} gitolite init_envs.sh
     sudo touch ${fgrpath}/.init_envs.sh
 else
