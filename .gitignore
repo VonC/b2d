@@ -12,3 +12,4 @@ coverage.out
 /nginx/key
 /gnupg2/gnupg2.path*
 /tests/
+/apache/crts
