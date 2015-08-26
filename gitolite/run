@@ -1,7 +1,7 @@
 #! /bin/sh
 . ../.bash_aliases
 
-if [ "${1}" == "bash" ]; then
+if [ "${1}" = "bash" ]; then
 	docker inspect gitolite.repos.test.cont > /dev/null 2>&1 || docker create --name="gitolite.repos.test.cont" gitolite.repos /bin/true
 	docker run -it --rm  --name gitolite.test --volumes-from gitolite.repos.test.cont gitolite bash
 	docker inspect gitolite.repos.test.cont > /dev/null 2>&1 && docker rm gitolite.repos.test.cont
@@ -12,7 +12,7 @@ gitolite_cont="gitolite.cont"
 gitolite_repos_cont="gitolite.repos.cont"
 grepos="grepos"
 
-if [[ "${1}" != "" ]]; then
+if [ "${1}" != "" ]; then
 	gitolite_cont="gitolite.${1}.cont"
 	gitolite_repos_cont="gitolite.repos.${1}.cont"
 	grepos="grepos.${1}"

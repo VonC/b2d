@@ -7,7 +7,7 @@ updatePath() {
 	fname="${3}"
 
 	grpath=$(docker inspect -f '{{ (index .Mounts 0).Source }}' ${cntname} 2> /dev/null)
-	if [ "${grpath}" == "" ]; then
+	if [ "${grpath}" = "" ]; then
 		echo "unable to find volume for data repo container '${cntname}'"
 		exit 1
 	fi
@@ -18,7 +18,7 @@ updatePath() {
 	else
 		[ ! -z "${verbose}" ] && echo "${fname}: existing container"
 		fgrpath=$(cat "${fpath}/${fname}")
-		if [ "${grpath}" == "${fgrpath}" ]; then
+		if [ "${grpath}" = "${fgrpath}" ]; then
 			[ ! -z "${verbose}" ] && echo "${fname}: same path"
 		else
 			[ ! -z "${verbose}" ] && echo "${fname}: different paths"
