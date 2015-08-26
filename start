@@ -5,3 +5,4 @@ re
 upstream=external rs
 upstream=staging rb
 echo "">apache/crts && find apache -name "*.crt" -exec sh -c 'l="========================================="; n={}; n=${n#*/}; ll=$(echo ${l:${#n}}); echo "">> apache/crts; echo "${n}" >> apache/crts; echo "${l:${#ll}}" >> apache/crts; cat {} >> apache/crts' \;
+find nginx -name "*.crt" -exec sh -c 'l="========================================="; n={}; n=${n#*/}; ll=$(echo ${l:${#n}}); echo "">> apache/crts; echo "${n}" >> apache/crts; echo "${l:${#ll}}" >> apache/crts; cat {} >> apache/crts' \;
