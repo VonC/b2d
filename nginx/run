@@ -22,5 +22,8 @@ port_http=$(sed -n "s#^\s*@PORT_NGINX_HTTP@\s*=\s*##p" ../envs/${envs_cnf})
 if [ "${port_http}" = "" ]; then echo "missing @PORT_NGINX_HTTP@ in '$HOME/b2d/envs/${envs_cnf}'"; exit 0; fi
 
 docker inspect ${apache_cont} > /dev/null 2>&1 || { echo "${nginx_cont}/run: apache_cont '${apache_cont}' not started"; exit 1; }
+if [ "$(din -f '{{.State.ExitCode}}' ${nginx_cont})" != "0" ]; then
+	d rm ${nginx_cont}
+fi
 docker inspect ${nginx_cont} > /dev/null 2>&1 || docker run -it -d --name ${nginx_cont} -p ${port_http}:80 -p ${port_https}:443 --link ${apache_cont}:nginx.apache.cont nginx
 docker cp ${nginx_cont}:/home/git/nginx/itsvc.world.company.crt "$(readlink -f $HOME/b2d)/nginx/${crt}"
