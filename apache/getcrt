@@ -2,7 +2,7 @@
 . ../.bash_aliases
 cd $HOME/b2d/apache
 rm -f crt key
-docker run --entrypoint=/bin/sh --rm -i -v ${HOME}/b2d/apache:/apache apache << COMMANDS
+docker run -u root --entrypoint=/bin/sh --rm -i -v ${HOME}/b2d/apache:/apache apache << COMMANDS
 pwd
 cp crt /apache
 cp key /apache
