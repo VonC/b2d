@@ -46,6 +46,7 @@ doskey vbmmu="VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp
 doskey vbmct="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
 doskey vbmcu="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
 doskey bd="boot2docker.exe" $*
+doskey cdb=cd "%~dp0"
 
 set scriptd=%script:\=\\%
 git -C %script% config filter.dffilter.smudge %scriptd%dfsmudge.sh
