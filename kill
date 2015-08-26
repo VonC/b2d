@@ -1,5 +1,5 @@
 #! /bin/sh
-. .bash_aliases
+. ./.bash_aliases
 env=${1}
 all=${2}
 if [[ "${env}" == "all" || "${env}" == "ALL" ]]; then

@@ -1,6 +1,6 @@
 #! /bin/sh
 cd $HOME/b2d/
-. .bash_aliases
+. ./.bash_aliases
 kb ALL
 ks ALL
 ke ALL

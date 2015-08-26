@@ -1,5 +1,5 @@
 #! /bin/sh
-. .bash_aliases
+. ./.bash_aliases
 cd $HOME/b2d/apache
 r $1
 cd $HOME/b2d/nginx
