@@ -1,9 +1,8 @@
 #!/bin/sh
 cd $HOME/b2d/
-ls -alrt .bash_aliases
 . ./.bash_aliases
 re
 upstream=external rs
 upstream=staging rb
-echo "">apache/crts && find apache -name "*.crt" -exec sh -c 'l="========================================="; n={}; n=${n#*/}; ll=$(echo ${l:${#n}}); echo "">> apache/crts; echo "${n}" >> apache/crts; echo "${l:${#ll}}" >> apache/crts; cat {} >> apache/crts' \;
-find nginx -name "*.crt" -exec sh -c 'l="========================================="; n={}; n=${n#*/}; ll=$(echo ${l:${#n}}); echo "">> apache/crts; echo "${n}" >> apache/crts; echo "${l:${#ll}}" >> apache/crts; cat {} >> apache/crts' \;
+echo "">apache/crts && find apache -name "*.crt" -exec /bin/sh -c 'l="========================================="; n={}; n=${n#*/}; echo "">> apache/crts; echo "${n}" >> apache/crts; ll=$(echo ${l}|cut -c ${#n}-); t=$(echo ${l}|cut -c ${#ll}-); echo ${t} >> apache/crts; cat {} >> apache/crts' \;
+find nginx -name "*.crt" -exec /bin/sh -c 'l="========================================="; n={}; n=${n#*/}; echo "">> apache/crts; echo "${n}" >> apache/crts; ll=$(echo ${l}|cut -c ${#n}-); t=$(echo ${l}|cut -c ${#ll}-); echo ${t} >> apache/crts; cat {} >> apache/crts' \;
