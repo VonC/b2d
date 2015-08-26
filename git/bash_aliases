@@ -1,2 +1,7 @@
 alias l='ls -alrt'
 alias sugit='su --shell /bin/bash git'
+alias h=history
+alias gl='git lg -20'
+alias glba='git lg -20 --branches --all'
+alias glab='git lg -20 --all --branches'
+alias gla='git lg -20 --all'
