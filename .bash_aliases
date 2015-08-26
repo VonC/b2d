@@ -56,3 +56,7 @@ debr() { docker exec -u root -it $1 bash; }
 
 alias start='./start'
 alias stop='./stop'
+alias test='./test'
+alias s=start
+alias st=stop
+alias t=test
