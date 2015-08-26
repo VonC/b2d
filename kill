@@ -2,7 +2,7 @@
 . ./.bash_aliases
 env=${1}
 all=${2}
-if [[ "${env}" == "all" || "${env}" == "ALL" ]]; then
+if [ "${env}" = "all" ] || [ "${env}" = "ALL" ]; then
 	all=${env}
 	env=""
 fi
@@ -11,7 +11,7 @@ k ${env}
 cd $HOME/b2d/apache
 k ${env}
 alll=$(echo $all | tr '[:upper:]' '[:lower:]')
-if [ "${alll}" == "all" ]; then
+if [ "${alll}" = "all" ]; then
 	cd $HOME/b2d/openldap
 	k ${env}
 	cd $HOME/b2d/gitolite
@@ -19,7 +19,7 @@ if [ "${alll}" == "all" ]; then
 	cd $HOME/b2d/gnupg2
 	k ${env} all
 fi
-if [ "${all}" == "ALL" ]; then
+if [ "${all}" = "ALL" ]; then
 	cd $HOME/b2d/gitolite
 	k ${env} ALL
 fi

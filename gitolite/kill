@@ -4,20 +4,20 @@ cd $HOME/b2d/gitolite
 
 env=${1}
 all=${2}
-if [[ "${env}" == "all" || "${env}" == "ALL" ]]; then
+if [ "${env}" = "all" ] || [ "${env}" = "ALL" ]; then
 	all=${env}
 	env=""
 fi
 
 gitolite_cont="gitolite.cont"
 gitolite_repos_cont="gitolite.repos.cont"
-if [[ "${env}" != "" && "${env}" != "bash" ]]; then
+if [ "${env}" != "" ] && [ "${env}" != "bash" ]; then
 	gitolite_cont="gitolite.${env}.cont"
 	gitolite_repos_cont="gitolite.repos.${env}.cont"
 fi
 
 docker inspect ${gitolite_cont} > /dev/null 2>&1 && docker rm ${gitolite_cont}
 
-if [[ "${all}" == "all" || "${all}" == "ALL" ]]; then
+if [ "${all}" = "all" ] || [ "${all}" = "ALL" ]; then
 	docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 && docker rm ${gitolite_repos_cont}
 fi

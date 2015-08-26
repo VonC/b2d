@@ -3,7 +3,7 @@
 cd $HOME/b2d/apache
 
 env=${1}
-if [[ "${env}" == "all" || "${env}" == "ALL" ]]; then
+if [ "${env}" = "all" ] || [ "${env}" = "ALL" ]; then
 	env=""
 fi
 
