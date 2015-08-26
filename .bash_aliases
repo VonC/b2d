@@ -51,4 +51,5 @@ alias bi='./build internal'
 alias ri='./run internal'
 alias ki='./kill internal'
 
-deb() { docker exec -it $1 bash; }
+deb() { docker exec -u git -it $1 bash; }
+debr() { docker exec -u root -it $1 bash; }
