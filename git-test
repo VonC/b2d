@@ -3,25 +3,77 @@
 set -o pipefail  # trace ERR through pipes
 # set -o errtrace  # trace ERR through 'time command' and other functions
 set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
-# set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
+set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
 
 stepp() {
-	steppres="$(grep ${1} tests/steps)"
-	return 1
+	set +e; steppres="$(grep \"${1}\" tests/steps| tr -d '\n')"; set -e
+	# echo "steppres='${steppres}'aa"
+	return 0
+}
+
+title() {
+	m="${env}.${i}"
+	if [ ${ii} -gt 0 ]; then m="  ${m}.${ii}"; fi
+	m="${m}: ${1}"
+	set +u
+	if [ "${2}" != "" ]; then echo -ne "${m} "; else echo -e "${m}"; fi
+	set -u
+}
+
+cmd() {
+	c="${1}"
+	cp="${c%%://*}://"
+	c=${c#${cp}}
+	cu="${c%%@*}"
+	c="${cp}${cu}:${c}"
+	# echo "cp='${cp}', c='${c}', cu='${cu}'"
+	if [ "${cu}" = "" ]; then c="${1}"; fi
+	m="${1#g }"
+	m="${gg} ${m}"
+	c="${c#g }"
+	c="${gg} ${c}"
+	if [ ${ii} -gt 0 ]; then m="  ${m}"; fi
+	echo -e "${Cyan}${m}${Color_Off}"
+	set +e
+	o=$(${c} 2> tests/err 1> tests/out) ; r=$?
+	if [ "$(ls -l tests/out 2> /dev/null | awk '{print $5}')" != "0" ]; then
+		while read line; do    
+    		echo -e "${Green}${line}${Color_Off}"   
+		done < tests/out
+	fi
+	if [ "$(ls -l tests/err 2> /dev/null | awk '{print $5}')" != "0" ]; then
+		if [ $r -eq 0 ]; then p="${Green}    "; else p="${Red}    "; fi
+		while read line; do    
+    		echo -e "${p}${line}${Color_Off}"   
+		done < tests/err
+	fi
+	set -e
+	return $r
 }
 
 . ./colors.sh
+gg="git -c http.sslCAInfo=apache/crts"
+alias g=${gg}
+alias g
 export LOG_LEVEL=3
 steppres=""
 touch tests/steps
+i=1
+ii=0
+env="B"
 echo -e "${Black}${On_White}Git Servers tests${Color_Off}"
 echo -e "${Black}${On_White}=================${Color_Off}"
 echo ""
 echo -e "${Black}${On_Yellow}B: Blessed tests${Color_Off}"
 if [ ! -e "tests/blessed" ]; then mkdir -p tests/blessed; fi
 echo -e "${Black}${On_Yellow}   -------------${Color_Off}"
-echo -e "B1: gitolite-admin repo"
+title "gitolite-admin repo"
+ii=$((ii+1))
+title "clone blessed gitolite-admin in tests/blessed/gitolite-admin" "_"
 stepp "B_gitolite-admin_cloned"
+# echo "steppres='${steppres#B_gitolite-admin_cloned}'aa"
 if [ "${steppres}" != "B_gitolite-admin_cloned" ]; then
-	echo "clone"
-fi
+	echo ""
+	cmd "g clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin"
+else echo "(already done)"; fi
+echo -e "${Green}[v] all done${Color_Off}"
