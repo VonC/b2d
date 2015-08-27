@@ -22,7 +22,9 @@ title() {
 	nl=""
 	if [ "${m#_}" != "${m}" ]; then m="${m#_}"; nl="1"; fi
 	# echo "nl='${nl}', m='${m}'"
-	m="${spaces}${env}.${i}: ${m}"
+	n="${i}"
+	if [ ${ii} -gt 0 ]; then n="${n}.${ii}"; fi
+	m="${spaces}${env}.${n}: ${m}"
 	if [ "${nl}" != "" ]; then echo -ne "${m} "; else echo -e "${m}"; fi
 }
 
