@@ -1,2 +1,27 @@
 #!/bin/sh
-echo "hello"
+# http://stackoverflow.com/questions/64786/error-handling-in-bash
+set -o pipefail  # trace ERR through pipes
+# set -o errtrace  # trace ERR through 'time command' and other functions
+set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
+# set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
+
+stepp() {
+	steppres="$(grep ${1} tests/steps)"
+	return 1
+}
+
+. ./colors.sh
+export LOG_LEVEL=3
+steppres=""
+touch tests/steps
+echo -e "${Black}${On_White}Git Servers tests${Color_Off}"
+echo -e "${Black}${On_White}=================${Color_Off}"
+echo ""
+echo -e "${Black}${On_Yellow}B: Blessed tests${Color_Off}"
+if [ ! -e "tests/blessed" ]; then mkdir -p tests/blessed; fi
+echo -e "${Black}${On_Yellow}   -------------${Color_Off}"
+echo -e "B1: gitolite-admin repo"
+stepp "B_gitolite-admin_cloned"
+if [ "${steppres}" != "B_gitolite-admin_cloned" ]; then
+	echo "clone"
+fi
