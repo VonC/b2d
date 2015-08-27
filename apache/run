@@ -47,7 +47,7 @@ if [ "${port_gitweb}" = "" ]; then echo "missing @PORT_HTTP_GITWEB@ in '$HOME/b2
 port_hgit=$(sed -n "s#^\s*@PORT_HTTP_HGIT@\s*=\s*##p" ../envs/${envs_cnf})
 if [ "${port_hgit}" = "" ]; then echo "missing @PORT_HTTP_HGIT@ in '$HOME/b2d/envs/${envs_cnf}'"; exit 0; fi
 
-if [ "$(din -f '{{.State.ExitCode}}' ${apache_cont})" != "0" ]; then
+docker inspect ${apache_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCode}}' ${apache_cont})" != "0" ]; then
 	d rm ${apache_cont}
 fi
 docker inspect ${apache_cont} > /dev/null 2>&1 && exit 0
