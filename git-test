@@ -103,4 +103,8 @@ stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_cloned" \
 		"g clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin" \
 		"already exists and is not an empty directory"
+stepcmd "_check ls-remote in tests/blessed/gitolite-admin" \
+		"B_gitolite-admin_ls-remote" \
+		"g -C tests/blessed/gitolite-admin ls-remote https://gitoliteadm@localhost:6443/hgit/gitolite-admin" \
+		"xxx"
 echo -e "${Green}[v] all done${Color_Off}"
