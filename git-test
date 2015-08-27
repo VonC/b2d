@@ -30,17 +30,23 @@ title() {
 
 
 cmd() {
-	c="${1}"
-	cp="${c%%://*}://"
-	c=${c#${cp}}
-	cu="${c%%@*}"
-	c="${cp}${cu}:${c}"
-	# echo "cp='${cp}', c='${c}', cu='${cu}'"
-	if [ "${cu}" = "" ]; then c="${1}"; fi
-	m="${1#g }"
-	m="${gg} ${m}"
-	c="${c#g }"
-	c="${gg} ${c}"
+	if [ "${1#g }" != "${1}" ]; then
+		c="${1}"
+		cp="${c%%://*}://"
+		c=${c#${cp}}
+		cu="${c%%@*}"
+		c="${cp}${cu}:${c}"
+		# echo "cp='${cp}', c='${c}', cu='${cu}'"
+		if [ "${cu}" = "" ]; then c="${1}"; fi
+		m="${1#g }"
+		m="${gg} ${m}"
+		c="${c#g }"
+		c="${gg} ${c}"
+	else
+		m="tests/b/${1}"
+		source ${m}
+		c="run"
+	fi
 	m="${spaces}${m}"
 	echo -e "${Cyan}${m}${Color_Off}"
 	set +e
