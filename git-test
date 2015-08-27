@@ -11,14 +11,19 @@ stepp() {
 	return 0
 }
 
+spaces=""
+setSpaces() {
+	if [ ${ii} -gt 0 ]; then spaces="  "; fi
+}
+
 title() {
-	m="${env}.${i}"
-	if [ ${ii} -gt 0 ]; then m="  ${m}.${ii}"; fi
+	m="${spaces}${env}.${i}"
 	m="${m}: ${1}"
 	set +u
 	if [ "${2}" != "" ]; then echo -ne "${m} "; else echo -e "${m}"; fi
 	set -u
 }
+
 
 cmd() {
 	c="${1}"
@@ -32,7 +37,7 @@ cmd() {
 	m="${gg} ${m}"
 	c="${c#g }"
 	c="${gg} ${c}"
-	if [ ${ii} -gt 0 ]; then m="  ${m}"; fi
+	m="${spaces}${m}"
 	echo -e "${Cyan}${m}${Color_Off}"
 	set +e
 	o=$(${c} 2> tests/err 1> tests/out) ; r=$?
@@ -68,7 +73,7 @@ echo -e "${Black}${On_Yellow}B: Blessed tests${Color_Off}"
 if [ ! -e "tests/blessed" ]; then mkdir -p tests/blessed; fi
 echo -e "${Black}${On_Yellow}   -------------${Color_Off}"
 title "gitolite-admin repo"
-ii=$((ii+1))
+ii=$((ii+1)); setSpaces
 title "clone blessed gitolite-admin in tests/blessed/gitolite-admin" "_"
 stepp "B_gitolite-admin_cloned"
 # echo "steppres='${steppres#B_gitolite-admin_cloned}'aa"
