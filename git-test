@@ -64,7 +64,26 @@ cmd() {
 	return $r
 }
 
-. ./colors.sh
+stepcmd() {
+	atitle="${1}"
+	acode="${2}"
+	acmd="${3}"
+	acmderr="${4}"
+
+	ii=$((ii+1)); setSpaces
+	title "${atitle}"
+	stepp "${acode}"
+	# echo "steppres='${steppres#${acode}}'aa"
+	if [ "${steppres}" != "${acode}" ]; then
+		echo ""
+		cmd "${acmd}" "${acmderr}"
+		if [ "${forced}" == "" ]; then echo -e "${spaces}${Green}[done]${Color_Off}";
+		else echo -e "${spaces}${Green}[forced]${Color_Off}"; fi
+		if [ "${steppres}" == "" ]; then echo "${acode}">> tests/steps; fi
+	else echo -e "${Green}(already done)${Color_Off}"; fi
+	echo -e "${Green}[v] all done${Color_Off}"
+}
+
 gg="git -c http.sslCAInfo=apache/crts"
 alias g=${gg}
 alias g
@@ -81,16 +100,7 @@ echo -e "${Black}${On_Yellow}B: Blessed tests${Color_Off}"
 if [ ! -e "tests/blessed" ]; then mkdir -p tests/blessed; fi
 echo -e "${Black}${On_Yellow}   -------------${Color_Off}"
 title "gitolite-admin repo"
-ii=$((ii+1)); setSpaces
-title "clone blessed gitolite-admin in tests/blessed/gitolite-admin" "_"
-stepp "B_gitolite-admin_cloned"
-# echo "steppres='${steppres#B_gitolite-admin_cloned}'aa"
-if [ "${steppres}" != "B_gitolite-admin_cloned" ]; then
-	echo ""
-	cmd "g clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin" \
+stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
+		"B_gitolite-admin_cloned" \
+		"g clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin" \
 		"already exists and is not an empty directory"
-	if [ "${forced}" == "" ]; then echo -e "${spaces}${Green}[done]${Color_Off}";
-	else echo -e "${spaces}${Green}[forced]${Color_Off}"; fi
-	if [ "${steppres}" == "" ]; then echo "B_gitolite-admin_cloned">> tests/steps; fi
-else echo "(already done)"; fi
-echo -e "${Green}[v] all done${Color_Off}"
