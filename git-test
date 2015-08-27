@@ -52,6 +52,12 @@ cmd() {
     		echo -e "${p}${line}${Color_Off}"   
 		done < tests/err
 	fi
+	# cmd /C "set force_res=1 && t"
+	forced=""
+	set +u; if [ ! -z "${force_res}" ] && [ ! -z "${2}" ]; then
+		e=$(grep "${2}" tests/err)
+		if [ "${e}" != "" ]; then r=0; forced="forced"; fi
+	fi; set -u
 	set -e
 	return $r
 }
@@ -79,6 +85,10 @@ stepp "B_gitolite-admin_cloned"
 # echo "steppres='${steppres#B_gitolite-admin_cloned}'aa"
 if [ "${steppres}" != "B_gitolite-admin_cloned" ]; then
 	echo ""
-	cmd "g clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin"
+	cmd "g clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin" \
+		"already exists and is not an empty directory"
+	if [ "${forced}" == "" ]; then echo -e "${spaces}${Green}[done]${Color_Off}";
+	else echo -e "${spaces}${Green}[forced]${Color_Off}"; fi
+	if [ "${steppres}" == "" ]; then echo "B_gitolite-admin_cloned">> tests/steps; fi
 else echo "(already done)"; fi
 echo -e "${Green}[v] all done${Color_Off}"
