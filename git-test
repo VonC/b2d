@@ -5,7 +5,7 @@ set -o pipefail  # trace ERR through pipes
 set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
 set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
 . ./colors.sh
-
+dirp0=$(readlink -f "$(dirname $0)")
 stepp() {
 	set +e; steppres="$(grep ${1} tests/steps| tr -d '\n')"; set -e
 	# echo "steppres='${steppres}'aa"
@@ -83,8 +83,8 @@ stepcmd() {
 	else echo -e "${Green}(already done)${Color_Off}"; fi
 	echo -e "${Green}[v] all done${Color_Off}"
 }
-
-gg="git -c http.sslCAInfo=apache/crts"
+git -c http.sslCAInfo=apache/crts --version
+gg="git -c http.sslCAInfo=${dirp0}/apache/crts"
 alias g=${gg}
 alias g
 export LOG_LEVEL=3
