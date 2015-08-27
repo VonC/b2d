@@ -57,7 +57,7 @@ cmd() {
 		done < tests/out
 	fi
 	if [ "$(ls -l tests/err 2> /dev/null | awk '{print $5}')" != "0" ]; then
-		if [ $r -eq 0 ]; then p="${Green}    "; else p="${Red}    "; fi
+		if [ $r -eq 0 ]; then p="${Color_Off}    "; else p="${Red}    "; fi
 		while read line; do    
     		echo -e "${p}${line}${Color_Off}"   
 		done < tests/err
@@ -90,6 +90,7 @@ stepcmd() {
 		if [ "${steppres}" == "" ]; then echo "${acode}">> tests/steps; fi
 	else echo -e "${Green}(already done)${Color_Off}"; fi
 }
+
 git -c http.sslCAInfo=apache/crts --version
 gg="git -c http.sslCAInfo=${dirp0}/apache/crts"
 alias g=${gg}
