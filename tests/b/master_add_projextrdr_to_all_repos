@@ -1,0 +1,24 @@
+#!/bin/sh
+
+run() {
+	export GIT_WORK_TREE=tests/blessed/gitolite-admin
+	export GIT_DIR=tests/blessed/gitolite-admin/.git
+	git checkout master
+	gconf="tests/blessed/gitolite-admin/conf/gitolite.conf"
+	# http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
+	i=$(awk '/repo\s+@all/,/RW\+\s+=\s+projextrdr$/' ${gconf}|wc -l)
+	if [ "${i}" -ne 2 ]; then
+		# http://stackoverflow.com/questions/9533679/how-to-insert-a-text-at-the-beginning-of-a-file
+	   	sed -i '1s/^/repo @all\n	RW+		=	projextrdr\n/' ${gconf}
+	   	git diff --color
+	   	git add ${gconf}
+	   	git commit -m "Add projextrdr to @all"
+	fi
+	check=$(git log --oneline --grep "Add projextrdr to @all")
+	export -n GIT_DIR
+	export -n GIT_WORK_TREE
+	if [ "${check}" == "" ]; then
+		echo "no commit 'Add projextrdr to @all2' found">> tests/err
+		return 1
+	fi
+}
