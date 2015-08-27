@@ -4,6 +4,7 @@ set -o pipefail  # trace ERR through pipes
 # set -o errtrace  # trace ERR through 'time command' and other functions
 set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
 set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
+. ./colors.sh
 
 stepp() {
 	set +e; steppres="$(grep ${1} tests/steps| tr -d '\n')"; set -e
@@ -17,11 +18,12 @@ setSpaces() {
 }
 
 title() {
-	m="${spaces}${env}.${i}"
-	m="${m}: ${1}"
-	set +u
-	if [ "${2}" != "" ]; then echo -ne "${m} "; else echo -e "${m}"; fi
-	set -u
+	m="${1}"
+	nl=""
+	if [ "${m#_}" != "${m}" ]; then m="${m#_}"; nl="1"; fi
+	# echo "nl='${nl}', m='${m}'"
+	m="${spaces}${env}.${i}: ${m}"
+	if [ "${nl}" != "" ]; then echo -ne "${m} "; else echo -e "${m}"; fi
 }
 
 
