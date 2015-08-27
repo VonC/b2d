@@ -1,2 +1,4 @@
 #!/bin/sh
+cd $HOME/b2d/
+. ./.bash_aliases
 ./git-test
