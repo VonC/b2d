@@ -5,4 +5,8 @@ run() {
 	if [ ! -e tests/blessed/module2_as_projadm2 ]; then
 		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://projadm2@localhost:6443/hgit/module2 tests/blessed/module2_as_projadm2
 	fi
+	cd tests/blessed/module2_as_projadm2
+	git config http.https://localhost:6443/.sslCAInfo ${dirp0}/apache/crts
+	git config credential.helper passwd
+	git remote -v
 }
