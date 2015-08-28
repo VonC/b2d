@@ -14,11 +14,11 @@ run() {
 	   	git add ${gconf}
 	   	git commit -m "Add projextrdr to @all"
 	fi
-	check=$(git log --oneline --grep "Add projextrdr to @all")
+	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*")
 	export -n GIT_DIR
 	export -n GIT_WORK_TREE
 	if [ "${check}" == "" ]; then
-		echo "no commit 'Add projextrdr to @all2' found">> tests/err
+		echo "no commit 'Add projextrdr to @all' found">> tests/err
 		return 1
 	fi
 }
