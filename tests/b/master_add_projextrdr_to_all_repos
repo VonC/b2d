@@ -1,10 +1,12 @@
 #!/bin/sh
 
 run() {
-	export GIT_WORK_TREE=tests/blessed/gitolite-admin
-	export GIT_DIR=tests/blessed/gitolite-admin/.git
+	set -e
+	cd tests/blessed/gitolite-admin
+	git config http.sslCAInfo ../../../apache/crts
+	git config core.pager cat
 	git checkout master
-	gconf="tests/blessed/gitolite-admin/conf/gitolite.conf"
+	gconf="conf/gitolite.conf"
 	# http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
 	i=$(awk '/repo\s+@all/,/RW\+\s+=\s+projextrdr$/' ${gconf}|wc -l)
 	if [ "${i}" -ne 2 ]; then
@@ -14,11 +16,21 @@ run() {
 	   	git add ${gconf}
 	   	git commit -m "Add projextrdr to @all"
 	fi
-	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*")
-	export -n GIT_DIR
-	export -n GIT_WORK_TREE
+	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" master)
 	if [ "${check}" == "" ]; then
 		echo "no commit 'Add projextrdr to @all' found">> tests/err
+		return 1
+	fi
+	git fetch origin
+	# http://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
+	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" origin/master)
+	if [ "${check}" == "" ]; then
+		git push -u origin master
+	fi
+	git fetch origin
+	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" origin/master)
+	if [ "${check}" == "" ]; then
+		echo "no commit 'Add projextrdr to @all' found on origin/master">> tests/err
 		return 1
 	fi
 }
