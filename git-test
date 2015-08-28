@@ -87,7 +87,7 @@ stepcmd() {
 		cmd "${acmd}" "${acmderr}"
 		if [ "${forced}" == "" ]; then echo -e "${spaces}${Green}[done]${Color_Off}";
 		else echo -e "${spaces}${Green}[forced]${Color_Off}"; fi
-		if [ "${steppres}" == "" ]; then echo "${acode}">> tests/steps; fi
+		# if [ "${steppres}" == "" ]; then echo "${acode}">> tests/steps; fi
 	else echo -e "${Green}(already done)${Color_Off}"; fi
 }
 
@@ -124,4 +124,8 @@ stepcmd "_(master) Add new repo module2" \
 		"B_gitolite-admin_master_add_new_repo_module2" \
 		"master_add_new_repo_module2" \
 		"___add new repo module2"
+stepcmd "_(master) Clone new repo module2 as projadm2" \
+		"B_gitolite-admin_master_clone_new_repo_module2_as_projadm2" \
+		"master_clone_new_repo_module2_as_projadm2" \
+		"__clone new repo module2"
 echo -e "${Green}[v] all done${Color_Off}"
