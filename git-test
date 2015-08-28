@@ -129,3 +129,7 @@ stepcmd "_(master) Clone new repo module2 as projadm2" \
 ii=0; i=$((i+1)); setSpaces
 title "Add new repo (replicated to external)"
 echo -e "${Green}[v] all done${Color_Off}"
+stepcmd "_(master_ext) Add projextrdr to all repos" \
+		"B_gitolite-admin_master_ext_add_projextrdr" \
+		"master_ext_add_projextrdr_to_all_repos" \
+		"___add projextrdr(ext) to all repo"
