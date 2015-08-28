@@ -1,0 +1,11 @@
+#!/bin/sh
+
+run() {
+	set -e
+	pwd
+
+	if [ ! -e tests/blessed/module2_as_projadm2 ]; then
+		echo "dirp0='${dirp0}' '$(which git-credential-netrc)', path='${PATH}'"
+		# git -c credential.helper="netrc -v -d -f ${dirp0}/tests/.netrc" -c http.sslCAInfo=apache/crts clone https://projadm2@localhost:6443/hgit/module2 tests/blessed/module2_as_projadm2
+	fi
+}
