@@ -30,7 +30,7 @@ title() {
 
 
 cmd() {
-	if [ "${1#g }" != "${1}" ]; then
+	if [ "${1#git }" != "${1}" ]; then
 		c="${1}"
 		cp="${c%%://*}://"
 		c=${c#${cp}}
@@ -38,10 +38,6 @@ cmd() {
 		c="${cp}${cu}:${c}"
 		# echo "cp='${cp}', c='${c}', cu='${cu}'"
 		if [ "${cu}" = "" ]; then c="${1}"; fi
-		m="${1#g }"
-		m="${gg} ${m}"
-		c="${c#g }"
-		c="${gg} ${c}"
 	else
 		m="tests/b/${1}"
 		source ${m}
@@ -91,10 +87,9 @@ stepcmd() {
 	else echo -e "${Green}(already done)${Color_Off}"; fi
 }
 
-git -c http.sslCAInfo=apache/crts --version
-gg="git -c http.sslCAInfo=${dirp0}/apache/crts"
-alias g=${gg}
-alias g
+git config http.https://localhost:6443/.sslCAInfo ${dirp0}/apache/crts
+git config credential.helper passwd
+git --version
 export LOG_LEVEL=3
 steppres=""
 touch tests/steps
@@ -110,11 +105,11 @@ echo -e "${Black}${On_Yellow}   -------------${Color_Off}"
 title "gitolite-admin repo"
 stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_cloned" \
-		"g clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin" \
+		"git clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin" \
 		"already exists and is not an empty directory"
 stepcmd "_check ls-remote in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_ls-remote" \
-		"g -C tests/blessed/gitolite-admin ls-remote https://gitoliteadm@localhost:6443/hgit/gitolite-admin" \
+		"git -C tests/blessed/gitolite-admin ls-remote https://gitoliteadm@localhost:6443/hgit/gitolite-admin" \
 		"xxx"
 stepcmd "_(master) Add projextrdr to all repo" \
 		"B_gitolite-admin_master_add_projextrdr" \
