@@ -4,6 +4,7 @@ run() {
 	set -e
 	cd tests/blessed/gitolite-admin
 	git config http.sslCAInfo ../../../apache/crts
+	git config credential.helper passwd
 	git config core.pager cat
 	git checkout master
 	git config push.default simple
