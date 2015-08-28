@@ -14,6 +14,7 @@ stepp() {
 
 spaces=""
 setSpaces() {
+	spaces=""
 	if [ ${ii} -gt 0 ]; then spaces="  "; fi
 }
 
@@ -115,6 +116,8 @@ stepcmd "_(master) Add projextrdr to all repo" \
 		"B_gitolite-admin_master_add_projextrdr" \
 		"master_add_projextrdr_to_all_repos" \
 		"___add projextrdr to all repo"
+ii=0; i=$((i+1)); setSpaces
+title "Add new repo (not replicated)"
 stepcmd "_(master) Add new repo module2" \
 		"B_gitolite-admin_master_add_new_repo_module2" \
 		"master_add_new_repo_module2" \
@@ -123,4 +126,6 @@ stepcmd "_(master) Clone new repo module2 as projadm2" \
 		"B_gitolite-admin_master_clone_new_repo_module2_as_projadm2" \
 		"master_clone_new_repo_module2_as_projadm2" \
 		"__clone new repo module2"
+ii=0; i=$((i+1)); setSpaces
+title "Add new repo (replicated to external)"
 echo -e "${Green}[v] all done${Color_Off}"
