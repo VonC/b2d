@@ -47,7 +47,8 @@ cmd() {
 	m="${spaces}${m}"
 	echo -e "${Cyan}${m}${Color_Off}"
 	set +e
-	o=$(${c} 2> tests/err 1> tests/out) ; r=$?
+	o=$(${c} 2> ${dirp0}/tests/err 1> ${dirp0}/tests/out) ; r=$?
+	cd ${dirp0}
 	if [ "$(ls -l tests/out 2> /dev/null | awk '{print $5}')" != "0" ]; then
 		while read line; do    
     		echo -e "${Green}${line}${Color_Off}"   
