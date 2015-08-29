@@ -134,3 +134,11 @@ stepcmd "_(master_ext) Add projextrdr to all repos" \
 		"B_gitolite-admin_master_ext_add_projextrdr" \
 		"master_ext_add_projextrdr_to_all_repos" \
 		"___add projextrdr(ext) to all repo"
+stepcmd "_(master_ext) Declare module2 gitolite-admin" \
+		"B_gitolite-admin_master_ext_declare_module2" \
+		"master_ext_declare_module2_to_gitolite-admin" \
+		"___xxx"
+stepcmd "_(master_ext) Clone new repo module2 as projextadm2" \
+		"B_gitolite-admin_master_clone_new_repo_module2_as_projextadm2" \
+		"master_ext_clone_new_repo_module2_as_projextadm2" \
+		"__clone new repo module2 as projextadm2"
