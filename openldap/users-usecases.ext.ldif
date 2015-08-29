@@ -67,3 +67,18 @@ givenname: p
 mail: p@company.com
 userPassword: p
 description: Project External Short
+
+dn: ou=Project External Admins,ou=People,dc=example,dc=com
+objectclass: organizationalUnit
+ou: Project External Admins
+
+dn: cn=Project External Admin2,ou=Project External Admins,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project External Admin2
+sn: aae2
+uid: projextadm2
+givenname: aae2
+mail: projadm2@company.com
+userPassword: projextadm2
+description: Project Admin 2
