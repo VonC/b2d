@@ -36,7 +36,7 @@ subconf \"subs/*.conf\"" >> ${gconf}
 	git fetch origin
 	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" origin/master)
 	if [ "${check}" == "" ]; then
-		echo "no commit 'Add projextrdr to @all' found on origin/master">> tests/err
+		echo "no commit 'Add projextrdr to @all' found on origin/master">> ${drp0}/tests/err
 		return 1
 	fi
 }
