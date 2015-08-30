@@ -1,0 +1,73 @@
+#!/bin/sh
+
+run() {
+	set -e
+	if [ ! -e tests/blessed/gitolite-admin-ext ]; then
+		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin-ext
+	fi
+	cd tests/blessed/gitolite-admin-ext
+	git config http.https://localhost:6443/.sslCAInfo ${dirp0}/apache/crts
+	git config credential.helper passwd
+	git config core.pager cat
+	git config push.default simple
+	git config user.name projextrdr
+	git config user.email projextrdr@email.com
+	git config color.ui always
+	if [ ! -e .git/refs/heads/master_ext ]; then
+		fc=$(git log --reverse --pretty=format:%H|head -1)
+		git checkout -b master_ext ${fc}
+	fi
+	if [ ! -e .git/refs/heads/master_ext ]; then
+		echo "no master_ext branch found">> tests/err
+		return 1
+	fi
+	gconf="conf/gitolite.conf"
+	git reset ${gconf}
+	git checkout ${gconf}
+	set +e
+	i=$(grep subconf ${gconf}|wc -l)
+	set -e
+	if [ "${i}" -ne 1 ]; then
+		echo "
+subconf \"subs/*.conf\"" >> ${gconf}
+	   	git diff --color
+	   	git status
+	   	git add ${gconf}
+	   	git commit -m "Add subs include directive in master_ext"
+	   	git log --oneline --decorate -3
+	fi
+	i=$(awk '/repo\s+module2/,/@projectext2\s+=\s+module2$/' ${gconf}|wc -l)
+	if [ "${i}" -ne 4 ]; then
+		# http://stackoverflow.com/questions/9533679/how-to-insert-a-text-at-the-beginning-of-a-file
+		echo "
+repo module2
+    RW+   = projextadm2
+
+@projectext2 = module2" >> ${gconf}
+	sed -i '/    RW+     =   gitoliteadm/a\
+    RW                                     = projextadm2\
+    RW VREF/NAME/conf/subs/projectext2     = projextadm2\
+    -  VREF/NAME/                          = projextadm2' ${gconf}
+    mkdir -p conf/subs
+	echo "repo @projectext2
+        RW+   = projextadm2
+" > conf/subs/projectext2.conf
+	   	git diff --color
+	   	git status
+	   	git add ${gconf}
+	   	git add conf/subs/projectext2.conf
+	   	git commit -m "Add new repo module2 to projectext2 group"
+	   	git log --oneline --decorate -3
+	fi
+	git fetch origin
+	check=$(git log --oneline --grep "[Aa]dd new repo module2 to projectext2.*" origin/master_ext)
+	if [ "${check}" == "" ]; then
+		git push --force -u origin master_ext
+	fi
+	git fetch origin
+	check=$(git log --oneline --grep "[Aa]dd new repo module2 to projectext2.*" origin/master_ext)
+	if [ "${check}" == "" ]; then
+		echo "no commit 'Add new repo module2 to projectext2">> ${drp0}/tests/err
+		return 1
+	fi
+}
