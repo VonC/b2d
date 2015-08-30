@@ -18,43 +18,37 @@ run() {
 	fi
 	gconf="conf/gitolite.conf"
 	git reset ${gconf}
-	git checkout ${gconf}
-	append_one "
-subconf \"subs/*.conf\"" ${gconf} "
-subconf \"subs/*.conf\"" "Add subs include directive in master_ext"
-	i=${unknown}
+	# git checkout ${gconf}
 
+	append_one "subconf " ${gconf} "
+subconf \"subs/*.conf\""
+	if [ ${append} -eq 0 ]; then
+		git_status_diff_add_commit_log "${gconf}" "Add subs include directive in master_ext"
+	fi
 
-	i=$(awk '/repo\s+module2/,/@projectext2\s+=\s+module2$/' ${gconf}|wc -l)
-	if [ "${i}" -ne 4 ]; then
-		# http://stackoverflow.com/questions/9533679/how-to-insert-a-text-at-the-beginning-of-a-file
-		echo "
+	append_multiple 'repo\s+module2' '@projectext2\s+=\s+module2$' \
+	"${gconf}" 4 "
 repo module2
     RW+   = projextadm2
 
-@projectext2 = module2" >> ${gconf}
-	sed -i '/    RW+     =   gitoliteadm/a\
-    RW                                     = projextadm2\
-    RW VREF/NAME/conf/subs/projectext2     = projextadm2\
-    -  VREF/NAME/                          = projextadm2' ${gconf}
+@projectext2 = module2"
+
+	append_multiple_after 'RW\s+=\s+projextadm2$' '-\s+VREF\/NAME\/\s+=\s+projextadm2$' "${gconf}" 3 'RW+\s\+=\s\+gitoliteadm$' \
+"\\
+	RW                                     = projextadm2\\
+	RW VREF/NAME/conf/subs/projectext2     = projextadm2\\
+	-  VREF/NAME/                          = projextadm2"
+
     mkdir -p conf/subs
 	echo "repo @projectext2
-        RW+   = projextadm2
-" > conf/subs/projectext2.conf
-	   	git diff --color
-	   	git status
-	   	git add ${gconf}
-	   	git add conf/subs/projectext2.conf
-	   	git commit -m "Add new repo module2 to projectext2 group"
-	   	git log --oneline --decorate -3
+	RW+   = projextadm2
+	" > conf/subs/projectext2.conf
+	
+	if [ ${append} -eq 0 ]; then
+		git_status_diff_add_commit_log "${gconf}" "Add new repo module2 to projectext2 group"
 	fi
-	git fetch origin
-	check=$(git log --oneline --grep "[Aa]dd new repo module2 to projectext2.*" origin/master_ext)
-	if [ "${check}" == "" ]; then
-		git push --force -u origin master_ext
-	fi
-	git fetch origin
-	check=$(git log --oneline --grep "[Aa]dd new repo module2 to projectext2.*" origin/master_ext)
+
+	check_if_pushed "origin" "[Aa]dd new repo module2 to projectext2.*" "master_ext"
 	if [ "${check}" == "" ]; then
 		echo "no commit 'Add new repo module2 to projectext2">> ${drp0}/tests/err
 		return 1
