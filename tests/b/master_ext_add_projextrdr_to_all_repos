@@ -5,14 +5,9 @@ run() {
 	if [ ! -e tests/blessed/gitolite-admin-ext ]; then
 		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin-ext
 	fi
+	source b/utils
 	cd tests/blessed/gitolite-admin-ext
-	git config http.https://localhost:6443/.sslCAInfo ${dirp0}/apache/crts
-	git config credential.helper passwd
-	git config core.pager cat
-	git config push.default simple
-	git config user.name projextrdr
-	git config user.email projextrdr@email.com
-	git config color.ui always
+	git_config
 	if [ ! -e .git/refs/heads/master_ext ]; then
 		fc=$(git log --reverse --pretty=format:%H|head -1)
 		git checkout -b master_ext ${fc}
