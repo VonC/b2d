@@ -10,20 +10,92 @@ git_config() {
 	git config color.ui always
 }
 
+git_status_diff_add_commit_log() {
+	f="${1}"
+	c="${2}"
+	git status
+	git diff --color
+	git add ${f}
+	# j=$jjjj
+	git commit -m "${c}"
+	git log --oneline --decorate -3	
+}
+
 append_one() {
 	s="${1}"
 	f="${2}"
 	a="${3}"
-	c="${4}"
+	append=1
 	set +e
 	i=$(grep "${s}" ${f}|wc -l)
 	set -e
 	if [ "${i}" -ne 1 ]; then
 		echo "${a}" >> ${f}
-		git status
-		git diff --color
-		git add ${f}
-		git commit -m "${4}"
-		git log --oneline --decorate -3
+		append=0
 	fi
+}
+
+append_multiple() {
+	sawk1="${1}"
+	sawk2="${2}"
+	f="${3}"
+	n=${4}
+	a="${5}"
+	append=1
+	# echo "sawk1='${sawk1}' , sawk2='${sawk2}'"
+	# awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}
+	# echo "gconf='${gconf}'"
+	i=$(awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}|wc -l)
+	# echo "i='${i}'"
+	if [ "${i}" -ne ${n} ]; then
+		echo "${a}" >> ${f}
+		append=0
+	fi
+}
+
+append_multiple_after() {
+	sawk1="${1}"
+	sawk2="${2}"
+	f="${3}"
+	n=${4}
+	a="${5}"
+	as="${6}"
+	append=1
+	# echo "sawk1='${sawk1}' , sawk2='${sawk2}'"
+	# echo "f='${f}'"
+	# awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}
+	i=$(awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}|wc -l)
+	# echo "i='${i}'"
+	# echo "a='${a}'"
+	# echo 'as='"${as}"
+	if [ "${i}" -ne ${n} ]; then
+		sed -i "/${a}/a\
+${as}" ${gconf}
+		append=0
+	fi
+}
+
+check_if_pushed() {
+	up="${1}"
+	re="${2}"
+	upbr="${3}"
+	git fetch "${1}"
+	check=$(git log --oneline --grep "${re}" "${up}/${upbr}")
+	# echo "check1='${check}'"
+	if [ "${check}" != "" ]; then
+		set +e
+		# echo "git branch --contains ""${up}/${upbr}"" | grep -n \""" ${upbr}$""\""
+		# git branch --contains "${up}/${upbr}"
+		# git branch --contains "${up}/${upbr}" | grep -n " ${upbr}$"
+		check=$(git branch --no-color --contains "${up}/${upbr}" | grep -e " ${upbr}$" 2&>1)
+		set -e
+		# echo "check2='${check}'"
+	fi
+	# echo "check3='${check}'"
+	if [ "${check}" == "" ]; then
+		git push --force -u "${up}" "${upbr}"
+	fi
+	git fetch "${up}"
+	check=$(git log --oneline --grep "${re}" "${up}/${upbr}")
+	# echo "check4='${check}'"
 }
