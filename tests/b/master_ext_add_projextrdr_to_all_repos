@@ -5,7 +5,7 @@ run() {
 	if [ ! -e tests/blessed/gitolite-admin-ext ]; then
 		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin-ext
 	fi
-	source b/utils
+	source tests/b/utils
 	cd tests/blessed/gitolite-admin-ext
 	git_config
 	if [ ! -e .git/refs/heads/master_ext ]; then
