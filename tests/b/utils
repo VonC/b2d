@@ -9,3 +9,21 @@ git_config() {
 	git config user.email projextrdr@email.com
 	git config color.ui always
 }
+
+append_one() {
+	s="${1}"
+	f="${2}"
+	a="${3}"
+	c="${4}"
+	set +e
+	i=$(grep "${s}" ${f}|wc -l)
+	set -e
+	if [ "${i}" -ne 1 ]; then
+		echo "${a}" >> ${f}
+		git status
+		git diff --color
+		git add ${f}
+		git commit -m "${4}"
+		git log --oneline --decorate -3
+	fi
+}

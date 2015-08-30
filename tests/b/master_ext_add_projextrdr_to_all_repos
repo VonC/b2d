@@ -19,18 +19,12 @@ run() {
 	gconf="conf/gitolite.conf"
 	git reset ${gconf}
 	git checkout ${gconf}
-	set +e
-	i=$(grep subconf ${gconf}|wc -l)
-	set -e
-	if [ "${i}" -ne 1 ]; then
-		echo "
-subconf \"subs/*.conf\"" >> ${gconf}
-	   	git diff --color
-	   	git status
-	   	git add ${gconf}
-	   	git commit -m "Add subs include directive in master_ext"
-	   	git log --oneline --decorate -3
-	fi
+	append_one "
+subconf \"subs/*.conf\"" ${gconf} "
+subconf \"subs/*.conf\"" "Add subs include directive in master_ext"
+	i=${unknown}
+
+
 	i=$(awk '/repo\s+module2/,/@projectext2\s+=\s+module2$/' ${gconf}|wc -l)
 	if [ "${i}" -ne 4 ]; then
 		# http://stackoverflow.com/questions/9533679/how-to-insert-a-text-at-the-beginning-of-a-file
