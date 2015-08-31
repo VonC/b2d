@@ -17,7 +17,9 @@ git_status_diff_add_commit_log() {
 	git diff --color
 	git add ${f}
 	# j=$jjjj
+	set +e
 	git commit -m "${c}"
+	set -e
 	git log --oneline --decorate -3	
 }
 
@@ -125,6 +127,7 @@ check_if_pushed() {
 		# echo "git branch --contains ""${up}/${upbr}"" | grep -n \""" ${upbr}$""\""
 		# git branch --contains "${up}/${upbr}"
 		# git branch --contains "${up}/${upbr}" | grep -n " ${upbr}$"
+		pwd
 		check=$(git branch --no-color --contains "${up}/${upbr}" | grep -e " ${upbr}$" 2>&1)
 		set -e
 		# echo "check2='${check}'"
