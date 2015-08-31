@@ -16,3 +16,4 @@ coverage.out
 /tests/err
 /tests/steps
 /tests/blessed/
+/tests/newusers/
