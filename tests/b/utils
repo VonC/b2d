@@ -80,7 +80,9 @@ check_if_pushed() {
 	re="${2}"
 	upbr="${3}"
 	git fetch "${1}"
+	set +e
 	check=$(git log --oneline --grep "${re}" "${up}/${upbr}")
+	set -e
 	# echo "check1='${check}'"
 	if [ "${check}" != "" ]; then
 		set +e
