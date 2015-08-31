@@ -167,5 +167,8 @@ stepcmd "_Clone module2 as projusr2" \
 
 ii=0; i=$((i+1)); setSpaces
 title "Declare new user on external"
+stepcmd "_(master_ext) Clone gitolite-admin as projextrdr" \
+		"NU_master_ext_clone_gitolite-admin_as_projextrdr" \
+		"master_ext_clone_gitolite-admin_as_projextrdr" "_"
 
 echo -e "${Green}[v] all done${Color_Off}"
