@@ -1,0 +1,29 @@
+#!/bin/sh
+
+run() {
+	set -e
+	pcrt=$(readlink -f ./apache/crts)
+	source tests/b/utils
+	cd tests/newusers/gitolite-admin_as_projadm2
+	git config http.https://localhost:6443/.sslCAInfo "${pcrt}"
+	git config credential.helper passwd
+	git config core.pager cat
+	git config push.default simple
+	git config user.name projadm2
+	git config user.email projadm@email.com
+	git checkout master &2>/dev/null
+	pconf="conf/subs/project2.conf"
+	# git reset ${gconf}
+	# git checkout ${gconf}
+	append_one "RW\s\+=\s\+projusr2" "${pconf}" "		RW	= projusr2"
+
+	if [ ${append} -eq 0 ]; then
+		git_status_diff_add_commit_log "${pconf}" "Add projusr2 to project2 as projadm2"
+	fi
+	echo "dirp0='${dirp0}' vs. pcrt='${pcrt}'"
+	check_if_pushed "origin" "[Aa]dd projusr2 to project2.*" "master"
+	if [ "${check}" == "" ]; then
+		echo "no commit 'Add projusr2 to project2 as projadm2">> ${drp0}/tests/err
+		return 1
+	fi
+}
