@@ -43,7 +43,8 @@ append_one() {
 	a="${3}"
 	append=1
 	set +e
-	i=$(grep "${s}" ${f}|wc -l)
+	# echo "'grep -e \"${s}\" \"${f}\"'"
+	i=$(grep -e "${s}" ${f}|wc -l)
 	set -e
 	if [ "${i}" -ne 1 ]; then
 		echo "${a}" >> ${f}
