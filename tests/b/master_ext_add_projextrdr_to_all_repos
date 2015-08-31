@@ -6,8 +6,9 @@ run() {
 		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin-ext
 	fi
 	source tests/b/utils
+	pcrt=$(readlink -f ./apache/crts)
 	cd tests/blessed/gitolite-admin-ext
-	git_config
+	git_config 6443 "${pcrt}"
 	if [ ! -e .git/refs/heads/master_ext ]; then
 		fc=$(git log --reverse --pretty=format:%H|head -1)
 		git checkout -b master_ext ${fc}

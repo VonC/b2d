@@ -1,7 +1,9 @@
 #!/bin/sh
 
 git_config() {
-	git config http.https://localhost:6443/.sslCAInfo ${dirp0}/apache/crts
+	port="${1}"
+	pcrts="${2}"
+	git config http.https://localhost:${port}/.sslCAInfo ${pcrts}
 	git config credential.helper passwd
 	git config core.pager cat
 	git config push.default simple
