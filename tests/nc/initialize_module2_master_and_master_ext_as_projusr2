@@ -1,0 +1,18 @@
+#!/bin/sh
+
+run() {
+	set -e
+	pcrt=$(readlink -f ./apache/crts)
+	if [ ! -e tests/newcommits/module2_as_projusr2 ]; then
+		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://projusr2@localhost:6443/hgit/module2 tests/newcommits/module2_as_projusr2
+	fi
+	cd tests/newcommits/module2_as_projusr2
+	# echo "git config http.https://localhost:6443/.sslCAInfo ${pcrt}"
+	git config http.https://localhost:6443/.sslCAInfo "${pcrt}"
+	git config credential.helper passwd
+	git remote -v
+	git ls-remote origin
+	git config core.pager cat
+
+
+}

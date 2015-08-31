@@ -188,8 +188,11 @@ echo -e "${Black}${On_Yellow}    -----------------${Color_Off}"
 if [ ! -e "tests/newcommits" ]; then mkdir -p tests/newcommits; fi
 
 title "Replication from blessed to external"
-# initialize_module2_master_and_master_ext_branches
-# add commit to master and push as projusr2
+recordstep=1
+stepcmd "_Initialize module2 master and master_ext as projusr2" \
+		"NC_initialize_module2_master_and_master_ext_as_projusr2" \
+		"initialize_module2_master_and_master_ext_as_projusr2" "_"
+# add_commit_to_master_and_push_as_projusr2
 # clone_module2_as_projextusr2_check_master_int
 
 title "Replication from external to blessed"
