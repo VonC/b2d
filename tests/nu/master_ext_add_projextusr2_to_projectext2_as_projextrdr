@@ -18,6 +18,7 @@ run() {
 		echo "repo @projectext2
 	RW+	= projextadm2
 	" > "${pconf}"
+		git add "${pconf}"
 	fi
 	# git reset ${gconf}
 	# git checkout ${gconf}
