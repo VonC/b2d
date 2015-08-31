@@ -173,5 +173,8 @@ stepcmd "_(master_ext) Clone gitolite-admin as projextrdr" \
 stepcmd "_(master_ext) Add projextusr2 to projectext2 as projextrdr for projextadm2" \
 		"NU_master_ext_add_projextusr2_to_projectext2_as_projextrdr" \
 		"master_ext_add_projextusr2_to_projectext2_as_projextrdr" "_"
+stepcmd "_Clone module2 as projextusr2" \
+		"NU_clone_module2_as_projextusr2" \
+		"clone_module2_as_projextusr2" "_"
 
 echo -e "${Green}[v] all done${Color_Off}"
