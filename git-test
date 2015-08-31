@@ -177,4 +177,22 @@ stepcmd "_Clone module2 as projextusr2" \
 		"NU_clone_module2_as_projextusr2" \
 		"clone_module2_as_projextusr2" "_"
 
+
+env="NC"
+envfull="nc"
+ii=0; i=1; setSpaces
+echo ""
+echo -e "${Black}${On_Yellow}NC: New Commits tests${Color_Off}"
+echo -e "${Black}${On_Yellow}    -----------------${Color_Off}"
+if [ ! -e "tests/newcommits" ]; then mkdir -p tests/newcommits; fi
+
+title "Replication from blessed to external"
+# initialize_module2_master_and_master_ext_branches
+# add commit to master and push as projusr2
+# clone_module2_as_projextusr2_check_master_int
+
+title "Replication from external to blessed"
+# add commit to master and push as projextusr2
+# clone_module2_as_projusr2_check_master_ext
+
 echo -e "${Green}[v] all done${Color_Off}"
