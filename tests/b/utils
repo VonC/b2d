@@ -70,7 +70,7 @@ append_multiple_after() {
 	# echo 'as='"${as}"
 	if [ "${i}" -ne ${n} ]; then
 		sed -i "/${a}/a\
-${as}" ${gconf}
+${as}" ${f}
 		append=0
 	fi
 }
