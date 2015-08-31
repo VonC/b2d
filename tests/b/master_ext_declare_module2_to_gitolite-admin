@@ -16,7 +16,6 @@ run() {
 		echo "no master_ext branch found">> tests/err
 		return 1
 	fi
-	git checkout master_ext
 	gconf="conf/gitolite.conf"
 	git reset ${gconf}
 	# git checkout ${gconf}
@@ -27,17 +26,31 @@ subconf \"subs/*.conf\""
 		git_status_diff_add_commit_log "${gconf}" "Add subs include directive in master_ext"
 	fi
 
-	prepend_multiple 'repo\s+@all$' 'RW\+\s+=\s+projextrdr$' "${gconf}" 2 \
-"repo @all\\
-	RW+		=	projextrdr\\
-"
-	if [ ${prepend} -eq 0 ]; then
-		git_status_diff_add_commit_log "${gconf}" "Add projextrdr to @all in master_ext"
+	append_multiple 'repo\s+module2' '@projectext2\s+=\s+module2$' \
+	"${gconf}" 4 "
+repo module2
+    RW+   = projextadm2
+
+@projectext2 = module2"
+
+	append_multiple_after 'RW\s+=\s+projextadm2$' '-\s+VREF\/NAME\/\s+=\s+projextadm2$' "${gconf}" 3 'RW+\s\+=\s\+gitoliteadm$' \
+"\\
+	RW                                     = projextadm2\\
+	RW VREF/NAME/conf/subs/projectext2     = projextadm2\\
+	-  VREF/NAME/                          = projextadm2"
+
+    mkdir -p conf/subs
+	echo "repo @projectext2
+	RW+   = projextadm2
+	" > conf/subs/projectext2.conf
+	
+	if [ ${append} -eq 0 ]; then
+		git_status_diff_add_commit_log "${gconf}" "Add new repo module2 to projectext2 group"
 	fi
 
-	check_if_pushed "origin" "[Aa]dd projextrdr to @all in master_ext.*" "master_ext"
+	check_if_pushed "origin" "[Aa]dd new repo module2 to projectext2.*" "master_ext"
 	if [ "${check}" == "" ]; then
-		echo "no commit 'Add projextrdr to @all in master_ext">> ${drp0}/tests/err
+		echo "no commit 'Add new repo module2 to projectext2">> ${drp0}/tests/err
 		return 1
 	fi
 }
