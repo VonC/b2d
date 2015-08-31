@@ -156,6 +156,11 @@ title "Declare new user on blessed"
 stepcmd "_(master) Clone gitolite-admin as projadm2" \
 		"NU_clone_gitolite-admin_as_projadm" \
 		"clone_gitolite-admin_as_projadm" "_"
+
+stepcmd "_(master) Add projusr2 to project2 as projadm2" \
+		"NU_master_add_projusr2_to_project2_as_projadm2" \
+		"master_add_projusr2_to_project2_as_projadm2" "_"
+
 ii=0; i=$((i+1)); setSpaces
 title "Declare new user on external"
 
