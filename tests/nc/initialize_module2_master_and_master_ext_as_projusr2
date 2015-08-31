@@ -18,4 +18,8 @@ run() {
 	if [ ! -e .git/refs/heads/master ]; then
 		git commit --allow-empty -m "First commit as projusr2 on master"
 	fi
+	set +e; check=$(git branch --no-color | grep -e " master_ext$" 2>&1); set -e
+	if [ "${check}" = "" ]; then
+		git checkout -b master_ext
+	fi
 }
