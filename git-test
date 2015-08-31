@@ -40,7 +40,7 @@ cmd() {
 		# echo "cp='${cp}', c='${c}', cu='${cu}'"
 		if [ "${cu}" = "" ]; then c="${1}"; fi
 	else
-		m="tests/b/${1}"
+		m="tests/${envfull}/${1}"
 		source ${m}
 		c="run"
 	fi
@@ -97,13 +97,14 @@ steppres=""
 touch tests/steps
 i=1
 ii=0
-env="B"
-echo -e "${Black}${On_White}Git Servers tests${Color_Off}"
+env="NR"
+envfull="b"
+echo -e "${Black}${On_White}Git Server tests${Color_Off}"
 echo -e "${Black}${On_White}=================${Color_Off}"
 echo ""
-echo -e "${Black}${On_Yellow}B: Blessed tests${Color_Off}"
+echo -e "${Black}${On_Yellow}NR: New Repos tests${Color_Off}"
 if [ ! -e "tests/blessed" ]; then mkdir -p tests/blessed; fi
-echo -e "${Black}${On_Yellow}   -------------${Color_Off}"
+echo -e "${Black}${On_Yellow}    ---------------${Color_Off}"
 title "gitolite-admin repo"
 stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_cloned" \
@@ -127,9 +128,9 @@ stepcmd "_(master) Clone new repo module2 as projadm2" \
 		"B_gitolite-admin_master_clone_new_repo_module2_as_projadm2" \
 		"master_clone_new_repo_module2_as_projadm2" \
 		"__clone new repo module2"
+
 ii=0; i=$((i+1)); setSpaces
 title "Add new repo (replicated to external)"
-echo -e "${Green}[v] all done${Color_Off}"
 stepcmd "_(master_ext) Add projextrdr to all repos" \
 		"B_gitolite-admin_master_ext_add_projextrdr" \
 		"master_ext_add_projextrdr_to_all_repos" \
@@ -142,3 +143,20 @@ stepcmd "_(master_ext) Clone new repo module2 as projextadm2" \
 		"B_gitolite-admin_master_clone_new_repo_module2_as_projextadm2" \
 		"master_ext_clone_new_repo_module2_as_projextadm2" \
 		"__clone new repo module2 as projextadm2"
+
+env="NU"
+envfull="nu"
+ii=0; i=1; setSpaces
+echo ""
+echo -e "${Black}${On_Yellow}NU: New Users tests${Color_Off}"
+echo -e "${Black}${On_Yellow}    ---------------${Color_Off}"
+if [ ! -e "tests/newusers" ]; then mkdir -p tests/newusers; fi
+
+title "Declare new user on blessed"
+stepcmd "_(master) Clone gitolite-admin as projadm2" \
+		"NU_clone_gitolite-admin_as_projadm" \
+		"clone_gitolite-admin_as_projadm" "_"
+ii=0; i=$((i+1)); setSpaces
+title "Declare new user on external"
+
+echo -e "${Green}[v] all done${Color_Off}"
