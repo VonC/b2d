@@ -12,5 +12,10 @@ run() {
 	git_config 6443 "${pcrt}"
 	git ls-remote origin
 	git remote -v
+	git config user.name projusr2
+	git config user.email projusr2@email.com
 
+	if [ ! -e .git/refs/heads/master ]; then
+		git commit --allow-empty -m "First commit as projusr2 on master"
+	fi
 }
