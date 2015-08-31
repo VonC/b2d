@@ -21,5 +21,13 @@ run() {
 	set +e; check=$(git branch --no-color | grep -e " master_ext$" 2>&1); set -e
 	if [ "${check}" = "" ]; then
 		git checkout -b master_ext
+	else
+		git checkout master_ext
 	fi
+	# git commit --amend --allow-empty --no-edit
+	set +e; check=$(git branch --no-color --contain origin/master_ext | grep -e " master_ext$" 2>&1); set -e
+	if [ "${check}" = "" ]; then
+		git push -u -f origin master_ext
+	fi
+
 }
