@@ -1,0 +1,14 @@
+#!/bin/bash
+
+H=/home/git
+g="${H}/.gnupg"
+
+pid=$(pidof gpg-agent 2>/dev/null)
+nsec=$(ps -p ${pid} -o etimes= 2>/dev/null)
+if [ "${nsec}" != "" ] && [ ${nsec} -gt 34000 ]; then
+	kill -9 ${pid}
+fi
+
+if [ "${nsec}" = "" ] || [ ${nsec} -gt 34000 ]; then
+	gpg2 --pinentry-mode loopback --passphrase-fd 0 -q -d "${g}/users.netrc.asc" <<< "projextrdrpp1" 1>/dev/null 2>&1
+fi
