@@ -101,9 +101,17 @@ user=${r%@*}
 r=${r#*@}
 u=${r#*/}
 r=${r%%/*}
-p=$(${H}/.gnupg/git-credential-netrc -f ${H}/.gnupg/users.netrc.asc get <<EOF host=$r
+echo "host='$r', username='$user'"
+echo "${H}/.gnupg/git-credential-netrc -f ${H}/.gnupg/users.netrc.asc get host=$r username=$user"
+# pidof gpg-agent
+# ps -p 7442 -o etimes=
+# ps -p $(pidof gpg-agent 2>/dev/null) -o etimes= 2>/dev/null
+p=$(${H}/.gnupg/git-credential-netrc -f ${H}/.gnupg/users.netrc.asc get << EOF
+host=$r
 username=$user
-EOF | grep password)
+EOF
+)
+echo "password p='${p}'"
 if [[ "${p}" == "${p#*password=}" ]] ; then
   echo "No password found for pushing to '${upstream_url}'"
   exit 0
