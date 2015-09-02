@@ -35,19 +35,9 @@ title() {
 
 
 cmd() {
-	if [ "${1#git }" != "${1}" ]; then
-		c="${1}"
-		cp="${c%%://*}://"
-		c=${c#${cp}}
-		cu="${c%%@*}"
-		c="${cp}${cu}:${c}"
-		# echo "cp='${cp}', c='${c}', cu='${cu}'"
-		if [ "${cu}" = "" ]; then c="${1}"; fi
-	else
-		m="tests/${envfull}/${1}"
-		. "${m}"
-		c="run"
-	fi
+	m="tests/${envfull}/${1}"
+	. "${m}"
+	c="run"
 	m="${spaces}${m}"
 	printf "${Cyan}${m}${Color_Off}\n"
 	set +e
@@ -65,11 +55,6 @@ cmd() {
 		done < tests/err
 	fi
 	# cmd /C "set force_res=1 && t"
-	forced=""
-	set +u; if [ ! -z "${force_res}" ] && [ ! -z "${2}" ]; then
-		e=$(grep "${2}" tests/err)
-		if [ "${e}" != "" ]; then r=0; forced="forced"; fi
-	fi; set -u
 	set -e
 	return $r
 }
@@ -78,7 +63,6 @@ stepcmd() {
 	atitle="${1}"
 	acode="${2}"
 	acmd="${3}"
-	acmderr="${4}"
 
 	ii=$((ii+1)); setSpaces
 	title "${atitle}"
@@ -86,9 +70,8 @@ stepcmd() {
 	# echo "steppres='${steppres#${acode}}'aa"
 	if [ "${steppres}" != "${acode}" ]; then
 		echo ""
-		cmd "${acmd}" "${acmderr}"
-		if [ "${forced}" = "" ]; then printf "${spaces}${Green}[done]${Color_Off}\n";
-		else printf "${spaces}${Green}[forced]${Color_Off}\n"; fi
+		cmd "${acmd}"
+		printf "${spaces}${Green}[done]${Color_Off}\n";
 		if [ "${steppres}" = "" ] && [ "${recordstep}" -eq 0 ]; then echo "${acode}">> tests/steps; fi
 	else printf "${Green}(already done)${Color_Off}\n"; fi
 }
