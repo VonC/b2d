@@ -1,0 +1,7 @@
+#!/bin/sh
+
+run() {
+	set -e
+	cd tests/blessed/gitolite-admin
+	git ls-remote origin
+}

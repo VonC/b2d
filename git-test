@@ -116,7 +116,7 @@ stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
 		"clone_gitolite-admin_as_gitoliteadm" "_"
 stepcmd "_check ls-remote in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_ls-remote" \
-		"git -C tests/blessed/gitolite-admin ls-remote https://gitoliteadm@localhost:6443/hgit/gitolite-admin" \
+		"check_ls-remote_in_gitolite-admin" \
 		"xxx"
 stepcmd "_(master) Add projextrdr to all repo" \
 		"B_gitolite-admin_master_add_projextrdr" \
