@@ -19,3 +19,5 @@
 	unignore = update-index --no-assume-unchanged
 	aliases=config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /' | awk '{printf 033[1;31m  033[0m; =; print bin/bash;}'
 	lo=!sh -c 'git log $1' -
+[push]
+	default = simple
