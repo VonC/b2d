@@ -23,3 +23,5 @@ if [ "${all}" = "ALL" ]; then
 	cd $HOME/b2d/gitolite
 	k ${env} ALL
 fi
+cd $HOME/b2d/mcron
+k
