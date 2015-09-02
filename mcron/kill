@@ -1,0 +1,6 @@
+#! /bin/sh
+cd $HOME/b2d/mcron
+. ../.bash_aliases
+
+docker inspect mcron.cont > /dev/null 2>&1 && docker kill mcron.cont 2> /dev/null
+docker inspect mcron.cont > /dev/null 2>&1 && docker rm mcron.cont
