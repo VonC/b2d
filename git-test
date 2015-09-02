@@ -113,8 +113,7 @@ printf "${Black}${On_Yellow}    ---------------${Color_Off}\n"
 title "gitolite-admin repo"
 stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_cloned" \
-		"git clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin" \
-		"already exists and is not an empty directory"
+		"clone_gitolite-admin_as_gitoliteadm" "_"
 stepcmd "_check ls-remote in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_ls-remote" \
 		"git -C tests/blessed/gitolite-admin ls-remote https://gitoliteadm@localhost:6443/hgit/gitolite-admin" \
