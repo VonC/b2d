@@ -1,0 +1,6 @@
+#! /bin/sh
+cd $HOME/b2d/sshd
+. ../.bash_aliases
+
+docker inspect sshd.cont > /dev/null 2>&1 && docker kill sshd.cont 2> /dev/null
+docker inspect sshd.cont > /dev/null 2>&1 && docker rm sshd.cont
