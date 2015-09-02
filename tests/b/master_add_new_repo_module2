@@ -3,6 +3,7 @@
 run() {
 	set -e
 	cd tests/blessed/gitolite-admin
+	pwd
 	git config http.sslCAInfo ../../../apache/crts
 	git config credential.helper passwd
 	git config core.pager cat
