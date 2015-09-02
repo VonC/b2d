@@ -4,3 +4,5 @@ cd $HOME/b2d/apache
 r $1
 cd $HOME/b2d/nginx
 r $1
+cd $HOME/b2d/mcron
+upstream=external downstream=blessed r
