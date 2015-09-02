@@ -30,7 +30,7 @@ title() {
 	p="${spaces}${env}.${n}: "
 	if [ ${ii} -eq 0 ]; then m="${p}${White}${On_Cyan}${m}${Color_Off}"; fi
 	if [ ${ii} -ne 0 ]; then m="${p}${m}"; fi
-	if [ "${nl}" != "" ]; then echo -ne "${m} "; else echo -e "${m}"; fi
+	if [ "${nl}" != "" ]; then printf "${m} "; else printf "${m}\n"; fi
 }
 
 
@@ -49,19 +49,19 @@ cmd() {
 		c="run"
 	fi
 	m="${spaces}${m}"
-	echo -e "${Cyan}${m}${Color_Off}"
+	printf "${Cyan}${m}${Color_Off}\n"
 	set +e
 	o=$(${c} 2> ${dirp0}/tests/err 1> ${dirp0}/tests/out) ; r=$?
 	cd ${dirp0}
 	if [ "$(ls -l tests/out 2> /dev/null | awk '{print $5}')" != "0" ]; then
 		while read line; do    
-    		echo -e "${Green}${line}${Color_Off}"   
+			printf "${Green}${line}${Color_Off}\n"
 		done < tests/out
 	fi
 	if [ "$(ls -l tests/err 2> /dev/null | awk '{print $5}')" != "0" ]; then
 		if [ $r -eq 0 ]; then p="${Color_Off}    "; else p="${Red}    "; fi
 		while read line; do    
-    		echo -e "${p}${line}${Color_Off}"   
+			printf "${p}${line}${Color_Off}\n"
 		done < tests/err
 	fi
 	# cmd /C "set force_res=1 && t"
@@ -87,10 +87,10 @@ stepcmd() {
 	if [ "${steppres}" != "${acode}" ]; then
 		echo ""
 		cmd "${acmd}" "${acmderr}"
-		if [ "${forced}" == "" ]; then echo -e "${spaces}${Green}[done]${Color_Off}";
-		else echo -e "${spaces}${Green}[forced]${Color_Off}"; fi
+		if [ "${forced}" == "" ]; then printf "${spaces}${Green}[done]${Color_Off}\n";
+		else printf "${spaces}${Green}[forced]${Color_Off}\n"; fi
 		if [ "${steppres}" == "" ] && [ "${recordstep}" -eq 0 ]; then echo "${acode}">> tests/steps; fi
-	else echo -e "${Green}(already done)${Color_Off}"; fi
+	else printf "${Green}(already done)${Color_Off}\n"; fi
 }
 
 git config http.https://localhost:6443/.sslCAInfo ${dirp0}/apache/crts
@@ -104,12 +104,12 @@ ii=0
 env="NR"
 envfull="b"
 recordstep=0
-echo -e "${Black}${On_White}Git Server tests${Color_Off}"
-echo -e "${Black}${On_White}=================${Color_Off}"
+printf "${Black}${On_White}Git Server tests${Color_Off}\n"
+printf "${Black}${On_White}=================${Color_Off}\n"
 echo ""
-echo -e "${Black}${On_Yellow}NR: New Repos tests${Color_Off}"
+printf "${Black}${On_Yellow}NR: New Repos tests${Color_Off}\n"
 if [ ! -e "tests/blessed" ]; then mkdir -p tests/blessed; fi
-echo -e "${Black}${On_Yellow}    ---------------${Color_Off}"
+printf "${Black}${On_Yellow}    ---------------${Color_Off}\n"
 title "gitolite-admin repo"
 stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_cloned" \
@@ -153,8 +153,8 @@ env="NU"
 envfull="nu"
 ii=0; i=1; setSpaces
 echo ""
-echo -e "${Black}${On_Yellow}NU: New Users tests${Color_Off}"
-echo -e "${Black}${On_Yellow}    ---------------${Color_Off}"
+printf "${Black}${On_Yellow}NU: New Users tests${Color_Off}\n"
+printf "${Black}${On_Yellow}    ---------------${Color_Off}\n"
 if [ ! -e "tests/newusers" ]; then mkdir -p tests/newusers; fi
 
 title "Declare new user on blessed"
@@ -185,8 +185,8 @@ env="NC"
 envfull="nc"
 ii=0; i=1; setSpaces
 echo ""
-echo -e "${Black}${On_Yellow}NC: New Commits tests${Color_Off}"
-echo -e "${Black}${On_Yellow}    -----------------${Color_Off}"
+printf "${Black}${On_Yellow}NC: New Commits tests${Color_Off}\n"
+printf "${Black}${On_Yellow}    -----------------${Color_Off}\n"
 if [ ! -e "tests/newcommits" ]; then mkdir -p tests/newcommits; fi
 
 title "Replication from blessed to external"
@@ -201,4 +201,4 @@ title "Replication from external to blessed"
 # add commit to master and push as projextusr2
 # clone_module2_as_projusr2_check_master_ext
 
-echo -e "${Green}[v] all done${Color_Off}"
+printf "${Green}[v] all done${Color_Off}\n"
