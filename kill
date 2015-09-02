@@ -25,3 +25,5 @@ if [ "${all}" = "ALL" ]; then
 fi
 cd $HOME/b2d/mcron
 k
+cd $HOME/b2d/sshd
+k
