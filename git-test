@@ -45,7 +45,7 @@ cmd() {
 		if [ "${cu}" = "" ]; then c="${1}"; fi
 	else
 		m="tests/${envfull}/${1}"
-		source ${m}
+		. "${m}"
 		c="run"
 	fi
 	m="${spaces}${m}"
