@@ -53,6 +53,9 @@ alias ki='./kill internal'
 
 deb() { docker exec -u git -it $1 bash; }
 debr() { docker exec -u root -it $1 bash; }
+debc() { docker exec -u git -it "$@"; }
+debrc() { docker exec -u root -it "$@"; }
+scpe() { sudo cp -f "${1}" $(cat $(ls *.path.${2})); sudo chown 105:112 $(cat $(ls *.path.${2}))/"${1}"; }
 
 alias start='./start'
 alias stop='./stop'
