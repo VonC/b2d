@@ -29,7 +29,7 @@ run() {
 	fi
 	echo "dirp0='${dirp0}' vs. pcrt='${pcrt}'"
 	check_if_pushed "origin" "[Aa]dd projextusr2 to projectext2.*" "master_ext"
-	if [ "${check}" == "" ]; then
+	if [ "${check}" = "" ]; then
 		echo "no commit 'Add projusr2 to project2 as projadm2">> ${dirp0}/tests/err
 		return 1
 	fi

@@ -43,12 +43,12 @@ repo module2
 	git fetch origin
 	# http://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
 	check=$(git log --oneline --grep "[Aa]dd new repo module2.*" origin/master)
-	if [ "${check}" == "" ]; then
+	if [ "${check}" = "" ]; then
 		git push -u origin master
 	fi
 	git fetch origin
 	check=$(git log --oneline --grep "[Aa]dd new repo module2.*" origin/master)
-	if [ "${check}" == "" ]; then
+	if [ "${check}" = "" ]; then
 		echo "no commit 'Add new repo module2">> tests/err
 		return 1
 	fi

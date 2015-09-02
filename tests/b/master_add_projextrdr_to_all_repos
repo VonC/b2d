@@ -23,19 +23,19 @@ subconf \"subs/*.conf\"" >> ${gconf}
 	   	git commit -m "Add projextrdr to @all"
 	fi
 	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" master)
-	if [ "${check}" == "" ]; then
+	if [ "${check}" = "" ]; then
 		echo "no commit 'Add projextrdr to @all' found">> tests/err
 		return 1
 	fi
 	git fetch origin
 	# http://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
 	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" origin/master)
-	if [ "${check}" == "" ]; then
+	if [ "${check}" = "" ]; then
 		git push -u origin master
 	fi
 	git fetch origin
 	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" origin/master)
-	if [ "${check}" == "" ]; then
+	if [ "${check}" = "" ]; then
 		echo "no commit 'Add projextrdr to @all' found on origin/master">> ${drp0}/tests/err
 		return 1
 	fi

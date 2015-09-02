@@ -37,7 +37,7 @@ subconf \"subs/*.conf\""
 	fi
 
 	check_if_pushed "origin" "[Aa]dd projextrdr to @all in master_ext.*" "master_ext"
-	if [ "${check}" == "" ]; then
+	if [ "${check}" = "" ]; then
 		echo "no commit 'Add projextrdr to @all in master_ext">> ${drp0}/tests/err
 		return 1
 	fi
