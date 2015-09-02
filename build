@@ -9,5 +9,5 @@ cd $HOME/b2d/apache && $HOME/b2d/apache/build
 cd $HOME/b2d/nginx && $HOME/b2d/nginx/build
 cd $HOME/b2d/gnupg2 && $HOME/b2d/gnupg2/build
 cd $HOME/b2d/mcron && $HOME/b2d/mcron/build
-cd $HOME/b2d/sshd && $HOME/b2d/sshd/sshd
+cd $HOME/b2d/sshd && $HOME/b2d/sshd/build
 cd $HOME/b2d
