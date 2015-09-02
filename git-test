@@ -87,9 +87,9 @@ stepcmd() {
 	if [ "${steppres}" != "${acode}" ]; then
 		echo ""
 		cmd "${acmd}" "${acmderr}"
-		if [ "${forced}" == "" ]; then printf "${spaces}${Green}[done]${Color_Off}\n";
+		if [ "${forced}" = "" ]; then printf "${spaces}${Green}[done]${Color_Off}\n";
 		else printf "${spaces}${Green}[forced]${Color_Off}\n"; fi
-		if [ "${steppres}" == "" ] && [ "${recordstep}" -eq 0 ]; then echo "${acode}">> tests/steps; fi
+		if [ "${steppres}" = "" ] && [ "${recordstep}" -eq 0 ]; then echo "${acode}">> tests/steps; fi
 	else printf "${Green}(already done)${Color_Off}\n"; fi
 }
 
