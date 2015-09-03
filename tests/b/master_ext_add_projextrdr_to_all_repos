@@ -8,7 +8,10 @@ run() {
 	source tests/b/utils
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/blessed/gitolite-admin-ext
+	pwd
 	git_config 6443 "${pcrt}"
+	git config user.name projextrdr
+	git config user.email projextrdr@email.com
 	if [ ! -e .git/refs/heads/master_ext ]; then
 		fc=$(git log --reverse --pretty=format:%H|head -1)
 		git checkout -b master_ext ${fc}
