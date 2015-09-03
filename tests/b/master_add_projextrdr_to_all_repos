@@ -12,7 +12,7 @@ run() {
 	gconf="conf/gitolite.conf"
 	# http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
 	i=$(awk '/repo\s+@all/,/RW\+\s+=\s+projextrdr$/' ${gconf}|wc -l)
-	if [ "${i}" -ne 2 ]; then
+	if [ "${i}" -eq 0 ]; then
 		# http://stackoverflow.com/questions/9533679/how-to-insert-a-text-at-the-beginning-of-a-file
 	   	sed -i '1s/^/repo @all\n	RW+		=	projextrdr\n/' ${gconf}
 		echo "
@@ -20,6 +20,10 @@ subconf \"subs/*.conf\"" >> ${gconf}
 	   	git diff --color
 	   	git add ${gconf}
 	   	git commit -m "Add projextrdr to @all"
+	fi
+	i=$(awk '/repo\s+@all/,/RW\+\s+=\s+projextrdr$/' ${gconf}|wc -l)
+	if [ "${i}" -eq 2 ]; then
+		echo "incorrect insert for projextrdr"
 	fi
 	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" master)
 	if [ "${check}" = "" ]; then
