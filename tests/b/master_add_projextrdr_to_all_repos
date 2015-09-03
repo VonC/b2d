@@ -2,14 +2,13 @@
 
 run() {
 	set -e
+	source tests/b/utils
+	pcrt=$(readlink -f ./apache/crts)
 	cd tests/blessed/gitolite-admin
-	git config http.sslCAInfo ../../../apache/crts
-	git config credential.helper passwd
-	git config core.pager cat
-	git checkout master
-	git config push.default simple
+	pwd
+	git_config 6443 "${pcrt}"
 	git config user.name projextrdr
-	git config user.email projextrdr@emaim.com
+	git config user.email projextrdr@email.com
 	gconf="conf/gitolite.conf"
 	# http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
 	i=$(awk '/repo\s+@all/,/RW\+\s+=\s+projextrdr$/' ${gconf}|wc -l)
