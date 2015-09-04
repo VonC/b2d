@@ -114,11 +114,13 @@ prepend_multiple() {
 		sed -i "1 i\
 ${ps}" "${f}"
 		prepend=0
+		# echo "done: prepend='${prepend}'"
 	fi
 	i=$(awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}|wc -l)
 	if [ "${i}" -ne ${n} ]; then
 		prepend=-1
 	fi
+	# echo "prepend='${prepend}'"
 }
 
 check_if_pushed() {
@@ -127,6 +129,8 @@ check_if_pushed() {
 	upbr="${3}"
 	git fetch "${1}"
 	set +e
+	# echo "git log --oneline --grep ${re} ${up}/${upbr}"
+	# git log --oneline --grep "${re}" "${up}/${upbr}"
 	check=$(git log --oneline --grep "${re}" "${up}/${upbr}")
 	set -e
 	# echo "check1='${check}'"
@@ -142,6 +146,7 @@ check_if_pushed() {
 	fi
 	# echo "check3='${check}'"
 	if [ "${check}" == "" ]; then
+		# echo "git push --force -u ${up} ${upbr}"
 		git push --force -u "${up}" "${upbr}"
 	fi
 	git fetch "${up}"
