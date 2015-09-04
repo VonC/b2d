@@ -13,6 +13,17 @@ run() {
 	git config user.name projextrdr
 	git config user.email projextrdr@email.com
 	gconf="conf/gitolite.conf"
+
+	if [ ${reset} ]; then
+		check=$(git log --format=format:%H --grep "gitolite setup.*\.pub$" master)
+		if [ "check" = "" ]; then
+			echo "Impossible to reset: gitolite setup.*\\.pub$ not found" >> ${dirp0}/tests/err
+			return -1
+		fi
+		git reset --hard ${check}
+		reset=1
+	fi
+	return 0
 	git reset ${gconf}
 	# git checkout ${gconf}
 
