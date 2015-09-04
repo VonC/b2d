@@ -2,6 +2,9 @@
 
 run() {
 	set -e
+	if [ ! -e tests/blessed/gitolite-admin ]; then
+		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin
+	fi
 	. tests/b/utils
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/blessed/gitolite-admin
@@ -10,36 +13,34 @@ run() {
 	git config user.name projextrdr
 	git config user.email projextrdr@email.com
 	gconf="conf/gitolite.conf"
-	# http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
-	i=$(awk '/repo\s+@all/,/RW\+\s+=\s+projextrdr$/' ${gconf}|wc -l)
-	if [ "${i}" -eq 0 ]; then
-		# http://stackoverflow.com/questions/9533679/how-to-insert-a-text-at-the-beginning-of-a-file
-	   	sed -i '1s/^/repo @all\n	RW+		=	projextrdr\n/' ${gconf}
-		echo "
-subconf \"subs/*.conf\"" >> ${gconf}
-	   	git diff --color
-	   	git add ${gconf}
-	   	git commit -m "Add projextrdr to @all"
+	git reset ${gconf}
+	# git checkout ${gconf}
+
+	append_one "subconf " ${gconf} "
+subconf \"subs/*.conf\""
+	if [ ${append} -eq 0 ]; then
+		git_status_diff_add_commit_log "${gconf}" "Add subs include directive in master"
 	fi
-	i=$(awk '/repo\s+@all/,/RW\+\s+=\s+projextrdr$/' ${gconf}|wc -l)
-	if [ "${i}" -eq 2 ]; then
-		echo "incorrect insert for projextrdr"
+	if [ ${append} -lt 0 ]; then
+		echo "Incorrect number of subconf in '${gconf}'">> ${drp0}/tests/err
+		return -1
 	fi
-	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" master)
+
+	prepend_multiple 'repo\s+@all$' 'RW\+\s+=\s+projextrdr$' "${gconf}" 2 \
+"repo @all\\
+	RW+		=	projextrdr\\
+"
+	if [ ${prepend} -lt 0 ]; then
+		echo "Incorrect number of repo @all RW+ projextrdr in '${gconf}'">> ${drp0}/tests/err
+		return -1
+	fi
+	if [ ${prepend} -eq 0 ]; then
+		git_status_diff_add_commit_log "${gconf}" "Add projextrdr to @all in master"
+	fi
+
+	check_if_pushed "origin" "[Aa]dd projextrdr to @all in master$" "master"
 	if [ "${check}" = "" ]; then
-		echo "no commit 'Add projextrdr to @all' found">> tests/err
-		return 1
-	fi
-	git fetch origin
-	# http://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
-	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" origin/master)
-	if [ "${check}" = "" ]; then
-		git push -u origin master
-	fi
-	git fetch origin
-	check=$(git log --oneline --grep "[Aa]dd projextrdr to @\?all.*" origin/master)
-	if [ "${check}" = "" ]; then
-		echo "no commit 'Add projextrdr to @all' found on origin/master">> ${drp0}/tests/err
+		echo "no commit 'Add projextrdr to @all in master">> ${drp0}/tests/err
 		return 1
 	fi
 }
