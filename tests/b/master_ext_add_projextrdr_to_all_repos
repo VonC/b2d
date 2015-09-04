@@ -27,6 +27,10 @@ run() {
 
 	append_one "subconf " ${gconf} "
 subconf \"subs/*.conf\""
+	if [ ${append} -lt 0 ]; then
+		echo "Incorrect number of subconf in '${gconf}'">> ${drp0}/tests/err
+		return -1
+	fi
 	if [ ${append} -eq 0 ]; then
 		git_status_diff_add_commit_log "${gconf}" "Add subs include directive in master_ext"
 	fi
@@ -35,6 +39,10 @@ subconf \"subs/*.conf\""
 "repo @all\\
 	RW+		=	projextrdr\\
 "
+	if [ ${prepend} -lt 0 ]; then
+		echo "Incorrect number of repo @all RW+ projextrdr in '${gconf}'">> ${drp0}/tests/err
+		return -1
+	fi
 	if [ ${prepend} -eq 0 ]; then
 		git_status_diff_add_commit_log "${gconf}" "Add projextrdr to @all in master_ext"
 	fi
