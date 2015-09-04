@@ -54,6 +54,8 @@ append_one() {
 		echo "${a}" >> ${f}
 		append=0
 	fi
+	set +e; i=$(grep -e "${s}" ${f}|wc -l); set -e
+	if [ "${i}" -ne 1 ]; then append=-1; fi
 }
 
 append_multiple() {
@@ -112,6 +114,10 @@ prepend_multiple() {
 		sed -i "1 i\
 ${ps}" "${f}"
 		prepend=0
+	fi
+	i=$(awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}|wc -l)
+	if [ "${i}" -ne ${n} ]; then
+		prepend=-1
 	fi
 }
 
