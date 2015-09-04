@@ -28,7 +28,7 @@ run() {
 	append_one "subconf " ${gconf} "
 subconf \"subs/*.conf\""
 	if [ ${append} -lt 0 ]; then
-		echo "Incorrect number of subconf in '${gconf}'">> ${drp0}/tests/err
+		echo "Incorrect number of subconf in '${gconf}'">> ${dirp0}/tests/err
 		return -1
 	fi
 	if [ ${append} -eq 0 ]; then
@@ -40,7 +40,7 @@ subconf \"subs/*.conf\""
 	RW+		=	projextrdr\\
 "
 	if [ ${prepend} -lt 0 ]; then
-		echo "Incorrect number of repo @all RW+ projextrdr in '${gconf}'">> ${drp0}/tests/err
+		echo "Incorrect number of repo @all RW+ projextrdr in '${gconf}'">> ${dirp0}/tests/err
 		return -1
 	fi
 	if [ ${prepend} -eq 0 ]; then
@@ -49,7 +49,7 @@ subconf \"subs/*.conf\""
 
 	check_if_pushed "origin" "[Aa]dd projextrdr to @all in master_ext.*" "master_ext"
 	if [ "${check}" = "" ]; then
-		echo "no commit 'Add projextrdr to @all in master_ext">> ${drp0}/tests/err
+		echo "no commit 'Add projextrdr to @all in master_ext">> ${dirp0}/tests/err
 		return 1
 	fi
 }

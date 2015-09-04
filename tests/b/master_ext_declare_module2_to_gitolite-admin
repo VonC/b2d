@@ -52,7 +52,7 @@ repo module2
 
 	check_if_pushed "origin" "[Aa]dd new repo module2 to projectext2.*" "master_ext"
 	if [ "${check}" = "" ]; then
-		echo "no commit 'Add new repo module2 to projectext2">> ${drp0}/tests/err
+		echo "no commit 'Add new repo module2 to projectext2">> ${dirp0}/tests/err
 		return 1
 	fi
 }

@@ -22,7 +22,7 @@ subconf \"subs/*.conf\""
 		git_status_diff_add_commit_log "${gconf}" "Add subs include directive in master"
 	fi
 	if [ ${append} -lt 0 ]; then
-		echo "Incorrect number of subconf in '${gconf}'">> ${drp0}/tests/err
+		echo "Incorrect number of subconf in '${gconf}'">> ${dirp0}/tests/err
 		return -1
 	fi
 
@@ -31,7 +31,7 @@ subconf \"subs/*.conf\""
 	RW+		=	projextrdr\\
 "
 	if [ ${prepend} -lt 0 ]; then
-		echo "Incorrect number of repo @all RW+ projextrdr in '${gconf}'">> ${drp0}/tests/err
+		echo "Incorrect number of repo @all RW+ projextrdr in '${gconf}'">> ${dirp0}/tests/err
 		return -1
 	fi
 	if [ ${prepend} -eq 0 ]; then
@@ -40,7 +40,7 @@ subconf \"subs/*.conf\""
 
 	check_if_pushed "origin" "[Aa]dd projextrdr to @all in master$" "master"
 	if [ "${check}" = "" ]; then
-		echo "no commit 'Add projextrdr to @all in master">> ${drp0}/tests/err
+		echo "no commit 'Add projextrdr to @all in master">> ${dirp0}/tests/err
 		return 1
 	fi
 }
