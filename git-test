@@ -68,7 +68,7 @@ stepcmd() {
 	title "${atitle}"
 	stepp "${acode}"
 	# echo "steppres='${steppres#${acode}}'aa"
-	if [ "${steppres}" != "${acode}" ] || [ "${noreset}" -ne 0 ]; then
+	if [ "${steppres}" != "${acode}" ] || [ "${reset}" -eq 0 ]; then
 		echo ""
 		cmd "${acmd}"
 		printf "${spaces}${Green}[done]${Color_Off}\n";
@@ -94,7 +94,7 @@ printf "${Black}${On_Yellow}NR: New Repos tests${Color_Off}\n"
 if [ ! -e "tests/blessed" ]; then mkdir -p tests/blessed; fi
 printf "${Black}${On_Yellow}    ---------------${Color_Off}\n"
 title "gitolite-admin repo"
-noreset=0
+reset=1
 stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_cloned" \
 		"clone_gitolite-admin_as_gitoliteadm" "_"
@@ -102,7 +102,7 @@ stepcmd "_check ls-remote in tests/blessed/gitolite-admin" \
 		"B_gitolite-admin_ls-remote" \
 		"check_ls-remote_in_gitolite-admin" \
 		"xxx"
-noreset=1
+reset=0
 recordstep=1
 stepcmd "_(master) Add projextrdr to all repo" \
 		"B_gitolite-admin_master_add_projextrdr" \
