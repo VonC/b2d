@@ -2,14 +2,14 @@
 
 run() {
 	set -e
-	pcrt=$(readlink -f ./apache/crts)
 	if [ ! -e tests/newusers/gitolite-admin_as_projadm2 ]; then
 		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone -b master https://projadm2@localhost:6443/hgit/gitolite-admin tests/newusers/gitolite-admin_as_projadm2
 	fi
+	. tests/b/utils
+	pcrt=$(readlink -f ./apache/crts)
 	cd tests/newusers/gitolite-admin_as_projadm2
-	# echo "git config http.https://localhost:6443/.sslCAInfo ${pcrt}"
-	git config http.https://localhost:6443/.sslCAInfo "${pcrt}"
-	git config credential.helper passwd
+	pwd
+	git_config 6443 "${pcrt}" "projadm2"
 	git remote -v
 	git ls-remote origin
 }
