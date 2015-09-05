@@ -12,7 +12,8 @@ run() {
 	git_config 6443 "${pcrt}" "projextrdr"
 	gconf="conf/gitolite.conf"
 
-	if [ ${reset} ]; then
+	if [ ${reset} -eq 0 ]; then
+		echo "resetting to 'gitolite setup'"
 		check=$(git log --format=format:%H --grep "gitolite setup.*\.pub$" master)
 		if [ "check" = "" ]; then
 			echo "Impossible to reset: gitolite setup.*\\.pub$ not found" >> ${dirp0}/tests/err
@@ -21,7 +22,6 @@ run() {
 		git reset --hard ${check}
 		reset=1
 	fi
-	return 0
 	git reset ${gconf}
 	# git checkout ${gconf}
 
