@@ -140,7 +140,7 @@ check_if_pushed() {
 		# echo "git branch --contains ""${up}/${upbr}"" | grep -n \""" ${upbr}$""\""
 		# git branch --contains "${up}/${upbr}"
 		# git branch --contains "${up}/${upbr}" | grep -n " ${upbr}$"
-		pwd
+		# pwd
 		check=$(git branch --no-color --contains "${up}/${upbr}" | grep -e " ${upbr}$" 2>&1)
 		set -e
 		# echo "check2='${check}'"
