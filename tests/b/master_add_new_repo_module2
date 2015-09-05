@@ -23,43 +23,32 @@ run() {
 
 	# git reset ${gconf}
 	# git checkout ${gconf}
-	# http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
-	i=$(awk '/repo\s+module2/,/@project2\s+=\s+module2$/' ${gconf}|wc -l)
-	if [ "${i}" -ne 4 ]; then
-		# http://stackoverflow.com/questions/9533679/how-to-insert-a-text-at-the-beginning-of-a-file
-		echo "
-subconf \"subs/*.conf\"
-
+	append_multiple 'repo\s+module2' '@project2\s+=\s+module2$' \
+	"${gconf}" 4 "
 repo module2
     RW+   = projadm2
 
-@project2 = module2" >> ${gconf}
-		# http://stackoverflow.com/questions/15559359/insert-line-after-first-match-using-sed
-		sed -i '/    RW+     =   gitoliteadm/a\
-    RW                                     = projadm2\
-    RW VREF/NAME/conf/subs/project2        = projadm2\
-    -  VREF/NAME/                          = projadm2' ${gconf}
-    	mkdir -p conf/subs
-	   	echo "repo @project2
-        RW+   = projadm2
+@project2 = module2"
+
+	append_multiple_after 'RW\s+=\s+projadm2$' '-\s+VREF\/NAME\/\s+=\s+projadm2$' "${gconf}" 3 'RW+\s\+=\s\+gitoliteadm$' \
+"\\
+	RW                                     = projadm2\\
+	RW VREF/NAME/conf/subs/project2     = projadm2\\
+	-  VREF/NAME/                          = projadm2"
+
+	mkdir -p conf/subs
+	echo "repo @project2
+		RW+   = projadm2
 " > conf/subs/project2.conf
-	   	git diff --color
-	   	git status
-	   	git add ${gconf}
-	   	git add conf/subs/project2.conf
-	   	git commit -m "Add new repo module2"
-	   	git log --oneline --decorate -3
+	git add conf/subs/project2.conf
+
+	if [ ${append} -eq 0 ]; then
+		git_status_diff_add_commit_log "${gconf}" "Add new repo module2 to project2 group"
 	fi
-	git fetch origin
-	# http://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
-	check=$(git log --oneline --grep "[Aa]dd new repo module2.*" origin/master)
+
+	check_if_pushed "origin" "[Aa]dd new repo module2 to project2 group$" "master"
 	if [ "${check}" = "" ]; then
-		git push -u origin master
-	fi
-	git fetch origin
-	check=$(git log --oneline --grep "[Aa]dd new repo module2.*" origin/master)
-	if [ "${check}" = "" ]; then
-		echo "no commit 'Add new repo module2">> tests/err
+		echo "no commit 'Add new repo module2 to project2 group'">> ${dirp0}/tests/err
 		return 1
 	fi
 }
