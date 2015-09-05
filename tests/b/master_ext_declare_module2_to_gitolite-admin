@@ -3,29 +3,33 @@
 run() {
 	set -e
 	if [ ! -e tests/blessed/gitolite-admin-ext ]; then
-		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin-ext
+		echo "no gitolite-admin-ext repo found">> tests/err
+		return 1
 	fi
-	source tests/b/utils
+	. tests/b/utils
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/blessed/gitolite-admin-ext
-	git_config 6443 "${pcrt}"
-	if [ ! -e .git/refs/heads/master_ext ]; then
-		fc=$(git log --reverse --pretty=format:%H|head -1)
-		git checkout -b master_ext ${fc}
-	fi
+	pwd
+	git_config 6443 "${pcrt}" gitoliteadm
 	if [ ! -e .git/refs/heads/master_ext ]; then
 		echo "no master_ext branch found">> tests/err
 		return 1
 	fi
+	git checkout master_ext
 	gconf="conf/gitolite.conf"
 	git reset ${gconf}
-	# git checkout ${gconf}
 
-	append_one "subconf " ${gconf} "
-subconf \"subs/*.conf\""
-	if [ ${append} -eq 0 ]; then
-		git_status_diff_add_commit_log "${gconf}" "Add subs include directive in master_ext"
+	if [ ${reset} -eq 0 ]; then
+		echo "resetting to 'Add projextrdr to @all in master_ext'"
+		check=$(git log --format=format:%H --grep "Add projextrdr to @all in master_ext$" master)
+		if [ "check" = "" ]; then
+			echo "Impossible to reset: 'Add projextrdr to @all in master_ext$' not found" >> ${dirp0}/tests/err
+			return -1
+		fi
+		git reset --hard ${check}
+		reset=1
 	fi
+	# git checkout ${gconf}
 
 	append_multiple 'repo\s+module2' '@projectext2\s+=\s+module2$' \
 	"${gconf}" 4 "
