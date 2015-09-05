@@ -9,9 +9,7 @@ run() {
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/blessed/gitolite-admin
 	pwd
-	git_config 6443 "${pcrt}"
-	git config user.name projextrdr
-	git config user.email projextrdr@email.com
+	git_config 6443 "${pcrt}" "projextrdr"
 	gconf="conf/gitolite.conf"
 
 	if [ ${reset} ]; then
