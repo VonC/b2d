@@ -9,6 +9,18 @@ run() {
 	git_config 6443 "${pcrt}" "projextrdr"
 	git checkout master
 	gconf="conf/gitolite.conf"
+
+	if [ ${reset} -eq 0 ]; then
+		echo "resetting to 'Add projextrdr to @all in master'"
+		check=$(git log --format=format:%H --grep "Add projextrdr to @all in master$" master)
+		if [ "check" = "" ]; then
+			echo "Impossible to reset: 'Add projextrdr to @all in master$' not found" >> ${dirp0}/tests/err
+			return -1
+		fi
+		git reset --hard ${check}
+		reset=1
+	fi
+
 	# git reset ${gconf}
 	# git checkout ${gconf}
 	# http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
