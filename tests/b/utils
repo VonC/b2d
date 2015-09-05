@@ -69,6 +69,7 @@ append_multiple() {
 	# echo "sawk1='${sawk1}' , sawk2='${sawk2}'"
 	# awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}
 	# echo "gconf='${gconf}'"
+	# http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
 	i=$(awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}|wc -l)
 	# echo "i='${i}'"
 	if [ "${i}" -ne ${n} ]; then
