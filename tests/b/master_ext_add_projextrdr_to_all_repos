@@ -20,6 +20,7 @@ run() {
 		echo "no master_ext branch found">> tests/err
 		return 1
 	fi
+	git checkout master_ext
 
 	if [ ${reset} -eq 0 ]; then
 		echo "resetting to 'gitolite setup'"
@@ -32,7 +33,6 @@ run() {
 		reset=1
 	fi
 
-	git checkout master_ext
 	git reset ${gconf}
 	# git checkout ${gconf}
 
