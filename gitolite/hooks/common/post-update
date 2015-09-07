@@ -137,8 +137,8 @@ if [[ "${downstream_name}" == "" ]]; then
     flog="push.${GL_USER}.log"
   fi
   nowd=`date +"%Y%m%d - %H:%M:%S"`
-  echo "~~~~~~~~~~~~~~~~~~~" >> "${H}/git/logs/${flog}"
-  echo "$nowd (${GL_USER})" >> "${H}/git/logs/${flog}"
+  echo "~~~~~~~~~~~~~~~~~~~" >> "${H}/logs/${flog}"
+  echo "$nowd (${GL_USER})" >> "${H}/logs/${flog}"
   echo "${res}" >> "${H}/git/logs/${flog}"
 else
   echo "${res}"
