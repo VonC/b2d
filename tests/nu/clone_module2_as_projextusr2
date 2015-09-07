@@ -3,13 +3,13 @@
 run() {
 	set -e
 	if [ ! -e tests/newusers/module2_as_projextusr2 ]; then
-		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://projextusr2@localhost:6443/hgit/module2 tests/newusers/module2_as_projextusr2
+		git -c http.https://localhost:8443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://projextusr2@localhost:8443/hgit/module2 tests/newusers/module2_as_projextusr2
 	fi
 	. tests/utils
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/newusers/module2_as_projextusr2
 	pwd
-	git_config 6443 "${pcrt}" "projextusr2"
+	git_config 8443 "${pcrt}" "projextusr2"
 	# echo "git config http.https://localhost:6443/.sslCAInfo ${pcrt}"
 	git remote -v
 	git ls-remote origin
