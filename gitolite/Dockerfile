@@ -7,7 +7,7 @@ MAINTAINER VonC <vonc@laposte.net>
 # ENV no_proxy .company,.sock,localhost,127.0.0.1,::1,192.168.59.103
 
 WORKDIR /home/git
-RUN mkdir /home/git/gitolite
+RUN mkdir /home/git/gitolite && mkdir /home/git/logs
 RUN chown -R git:git /home/git
 USER git
 RUN git clone https://github.com/sitaramc/gitolite /home/git/gitolite/github
