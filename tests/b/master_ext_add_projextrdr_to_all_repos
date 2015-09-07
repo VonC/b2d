@@ -30,7 +30,6 @@ run() {
 			return -1
 		fi
 		git reset --hard ${check}
-		reset=1
 	fi
 
 	git reset ${gconf}
