@@ -8,5 +8,5 @@ run() {
 	fi
 	. tests/utils
 	cd tests/blessed/gitolite-admin
-	git_config 6443 "${pcrt}"
+	git_config 6443 "${pcrt}" gitoliteadm
 }
