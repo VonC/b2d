@@ -109,8 +109,7 @@ echo "${H}/.gnupg/git-credential-netrc -f ${H}/.gnupg/users.netrc.asc get host=$
 p=$(${H}/.gnupg/git-credential-netrc -f ${H}/.gnupg/users.netrc.asc get << EOF
 host=$r
 username=$user
-EOF
-)
+EOF | grep "password")
 echo "password p='${p}'"
 if [[ "${p}" == "${p#*password=}" ]] ; then
   echo "No password found for pushing to '${upstream_url}'"
