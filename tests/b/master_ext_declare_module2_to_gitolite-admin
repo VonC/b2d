@@ -6,7 +6,7 @@ run() {
 		echo "no gitolite-admin-ext repo found">> tests/err
 		return 1
 	fi
-	. tests/b/utils
+	. tests/utils
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/blessed/gitolite-admin-ext
 	pwd

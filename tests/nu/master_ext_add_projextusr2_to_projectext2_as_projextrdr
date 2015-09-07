@@ -2,7 +2,7 @@
 
 run() {
 	set -e
-	. tests/b/utils
+	. tests/utils
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/newusers/gitolite-admin-ext_as_projextdr
 	pwd

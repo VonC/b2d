@@ -5,7 +5,7 @@ run() {
 	if [ ! -e tests/blessed/module2_as_projextadm2 ]; then
 		git -c http.https://localhost:8443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://projextadm2@localhost:8443/hgit/module2 tests/blessed/module2_as_projextadm2
 	fi
-	. tests/b/utils
+	. tests/utils
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/blessed/module2_as_projextadm2
 	pwd

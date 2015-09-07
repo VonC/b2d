@@ -5,7 +5,7 @@ run() {
 	if [ ! -e tests/newusers/gitolite-admin-ext_as_projextdr ]; then
 		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone -b master_ext https://projextrdr@localhost:6443/hgit/gitolite-admin tests/newusers/gitolite-admin-ext_as_projextdr
 	fi
-	. tests/b/utils
+	. tests/utils
 	pcrt=$(readlink -f ./apache/crts)
 	cd tests/newusers/gitolite-admin-ext_as_projextdr
 	pwd
