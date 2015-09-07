@@ -38,7 +38,7 @@ run() {
 	fi
 	echo "check='${check}'"
 	if [ "${check}" = "" ]; then
-		git remote set-url origin https://projextrdr@localhost:6443/hgit/module2
+		git remote set-url origin https://projadm2@localhost:6443/hgit/module2
 		git push -u -f origin master_ext
 		git remote set-url origin https://projusr2@localhost:6443/hgit/module2
 	fi
@@ -49,7 +49,7 @@ run() {
 	fi
 	if [ "${check}" = "" ]; then
 		echo "push master"
-		git remote set-url origin https://projextrdr@localhost:6443/hgit/module2
+		git remote set-url origin https://projadm2@localhost:6443/hgit/module2
 		git push -u -f origin master
 		git remote set-url origin https://projusr2@localhost:6443/hgit/module2
 	fi
