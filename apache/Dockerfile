@@ -5,7 +5,9 @@ USER root
 ENV HOME_GIT /home/git
 WORKDIR $HOME_GIT
 RUN git clone https://github.com/Semantic-Org/Semantic-UI -b 0.9.1 --depth=1 Semantic-UI
-RUN mkdir -p apache/log && mkdir -p git/logs && chown -R git:git git
+RUN mkdir -p apache/log && mkdir -p git/logs && chown -R git:git git && \
+    mkdir -p shippingbay_git/outgoing && mkdir -p shippingbay_git/incoming && \
+    chown -R git:git shippingbay_git
 WORKDIR $HOME_GIT/apache
 COPY gen_ssl_key_and_crt.sh ./
 RUN chmod +x gen_ssl_key_and_crt.sh
