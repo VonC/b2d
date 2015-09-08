@@ -85,20 +85,20 @@ touch tests/steps
 i=1
 ii=0
 env="NR"
-envfull="b"
+envfull="nr"
 recordstep=0
 printf "${Black}${On_White}Git Server tests${Color_Off}\n"
 printf "${Black}${On_White}=================${Color_Off}\n"
 echo ""
 printf "${Black}${On_Yellow}NR: New Repos tests${Color_Off}\n"
-if [ ! -e "tests/blessed" ]; then mkdir -p tests/blessed; fi
+if [ ! -e "tests/newrepos" ]; then mkdir -p tests/newrepos; fi
 printf "${Black}${On_Yellow}    ---------------${Color_Off}\n"
 title "gitolite-admin repo"
 reset=1
-stepcmd "_clone blessed gitolite-admin in tests/blessed/gitolite-admin" \
+stepcmd "_clone blessed gitolite-admin in tests/newrepos/gitolite-admin" \
 		"B_gitolite-admin_cloned" \
 		"clone_gitolite-admin_as_gitoliteadm" "_"
-stepcmd "_check ls-remote in tests/blessed/gitolite-admin" \
+stepcmd "_check ls-remote in tests/newrepos/gitolite-admin" \
 		"B_gitolite-admin_ls-remote" \
 		"check_ls-remote_in_gitolite-admin" \
 		"xxx"
