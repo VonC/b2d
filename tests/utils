@@ -100,6 +100,28 @@ ${as}" ${f}
 	fi
 }
 
+append_multiple_before() {
+	sawk1="${1}"
+	sawk2="${2}"
+	f="${3}"
+	n=${4}
+	a="${5}"
+	as="${6}"
+	append=1
+	# echo "sawk1='${sawk1}' , sawk2='${sawk2}'"
+	# echo "f='${f}'"
+	# awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}
+	i=$(awk "/${sawk1}/,/${sawk2}/"'{print}' ${f}|wc -l)
+	# echo "i='${i}'"
+	# echo "a='${a}'"
+	# echo 'as='"${as}"
+	if [ "${i}" -ne ${n} ]; then
+		sed -i "/${a}/i\
+${as}" ${f}
+		append=0
+	fi
+}
+
 prepend_multiple() {
 	sawk1="${1}"
 	sawk2="${2}"
