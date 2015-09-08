@@ -38,8 +38,7 @@ repo module2
 
 	mkdir -p conf/subs
 	echo "repo @project2
-		RW+   = projadm2
-" > conf/subs/project2.conf
+	RW+   = projadm2" > conf/subs/project2.conf
 	git add conf/subs/project2.conf
 
 	if [ ${append} -eq 0 ]; then
