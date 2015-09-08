@@ -42,7 +42,7 @@ RW+     = projextadm2
 		git add "${pconf}"
 	fi
 
-	append_one "RW\s\+=\s\+projextusr2" "${pconf}" "                RW      = projextusr2"
+	append_one "RW\s\+=\s\+projextusr2" "${pconf}" "		RW      = projextusr2"
 	if [ ${append} -lt 0 ]; then
 		echo "Incorrect number of projextusr2 in '${pconf}'">> ${dirp0}/tests/err
 		return -1
