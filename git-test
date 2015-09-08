@@ -106,9 +106,11 @@ stepcmd "_(master) Add projextrdr to all repo" \
 		"master_add_projextrdr_to_all_repos"
 ii=0; i=$((i+1)); setSpaces
 title "Add new repo (not replicated)"
+recordstep=1
 stepcmd "_(master) Add new repo module2" \
 		"B_gitolite-admin_master_add_new_repo_module2" \
 		"master_add_new_repo_module2"
+exit 0
 stepcmd "_(master) Clone new repo module2 as projadm2" \
 		"B_gitolite-admin_master_clone_new_repo_module2_as_projadm2" \
 		"master_clone_new_repo_module2_as_projadm2"
