@@ -2,12 +2,12 @@
 
 run() {
 	set -e
-	if [ ! -e tests/blessed/gitolite-admin-ext ]; then
-		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/blessed/gitolite-admin-ext
+	if [ ! -e tests/newrepos/gitolite-admin-ext ]; then
+		git -c http.https://localhost:6443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://gitoliteadm@localhost:6443/hgit/gitolite-admin tests/newrepos/gitolite-admin-ext
 	fi
 	. tests/utils
 	pcrt=$(readlink -f ./apache/crts)
-	cd tests/blessed/gitolite-admin-ext
+	cd tests/newrepos/gitolite-admin-ext
 	pwd
 	git_config 6443 "${pcrt}" "gitoliteadm"
 	gconf="conf/gitolite.conf"

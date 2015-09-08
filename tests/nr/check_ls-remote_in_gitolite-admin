@@ -2,6 +2,6 @@
 
 run() {
 	set -e
-	cd tests/blessed/gitolite-admin
+	cd tests/newrepos/gitolite-admin
 	git ls-remote origin
 }

@@ -2,13 +2,13 @@
 
 run() {
 	set -e
-	if [ ! -e tests/blessed/gitolite-admin-ext ]; then
+	if [ ! -e tests/newrepos/gitolite-admin-ext ]; then
 		echo "no gitolite-admin-ext repo found">> tests/err
 		return 1
 	fi
 	. tests/utils
 	pcrt=$(readlink -f ./apache/crts)
-	cd tests/blessed/gitolite-admin-ext
+	cd tests/newrepos/gitolite-admin-ext
 	pwd
 	git_config 6443 "${pcrt}" gitoliteadm
 	if [ ! -e .git/refs/heads/master_ext ]; then
