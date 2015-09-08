@@ -97,40 +97,33 @@ title "gitolite-admin repo"
 reset=1
 stepcmd "_clone blessed gitolite-admin in tests/newrepos/gitolite-admin" \
 		"B_gitolite-admin_cloned" \
-		"clone_gitolite-admin_as_gitoliteadm" "_"
+		"clone_gitolite-admin_as_gitoliteadm"
 stepcmd "_check ls-remote in tests/newrepos/gitolite-admin" \
 		"B_gitolite-admin_ls-remote" \
-		"check_ls-remote_in_gitolite-admin" \
-		"xxx"
+		"check_ls-remote_in_gitolite-admin"
 stepcmd "_(master) Add projextrdr to all repo" \
 		"B_gitolite-admin_master_add_projextrdr" \
-		"master_add_projextrdr_to_all_repos" \
-		"___add projextrdr to all repo"
+		"master_add_projextrdr_to_all_repos"
 ii=0; i=$((i+1)); setSpaces
 title "Add new repo (not replicated)"
 stepcmd "_(master) Add new repo module2" \
 		"B_gitolite-admin_master_add_new_repo_module2" \
-		"master_add_new_repo_module2" \
-		"___add new repo module2"
+		"master_add_new_repo_module2"
 stepcmd "_(master) Clone new repo module2 as projadm2" \
 		"B_gitolite-admin_master_clone_new_repo_module2_as_projadm2" \
-		"master_clone_new_repo_module2_as_projadm2" \
-		"__clone new repo module2"
+		"master_clone_new_repo_module2_as_projadm2"
 
 ii=0; i=$((i+1)); setSpaces
 title "Add new repo (replicated to external)"
 stepcmd "_(master_ext) Add projextrdr to all repos" \
 		"B_gitolite-admin_master_ext_add_projextrdr" \
-		"master_ext_add_projextrdr_to_all_repos" \
-		"___add projextrdr(ext) to all repo"
+		"master_ext_add_projextrdr_to_all_repos"
 stepcmd "_(master_ext) Declare module2 gitolite-admin" \
 		"B_gitolite-admin_master_ext_declare_module2" \
-		"master_ext_declare_module2_to_gitolite-admin" \
-		"___xxx"
+		"master_ext_declare_module2_to_gitolite-admin"
 stepcmd "_(master_ext) Clone new repo module2 as projextadm2" \
 		"B_gitolite-admin_master_clone_new_repo_module2_as_projextadm2" \
-		"master_ext_clone_new_repo_module2_as_projextadm2" \
-		"__clone new repo module2 as projextadm2"
+		"master_ext_clone_new_repo_module2_as_projextadm2"
 
 env="NU"
 envfull="nu"
@@ -143,25 +136,25 @@ if [ ! -e "tests/newusers" ]; then mkdir -p tests/newusers; fi
 title "Declare new user on blessed"
 stepcmd "_(master) Clone gitolite-admin as projadm2" \
 		"NU_clone_gitolite-admin_as_projadm" \
-		"clone_gitolite-admin_as_projadm" "_"
+		"clone_gitolite-admin_as_projadm"
 stepcmd "_(master) Add projusr2 to project2 as projadm2" \
 		"NU_master_add_projusr2_to_project2_as_projadm2" \
-		"master_add_projusr2_to_project2_as_projadm2" "_"
+		"master_add_projusr2_to_project2_as_projadm2"
 stepcmd "_Clone module2 as projusr2" \
 		"NU_clone_module2_as_projusr2" \
-		"clone_module2_as_projusr2" "_"
+		"clone_module2_as_projusr2"
 
 ii=0; i=$((i+1)); setSpaces
 title "Declare new user on external"
 stepcmd "_(master_ext) Clone gitolite-admin as projextrdr" \
 		"NU_master_ext_clone_gitolite-admin_as_projextrdr" \
-		"master_ext_clone_gitolite-admin_as_projextrdr" "_"
+		"master_ext_clone_gitolite-admin_as_projextrdr"
 stepcmd "_(master_ext) Add projextusr2 to projectext2 as projextrdr for projextadm2" \
 		"NU_master_ext_add_projextusr2_to_projectext2_as_projextrdr" \
-		"master_ext_add_projextusr2_to_projectext2_as_projextrdr" "_"
+		"master_ext_add_projextusr2_to_projectext2_as_projextrdr"
 stepcmd "_Clone module2 as projextusr2" \
 		"NU_clone_module2_as_projextusr2" \
-		"clone_module2_as_projextusr2" "_"
+		"clone_module2_as_projextusr2"
 
 env="NC"
 envfull="nc"
@@ -176,7 +169,7 @@ recordstep=1
 reset=0
 stepcmd "_Initialize module2 master and master_ext as projusr2" \
 		"NC_initialize_module2_master_and_master_ext_as_projusr2" \
-		"initialize_module2_master_and_master_ext_as_projusr2" "_"
+		"initialize_module2_master_and_master_ext_as_projusr2"
 # add_commit_to_master_and_push_as_projusr2
 # clone_module2_as_projextusr2_check_master_int
 
