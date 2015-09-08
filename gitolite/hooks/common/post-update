@@ -139,7 +139,7 @@ if [[ "${downstream_name}" == "" ]]; then
   nowd=`date +"%Y%m%d - %H:%M:%S"`
   echo "~~~~~~~~~~~~~~~~~~~" >> "${H}/logs/${flog}"
   echo "$nowd (${GL_USER})" >> "${H}/logs/${flog}"
-  echo "${res}" >> "${H}/git/logs/${flog}"
+  echo "${res}" >> "${H}/logs/${flog}"
 else
   echo "${res}"
 fi
