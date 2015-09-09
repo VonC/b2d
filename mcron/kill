@@ -2,5 +2,20 @@
 cd $HOME/b2d/mcron
 . ../.bash_aliases
 
-docker inspect mcron.cont > /dev/null 2>&1 && docker kill mcron.cont 2> /dev/null
-docker inspect mcron.cont > /dev/null 2>&1 && docker rm mcron.cont
+env=${1}
+if [ "${env}" = "all" ] || [ "${env}" = "ALL" ]; then
+	env=""
+fi
+
+mcron_cont="mcron.cont"
+if [ "${env}" != "" ]; then
+	mcron_cont="mcron.${env}.cont"
+fi
+
+docker inspect ${mcron_cont} > /dev/null 2>&1 && docker kill ${mcron_cont} 2> /dev/null
+docker inspect ${mcron_cont} > /dev/null 2>&1 && docker rm ${mcron_cont}
+
+if [ "${env}" = "bash" ]; then
+	cd $HOME/b2d/gitolite
+	kba all
+fi
