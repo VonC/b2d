@@ -32,7 +32,7 @@ run() {
 	pconf="conf/subs/project2.conf"
 	# git reset ${gconf}
 	# git checkout ${gconf}
-	append_one "RW\s\+=\s\+projusr2" "${pconf}" "		RW	= projusr2"
+	append_one "RW\s\+=\s\+projusr2" "${pconf}" "	RW	= projusr2"
 	if [ ${append} -lt 0 ]; then
 		echo "Incorrect number of projusr2 in '${pconf}'">> ${dirp0}/tests/err
 		return -1
