@@ -28,7 +28,7 @@ title() {
 	n="${i}"
 	if [ ${ii} -gt 0 ]; then n="${n}.${ii}"; fi
 	p="${spaces}${env}.${n}: "
-	if [ ${ii} -eq 0 ]; then m="${p}${White}${On_Cyan}${m}${Color_Off}"; fi
+	if [ ${ii} -eq 0 ]; then m="${p}${White}${On_Blue}${m}${Color_Off}"; fi
 	if [ ${ii} -ne 0 ]; then m="${p}${m}"; fi
 	if [ "${nl}" != "" ]; then printf "${m} "; else printf "${m}\n"; fi
 }
