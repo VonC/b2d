@@ -20,3 +20,6 @@ RUN ln -s ../mcron/pull_external bin/pull_external && \
 RUN chown -R git:git /home/git && \
 	chmod +x /home/git/mcron/pull_external && \
 	chmod +x /home/git/mcron/clean_shipping_bay
+USER git
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["mcron"]
