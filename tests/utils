@@ -115,6 +115,7 @@ append_multiple_before() {
 	# echo "i='${i}'"
 	# echo "a='${a}'"
 	# echo 'as='"${as}"
+	# echo "-----------"
 	if [ "${i}" -ne ${n} ]; then
 		sed -i "/${a}/i\
 ${as}" ${f}
