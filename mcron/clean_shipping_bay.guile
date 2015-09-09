@@ -1,0 +1,1 @@
+(job '(next-second (range 0 60 30)) "clean_shipping_bay --run")
