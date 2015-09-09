@@ -23,11 +23,11 @@ run() {
 	# git reset ${gconf}
 	# git checkout ${gconf}
 	append_multiple_before 'repo\s+module2' '@project2\s+=\s+module2$' \
-	"${gconf}" 4 '^subconf\s.*$' "
-repo module2
-    RW+   = projadm2
-
-@project2 = module2
+	"${gconf}" 4 'subconf .*$' "\\
+repo module2\\
+    RW+   = projadm2\\
+\\
+@project2 = module2\\
 "
 
 	append_multiple_after 'RW\s+=\s+projadm2$' '-\s+VREF\/NAME\/\s+=\s+projadm2$' "${gconf}" 3 'RW+\s\+=\s\+gitoliteadm$' \
