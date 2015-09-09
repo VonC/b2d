@@ -24,6 +24,6 @@ if [ "${all}" = "ALL" ]; then
 	k ${env} ALL
 fi
 cd $HOME/b2d/mcron
-k
+k ${env} ALL
 cd $HOME/b2d/sshd
 k
