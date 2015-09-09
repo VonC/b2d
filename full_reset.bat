@@ -1,0 +1,9 @@
+rm -Rf tests/blessed
+rm -Rf tests/newrepos 
+rm -Rf tests/newusers
+rm -Rf tests/newcommits
+rm -f tests/steps
+rm -f gitolite/grepos
+rm -f gitolite/grepos.*
+rm -f gnupg2/gnupg2.path
+rm -f gnupg2/gnupg2.path.*

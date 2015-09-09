@@ -6,3 +6,6 @@
 /bin/rm -Rf tests/newcommits
 /bin/rm -f tests/steps
 /bin/rm -f gitolite/grepos.*
+/bin/rm -f gitolite/grepos
+/bin/rm -f gnupg2/gnupg2.path.*
+/bin/rm -f gnupg2/gnupg2.path
