@@ -171,6 +171,9 @@ stepcmd "_Initialize module2 master and master_ext as projusr2" \
 stepcmd "_Test push from module2 blessed as projusr2" \
 		"NC_add_commit_to_master_and_push_as_projusr2" \
 		"add_commit_to_master_and_push_as_projusr2"
+stepcmd "_Check push has been replaicated to module2 external as projextusr2" \
+		"NC_clone_module2_as_projextusr2_check_master_bls" \
+		"clone_module2_as_projextusr2_check_master_bls"
 recordstep=1
 # reset=0
 # exit 0
