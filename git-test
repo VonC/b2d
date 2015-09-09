@@ -177,8 +177,6 @@ stepcmd "_Check push has been replaicated to module2 external as projextusr2" \
 recordstep=1
 # reset=0
 # exit 0
-# add_commit_to_master_and_push_as_projusr2
-# clone_module2_as_projextusr2_check_master_bls
 
 title "Replication from external to blessed"
 # add commit to master and push as projextusr2

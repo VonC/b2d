@@ -1,0 +1,24 @@
+#!/bin/sh
+
+run() {
+	set -e
+	if [ ! -e tests/newcommits/module2_as_projextusr2 ]; then
+		git -c http.https://localhost:8443/.sslCAInfo=${dirp0}/apache/crts -c credential.helper=passwd clone https://projextusr2@localhost:8443/hgit/module2 tests/newcommits/module2_as_projextusr2
+	fi
+	. tests/utils
+	pcrt=$(readlink -f ./apache/crts)
+	cd tests/newcommits/module2_as_projextusr2
+	pwd
+	git_config 8443 "${pcrt}" "projextusr2"
+	# echo "git config http.https://localhost:6443/.sslCAInfo ${pcrt}"
+	git remote -v
+	git ls-remote origin
+	git checkout master_bls
+
+	check=$(git log --format=format:%H --grep "New commit as projusr2 on master$" master_bls)
+	if [ "${check}" = "" ]; then
+		echo "Impossible to find replicated: 'New commit as projusr2 on master$' on master_bls" >> ${dirp0}/tests/err
+			return -1
+	fi
+	echo "replicated: 'New commit as projusr2 on master$' found in master_bls: commit '${check}'"
+}
