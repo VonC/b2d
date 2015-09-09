@@ -8,3 +8,26 @@ if [ "${1}" = "bash" ]; then
 	exit 0
 fi
 
+mcron_cont="mcron.cont"
+mcron_shippingbay_cont="mcron.shippingbay.cont"
+mshippingbay="mshippingbay"
+
+if [ "${1}" != "" ]; then
+	mcron_cont="gitolite.${1}.cont"
+	mcron_shippingbay_cont="mcron.shippingbay.${1}.cont"
+	mshippingbay="mshippingbay.${1}"
+fi
+if [ "${1}" != "external" ]; then
+	mcron_shippingbay_cont=""
+	mshippingbay=""
+fi
+
+if [ "${mshippingbay}" != "" ]; then
+	docker inspect ${mcron_shippingbay_cont} > /dev/null 2>&1 || docker create --name="${mcron_shippingbay_cont}" mcron.shippingbay /bin/true
+
+	. ../updateDataContainerPath
+	updatePath ${mcron_shippingbay_cont} "$HOME/b2d/mcron" ${mshippingbay}
+	docker inspect ${mcron_cont} > /dev/null 2>&1 || docker run --name="${mcron_cont}" --volumes-from ${mcron_shippingbay_cont} mcron
+else
+	docker inspect ${mcron_cont} > /dev/null 2>&1 || docker run --name="${mcron_cont}" mcron
+fi
