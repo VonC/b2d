@@ -170,7 +170,7 @@ check_if_pushed() {
 		# echo "check2='${check}'"
 	fi
 	# echo "check3='${check}'"
-	if [ "${check}" == "" ]; then
+	if [ "${check}" = "" ]; then
 		# echo "git push --force -u ${up} ${upbr}"
 		git push --force -u "${up}" "${upbr}"
 	fi
