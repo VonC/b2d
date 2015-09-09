@@ -41,6 +41,7 @@ else
    script_touch="touch"
    script_rm="rm" 
 fi
+echo "clean_shipping_bay '${OPTION}'"
 #exit 0
 H="/home/git"
 #source "${DIR}/.bashrc" --force > /dev/null

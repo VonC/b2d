@@ -19,7 +19,7 @@ upstream_shippingbay="/home/git/shippingbay_git"
 upstream_outgoing=${upstream_shippingbay}/outgoing
 upstream_incoming=${upstream_shippingbay}/incoming
 
-
+echo "pull_external"
 if [ "${downstream_url}" = "" ] ; then 
   #echo "no downstream_url."
   exit 0
