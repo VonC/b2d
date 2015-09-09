@@ -15,6 +15,6 @@ coverage.out
 /tests/out
 /tests/err
 /tests/steps
-/tests/blessed/
+/tests/newrepos/
 /tests/newusers/
 /tests/newcommits/
