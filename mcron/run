@@ -1,8 +1,10 @@
 #! /bin/sh
 . ../.bash_aliases
-ec=$(docker inspect -f '{{ .State.Running }}' mcron.cont 2> /dev/null)
-if [ "${ec}" = "false" ]; then
-	docker rm mcron.cont
+
+if [ "${1}" = "bash" ]; then
+	docker inspect mcron.shippingbay.test.cont > /dev/null 2>&1 || docker create --name="mcron.shippingbay.test.cont" mcron.shippingbay /bin/true
+	docker run -it --rm  --name mcron.test --volumes-from mcron.shippingbay.test.cont mcron bash
+	docker inspect mcron.shippingbay.test.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.test.cont
+	exit 0
 fi
-docker inspect mcron.cont > /dev/null 2>&1 || d run -d --name mcron.cont mcron
-docker inspect mcron.cont > /dev/null 2>&1 || exit 1
+
