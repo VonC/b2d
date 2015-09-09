@@ -1,6 +1,7 @@
 #!/bin/sh
 
 cd $(readlink -f $HOME/b2d/mcron)
+. ../.bash_aliases
 
 docker build -t mcron.shippingbay -f Dockerfile.shippingbay . || exit 1
 docker build -t mcron . || exit 1
