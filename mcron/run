@@ -1,15 +1,23 @@
 #! /bin/sh
 . ../.bash_aliases
 
+if [ "${1}" != "bash" ]; then
+	cd $HOME/b2d/gitolite
+	./run $1
+fi
+
 if [ "${1}" = "bash" ]; then
-	docker inspect mcron.shippingbay.test.cont > /dev/null 2>&1 || docker create --name="mcron.shippingbay.test.cont" mcron.shippingbay /bin/true
-	docker create -it --name mcron.test.cont --volumes-from mcron.shippingbay.test.cont mcron bash
-	docker cp "$HOME/b2d/envs/.envs.example.private" mcron.test.cont:/home/git/.envs.private
-	docker cp "$HOME/b2d/mcron/clean_shipping_bay.guile" mcron.test.cont:/home/git/.config/cron/
-	docker cp "$HOME/b2d/mcron/pull_external.guile" mcron.test.cont:/home/git/.config/cron/
-	docker start -a -i mcron.test.cont
-	docker inspect mcron.test.cont > /dev/null 2>&1 && docker rm mcron.test.cont
-	docker inspect mcron.shippingbay.test.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.test.cont
+	cd $HOME/b2d/gitolite
+	./run
+	cd $HOME/b2d/mcron
+	docker inspect mcron.shippingbay.bash.cont > /dev/null 2>&1 || docker create --name="mcron.shippingbay.bash.cont" mcron.shippingbay /bin/true
+	docker create -it --name mcron.bash.cont --volumes-from mcron.shippingbay.bash.cont --volumes-from gitolite.repos.cont mcron bash
+	docker cp "$HOME/b2d/envs/.envs.example.private" mcron.bash.cont:/home/git/.envs.private
+	docker cp "$HOME/b2d/mcron/clean_shipping_bay.guile" mcron.bash.cont:/home/git/.config/cron/
+	docker cp "$HOME/b2d/mcron/pull_external.guile" mcron.bash.cont:/home/git/.config/cron/
+	docker start -a -i mcron.bash.cont
+	docker inspect mcron.bash.cont > /dev/null 2>&1 && docker rm mcron.bash.cont
+	docker inspect mcron.shippingbay.bash.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.bash.cont
 	exit 0
 fi
 
