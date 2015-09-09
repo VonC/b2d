@@ -43,7 +43,7 @@ else
 fi
 #exit 0
 H="/home/git"
-source "${DIR}/.bashrc" --force > /dev/null
+#source "${DIR}/.bashrc" --force > /dev/null
 source "${H}/sbin/usrcmd/get_tpl_value"
 #homed=${H##*/}
 get_tpl_value "${H}/.envs.private" "@LOCAL_BRANCH@" branch_local
