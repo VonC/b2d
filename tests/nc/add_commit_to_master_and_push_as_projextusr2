@@ -1,0 +1,43 @@
+#!/bin/sh
+
+run() {
+	set -e
+	. tests/utils
+	pcrt=$(readlink -f ./apache/crts)
+	cd tests/newcommits/module2_as_projextusr2
+	pwd
+	git_config 8443 "${pcrt}" "projextusr2"
+	# echo "git config http.https://localhost:6443/.sslCAInfo ${pcrt}"
+	git remote -v
+	git ls-remote origin
+
+	if [ ! -e .git/refs/heads/master ]; then
+		git checkout --orphan master
+		git commit --allow-empty -m "First commit as projextusr2 on master external"
+	fi
+	git checkout master
+	if [ ${reset} -eq 0 ]; then
+		git checkout --orphan nmaster
+		git commit --allow-empty -m "First commit as projextusr2 on master external"
+		git branch -D master
+		git branch -M nmaster master
+	fi
+
+	check=$(git log --format=format:%H --grep "New commit as projextusr2 on master external$" master)
+	if [ "${check}" = "" ]; then
+		git commit --allow-empty -m "New commit as projextusr2 on master external"
+	fi
+
+	check=$(git log --format=format:%H --grep "New commit as projextusr2 on master external$" master)
+	if [ "${check}" = "" ]; then
+		echo "Impossible to reset: 'New commit as projextusr2 on master external$' not found/created" >> ${dirp0}/tests/err
+			return -1
+	fi
+return 0
+	check=""
+	check_if_pushed "origin" "New commit as projextusr2 on master external$" "master"
+	if [ "${check}" = "" ]; then
+		echo "no commit 'New commit as projextusr2 on master external' pushed">> ${dirp0}/tests/err
+		return 1
+	fi
+}
