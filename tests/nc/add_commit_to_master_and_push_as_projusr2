@@ -1,0 +1,39 @@
+#!/bin/sh
+
+run() {
+	set -e
+	. tests/utils
+	pcrt=$(readlink -f ./apache/crts)
+	cd tests/newcommits/module2_as_projusr2
+	pwd
+	git_config 6443 "${pcrt}" "projusr2"
+	# echo "git config http.https://localhost:6443/.sslCAInfo ${pcrt}"
+	git remote -v
+	git ls-remote origin
+
+	if [ ${reset} -eq 0 ]; then
+		echo "resetting to 'First commit as projusr2 on master'"
+		check=$(git log --format=format:%H --grep "First commit as projusr2 on master$" master)
+		if [ "check" = "" ]; then
+			echo "Impossible to reset: 'First commit as projusr2 on master$' not found" >> ${dirp0}/tests/err
+			return -1
+		fi
+		git reset --hard ${check}
+	fi
+
+	check=$(git log --format=format:%H --grep "New commit as projusr2 on master$" master)
+	if [ "check" = "" ]; then
+		git commit --allow-empty -m "New commit as projusr2 on master"
+	fi
+	check=$(git log --format=format:%H --grep "New commit as projusr2 on master$" master)
+	if [ "check" = "" ]; then
+		echo "Impossible to reset: 'New commit as projusr2 on master$' not found/created" >> ${dirp0}/tests/err
+			return -1
+	fi
+
+	check_if_pushed "origin" "New commit as projusr2 on master$" "master"
+	if [ "${check}" = "" ]; then
+		echo "no commit 'New commit as projusr2 on master">> ${dirp0}/tests/err
+		return 1
+	fi
+}
