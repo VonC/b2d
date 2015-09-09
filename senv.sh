@@ -28,5 +28,6 @@ fi
 
 sed -i -e "s;_unixpath_;${scriptdir};g" dfsmudge.sh
 echo $HOME
-export HOME=${HOME}
+export HOME=${parent}
+export PATH=$PATH:${scriptdir}
 
