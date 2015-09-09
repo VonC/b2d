@@ -3,7 +3,12 @@
 
 if [ "${1}" = "bash" ]; then
 	docker inspect mcron.shippingbay.test.cont > /dev/null 2>&1 || docker create --name="mcron.shippingbay.test.cont" mcron.shippingbay /bin/true
-	docker run -it --rm  --name mcron.test --volumes-from mcron.shippingbay.test.cont mcron bash
+	docker create -it --name mcron.test.cont --volumes-from mcron.shippingbay.test.cont mcron bash
+	docker cp "$HOME/b2d/envs/.envs.example.private" mcron.test.cont:/home/git/.envs.private
+	docker cp "$HOME/b2d/mcron/clean_shipping_bay.vixie" mcron.test.cont:/home/git/.config/cron/
+	docker cp "$HOME/b2d/mcron/pull_external.guile" mcron.test.cont:/home/git/.config/cron/
+	docker start -a -i mcron.test.cont
+	docker inspect mcron.test.cont > /dev/null 2>&1 && docker rm mcron.test.cont
 	docker inspect mcron.shippingbay.test.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.test.cont
 	exit 0
 fi
