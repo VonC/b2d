@@ -10,6 +10,7 @@ run() {
 	# echo "git config http.https://localhost:6443/.sslCAInfo ${pcrt}"
 	git remote -v
 	git ls-remote origin
+	git checkout master
 
 	if [ ${reset} -eq 0 ]; then
 		echo "resetting to 'First commit as projusr2 on master'"
@@ -22,15 +23,17 @@ run() {
 	fi
 
 	check=$(git log --format=format:%H --grep "New commit as projusr2 on master$" master)
-	if [ "check" = "" ]; then
+	if [ "${check}" = "" ]; then
 		git commit --allow-empty -m "New commit as projusr2 on master"
 	fi
+
 	check=$(git log --format=format:%H --grep "New commit as projusr2 on master$" master)
-	if [ "check" = "" ]; then
+	if [ "${check}" = "" ]; then
 		echo "Impossible to reset: 'New commit as projusr2 on master$' not found/created" >> ${dirp0}/tests/err
 			return -1
 	fi
 
+	check=""
 	check_if_pushed "origin" "New commit as projusr2 on master$" "master"
 	if [ "${check}" = "" ]; then
 		echo "no commit 'New commit as projusr2 on master">> ${dirp0}/tests/err
