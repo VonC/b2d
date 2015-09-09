@@ -175,6 +175,7 @@ stepcmd "_Check push has been replaicated to module2 external as projextusr2" \
 		"NC_clone_module2_as_projextusr2_check_master_bls" \
 		"clone_module2_as_projextusr2_check_master_bls"
 
+ii=0; i=$((i+1)); setSpaces
 title "Replication from external to blessed"
 recordstep=1
 # reset=0
