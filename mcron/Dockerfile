@@ -12,7 +12,7 @@ RUN  apt-get -yq update \
 WORKDIR /home/git
 RUN mkdir -p shippingbay_git/incoming && \
 	mkdir -p shippingbay_git/outgoing && \
-	mkdir mcron
+	mkdir mcron && mkdir -p .config/cron
 COPY pull_external mcron/
 COPY clean_shipping_bay mcron/
 COPY run_tasks mcron/
