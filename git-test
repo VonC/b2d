@@ -174,12 +174,14 @@ stepcmd "_Test push from module2 blessed as projusr2" \
 stepcmd "_Check push has been replaicated to module2 external as projextusr2" \
 		"NC_clone_module2_as_projextusr2_check_master_bls" \
 		"clone_module2_as_projextusr2_check_master_bls"
-recordstep=1
-# reset=0
-# exit 0
 
 title "Replication from external to blessed"
-# add commit to master and push as projextusr2
+recordstep=1
+# reset=0
+stepcmd "_Test push from module2 external as projextusr2" \
+		"NC_add_commit_to_master_and_push_as_projextusr2" \
+		"add_commit_to_master_and_push_as_projextusr2"
+# exit 0
 # clone_module2_as_projusr2_check_master_ext
 
 printf "${Green}[v] all done${Color_Off}\n"
