@@ -1,0 +1,8 @@
+#!/bin/bash
+
+/bin/rm -Rf tests/blessed
+/bin/rm -Rf tests/newrepos 
+/bin/rm -Rf tests/newusers
+/bin/rm -Rf tests/newcommits
+/bin/rm -f tests/steps
+/bin/rm -f gitolite/grepos.*
