@@ -5,6 +5,8 @@ if [ "${1}" != "bash" ]; then
 	./run $1
 	cd $HOME/b2d/gnupg2
 	./run $1
+	cd $HOME/b2d/mcron
+	./run $1
 fi
 cd $HOME/b2d/openldap
 ./run $1
@@ -13,10 +15,12 @@ cd $HOME/b2d/apache
 if [ "${1}" = "bash" ]; then
 	cd $HOME/b2d/gitolite
 	./run
+	cd $HOME/b2d/mcron
+	./run
 	cd $HOME/b2d/gnupg2
 	./run
 	cd $HOME/b2d/apache
-	docker create -it --name apache.bash.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont --volumes-from gnupg2.cont apache bash
+	docker create -it --name apache.bash.cont --volumes-from gitolite.repos.cont --volumes-from gitolite.cont --volumes-from gnupg2.cont --volumes-from mcron.shippingbay.cont apache bash
 	docker cp "$HOME/b2d/envs/.envs.example.private" apache.bash.cont:/home/git/.envs.private
 	docker cp apache.bash.cont:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/apache.bash.crt" || exit 1
 	docker start -a -i apache.bash.cont
@@ -31,6 +35,7 @@ gnupg2_cont="gnupg2.cont"
 envs_cnf="envs.cnf"
 envs_private=".envs.example.private"
 crt="crt"
+mcron_shippingbay_cont="mcron.shippingbay.cont"
 
 if [ "${1}" != "" ]; then
 	apache_cont="apache.${1}.cont"
@@ -40,6 +45,7 @@ if [ "${1}" != "" ]; then
 	envs_cnf="envs.${1}.cnf"
 	envs_private=".envs.${1}.private"
 	crt="apache.${1}.crt"
+	mcron_shippingbay_cont="mcron.shippingbay.${1}.cont"
 fi
 
 port_gitweb=$(sed -n "s#^\s*@PORT_HTTP_GITWEB@\s*=\s*##p" ../envs/${envs_cnf})
@@ -59,7 +65,11 @@ docker inspect ${gitolite_cont} > /dev/null 2>&1 || { echo "${apache_cont}/run: 
 alias drapache="docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -p ${port_hgit}:8553 --link openldap.cont:apache.openldap.cont --volumes-from ${gitolite_repos_cont} --volumes-from ${gitolite_cont} --volumes-from ${gnupg2_cont}"
 
 if [ -z "${upstream}" ] && [ -z "${downstream}" ]; then
-	drapache apache
+	if [ "${1}" = "external" ]; then
+		drapache --volumes-from ${mcron_shippingbay_cont} apache
+	else
+		drapache apache
+	fi
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
 	docker cp ${apache_cont}:/home/git/apache/localhost.crt "$(readlink -f $HOME/b2d)/apache/${crt}"
 	exit 0
