@@ -49,7 +49,7 @@ source "${H}/sbin/usrcmd/get_tpl_value"
 #homed=${H##*/}
 get_tpl_value "${H}/.envs.private" "@LOCAL_BRANCH@" branch_local
 get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_BRANCH@" downstream_name
-if [[ ${branch_local} != "" || ${downstream_name} != master_hs* ]]; then
+if [[ ${branch_local} != "" || ${downstream_name} != master_bls ]]; then
   # we are for sure not on external
   echo "branch local ${branch_local} downstream_name: ${downstream_name}"
   echo "This script must be launched only on external"
