@@ -13,7 +13,7 @@ run() {
 	fi
 	git checkout master_ext &2>/dev/null
 	gconf="conf/gitolite.conf"
-	git reset ${gconf}
+	# git reset ${gconf}
 
 	if [ ${reset} -eq 0 ]; then
 		echo "resetting to 'Add new repo module2 to projectext2 group'"
