@@ -21,14 +21,17 @@ if [ "${1}" = "bash" ]; then
 	exit 0
 fi
 
+cd $HOME/b2d/mcron
 mcron_cont="mcron.cont"
 mcron_shippingbay_cont="mcron.shippingbay.cont"
 mshippingbay="mshippingbay"
+envs_private=".envs.example.private"
 
 if [ "${1}" != "" ]; then
-	mcron_cont="gitolite.${1}.cont"
+	mcron_cont="mcron.${1}.cont"
 	mcron_shippingbay_cont="mcron.shippingbay.${1}.cont"
 	mshippingbay="mshippingbay.${1}"
+	envs_private=".envs.${1}.private"
 fi
 if [ "${1}" != "external" ]; then
 	mcron_shippingbay_cont=""
@@ -40,7 +43,25 @@ if [ "${mshippingbay}" != "" ]; then
 
 	. ../updateDataContainerPath
 	updatePath ${mcron_shippingbay_cont} "$HOME/b2d/mcron" ${mshippingbay}
-	docker inspect ${mcron_cont} > /dev/null 2>&1 || docker run --name="${mcron_cont}" --volumes-from ${mcron_shippingbay_cont} mcron
+fi
+
+docker inspect ${mcron_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCode}}' ${mcron_cont})" != "0" ]; then
+	d rm ${mcron_cont}
+fi
+docker inspect ${mcron_cont} > /dev/null 2>&1 && exit 0
+
+if [ "${1}" = "external" ]; then
+	docker create -it --name ${mcron_cont} --volumes-from ${mcron_shippingbay_cont} mcron
+	docker cp "$HOME/b2d/envs/${envs_private}" ${mcron_cont}:/home/git/.envs.private
+	docker cp "$HOME/b2d/mcron/clean_shipping_bay.guile" ${mcron_cont}:/home/git/.config/cron/
+	docker start ${mcron_cont}
+elif [ "${1}" = "staging" ]; then
+	docker inspect gitolite.repos.${1}.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: gitolite.repos.${1}.cont not started"; exit 1; }
+	docker create -it --name ${mcron_cont} --volumes-from gitolite.repos.${1}.cont mcron
+	docker cp "$HOME/b2d/envs/${envs_private}" ${mcron_cont}:/home/git/.envs.private
+	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
+	docker start ${mcron_cont}
 else
+	# does nothing though (for now; later, might schedule log management, or repo backups)
 	docker inspect ${mcron_cont} > /dev/null 2>&1 || docker run --name="${mcron_cont}" mcron
 fi
