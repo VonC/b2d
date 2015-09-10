@@ -31,7 +31,7 @@ syncmode=$($ggit branch | grep sync_mode | tr -d " ")
 get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
 
 echo "branch local ${branch_local} downstream_branch: ${downstream_branch}"
-if [[ ${branch_local} == "" && ${downstream_branch} == master_hs* ]]; then
+if [[ ${branch_local} == "" && ${downstream_branch} == master_bls ]]; then
 # We are for sure on external
    echo "We are for sure on external"
    if [[ ${branch} ==  sync_mode_* ]]
