@@ -18,3 +18,4 @@ coverage.out
 /tests/newrepos/
 /tests/newusers/
 /tests/newcommits/
+/mcron/mshippingbay*
