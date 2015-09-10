@@ -33,7 +33,7 @@ run() {
 		echo "Impossible to reset: 'New commit as projextusr2 on master external$' not found/created" >> ${dirp0}/tests/err
 			return -1
 	fi
-return 0
+
 	check=""
 	check_if_pushed "origin" "New commit as projextusr2 on master external$" "master"
 	if [ "${check}" = "" ]; then
