@@ -11,7 +11,7 @@ fi
 parent=$(dirname ${scriptdir})
 echo $parent
 set -a 
-source ../env.bat
+if [ -e ../env.bat ]; then . ../env.bat; fi
 set +a
 git -C $scriptdir config filter.dffilter.smudge ${scriptdir}/dfsmudge.sh
 git -C $scriptdir config filter.dffilter.clean ${scriptdir}/dfclean.sh
