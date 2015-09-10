@@ -3,13 +3,17 @@ cd $HOME/b2d/mcron
 . ../.bash_aliases
 
 env=${1}
+all=${2}
 if [ "${env}" = "all" ] || [ "${env}" = "ALL" ]; then
+	all=${env}
 	env=""
 fi
 
 mcron_cont="mcron.cont"
+mcron_shippingbay_cont="mcron.shippingbay.cont"
 if [ "${env}" != "" ]; then
 	mcron_cont="mcron.${env}.cont"
+	mcron_shippingbay_cont="mcron.shippingbay.${1}.cont"
 fi
 
 docker inspect ${mcron_cont} > /dev/null 2>&1 && docker kill ${mcron_cont} 2> /dev/null
@@ -18,4 +22,8 @@ docker inspect ${mcron_cont} > /dev/null 2>&1 && docker rm ${mcron_cont}
 if [ "${env}" = "bash" ]; then
 	cd $HOME/b2d/gitolite
 	kba all
+fi
+
+if [ "${all}" = "all" ] || [ "${all}" = "ALL" ]; then
+	docker inspect ${mcron_shippingbay_cont} > /dev/null 2>&1 && docker rm ${mcron_shippingbay_cont}
 fi
