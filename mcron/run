@@ -63,5 +63,6 @@ elif [ "${1}" = "staging" ]; then
 	docker start ${mcron_cont}
 else
 	# does nothing though (for now; later, might schedule log management, or repo backups)
-	docker inspect ${mcron_cont} > /dev/null 2>&1 || docker run --name="${mcron_cont}" mcron
+	docker create -it --name ${mcron_cont} mcron
+	docker start ${mcron_cont}
 fi
