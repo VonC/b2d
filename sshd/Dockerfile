@@ -11,6 +11,9 @@ RUN  apt-get -yq update \
 
 WORKDIR /home/git
 COPY post_install_ssh.sh .ssh/
+COPY cnf .ssh/
 RUN ln -s ../.ssh/post_install_ssh.sh bin/post_install_ssh.sh
+RUN chown -R git:git /home/git && \
+	chmod +x /home/git/.ssh/post_install_ssh.sh
 USER git
 ENTRYPOINT ["/bin/sh", "-c"]
