@@ -8,3 +8,9 @@ MAINTAINER VonC <vonc@laposte.net>
 
 RUN  apt-get -yq update \
   && apt-get -yqq install ssh
+
+WORKDIR /home/git
+COPY post_install_ssh.sh .ssh/
+RUN ln -s ../.ssh/post_install_ssh.sh bin/post_install_ssh.sh
+USER git
+ENTRYPOINT ["/bin/sh", "-c"]
