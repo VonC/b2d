@@ -8,20 +8,15 @@ if [[ ! -e "${H}/.ssh/authorized_keys" ]] ; then
   touch "${H}/.ssh/authorized_keys"
 fi
 chmod 600 "${H}/.ssh/authorized_keys"
-
-ln -fs ../../../.ssh/cnf "${H}/usr/local/etc/sshd_config"
-cp_tpl "${H}/.ssh/cnf.tpl" "${H}/.ssh"
-mkdir -p "${H}/usr/local/var/run"
-cp_tpl "${H}/.ssh/config.tpl" "${H}/.ssh" 
-ln -fs ../../../.ssh/config "${H}/usr/local/etc/ssh_config" 
 chmod 700 "${H}/.ssh"
-if [[ ! -h "${HULA}/openssh/etc/sshd_config" ]] ; then 
-  cp -f "${HULA}/openssh/etc/sshd_config" "${HULA}/openssh/etc/sshd_config.ori"
-  ln -fs ../../../../../.ssh/cnf "${HULA}/openssh/etc/sshd_config"
+
+if [[ ! -h "/etc/ssh/sshd_config" ]] ; then
+  cp -f "/etc/ssh/sshd_config" "/etc/ssh/sshd_config.ori"
+  ln -fs /home/git/.ssh/cnf /etc/ssh/sshd_config
 fi
-if [[ ! -h "${HULA}/openssh/etc/sshd_config" ]] ; then
-  cp -f "${HULA}/openssh/etc/ssh_config" "${HULA}/openssh/etc/ssh_config.ori"
-  ln -fs ../../../../../.ssh/config "${HULA}/openssh/etc/ssh_config"
+if [[ ! -h "/etc/ssh/ssh_config" ]] ; then
+  cp -f "/etc/ssh/ssh_config" "/etc/ssh/ssh_config.ori"
+  ln -fs /home/git/.ssh/config /etc/ssh/ssh_config
 fi
 if [[ ! -e "${H}/.ssh/root" ]]; then 
   ssh-keygen -t rsa -f "${H}/.ssh/root" -C "Local root access (interactive)" -q -P "" ; cat "${H}/.ssh/root.pub" >> "${H}/.ssh/authorized_keys"
@@ -39,7 +34,7 @@ l=$(grep $(hostname) "${H}/.ssh/known_hosts")
 if [[ "${k}" != "" && "${k}" != "${l}" ]] ; then
   echo "${k}" >> "${H}/.ssh/known_hosts"
 fi
-
+exit 0
 sshd start
 l=$(grep "localhost" "${H}/.ssh/known_hosts" | grep nist | tail -1)
 p=$(grep "@PORT_SSHD@" "${H}/.ports.ini")
