@@ -1,0 +1,9 @@
+Host gitsrv_root
+  Hostname localhost
+  User git
+  Port 2200
+  IdentityFile /home/git/.ssh/root
+
+Host *
+  UserKnownHostsFile /home/git/.ssh/known_hosts
+  Port 2200
