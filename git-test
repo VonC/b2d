@@ -177,11 +177,11 @@ stepcmd "_Check push has been replaicated to module2 external as projextusr2" \
 
 ii=0; i=$((i+1)); setSpaces
 title "Replication from external to blessed"
-recordstep=1
-# reset=0
 stepcmd "_Test push from module2 external as projextusr2" \
 		"NC_add_commit_to_master_and_push_as_projextusr2" \
 		"add_commit_to_master_and_push_as_projextusr2"
+recordstep=1
+# reset=0
 # exit 0
 # clone_module2_as_projusr2_check_master_ext
 
