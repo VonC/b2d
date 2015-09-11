@@ -9,7 +9,7 @@ homed="git"
 
 
 # SSI test creation of file
-# a file must be created if DOWNSTREAM_BRANCH=master_hs*
+# a file must be created if DOWNSTREAM_BRANCH=master_bls
 # external server is the only one that has this config in .envs.private
  get_tpl_value "${H}/.envs.private" "@LOCAL_BRANCH@" branch_local
  get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_BRANCH@" downstream_branch
@@ -51,7 +51,7 @@ if [[ ${branch_local} == "" && ${downstream_branch} == master_bls ]]; then
     elif [[ "${syncmode}" == "sync_mode_FULL" ]]
     then
        echo "Full syncmode"
-       if [[ ${branch} = *_blessed ||  ${branch} = master_hs* ]]
+       if [[ ${branch} = *_blessed ||  ${branch} = master_bls ]]
        #  We do not want any loop back if some changes are pushed from staging
        then
           echo "No need to create sync file for change imported in ${branch}"
@@ -126,16 +126,16 @@ then
            branch_upstream=${branch}_blessed
            echo "Branch delivered is ${branch}, upstream branch is ${branch_upstream}"
         fi
-     elif [[ ${branch_local} == master_hs* ]]; then
+     elif [[ ${branch_local} == master_bls ]]; then
        # We are on staging
           if [[ "${branch}" != *_sync_blessed && "${branch}" != "${branch_local}" ]]; then
-           # we manage only changes in _sync_blessed or master_hs*
+           # we manage only changes in _sync_blessed or master_bls
            # no risk that any change on master_ext or _sync_ext induced by pull_external is sent back to external
             echo "Update on a branch other than *_sync or local branch, nothing to push to upstream."
             exit 0
           fi
           if [[ $branch != "${branch_local}" ]]
-           # i.e. we are not dealing with master_hs* branch, so should be a _sync_blessed branch
+           # i.e. we are not dealing with master_bls branch, so should be a _sync_blessed branch
            # no need to rename the branch in that case
           then
         #   branch_ext=${branch}
@@ -188,7 +188,7 @@ then
               branch_upstream=${branch}_blessed
               echo "Branch delivered is ${branch}, upstream branch is ${branch_upstream}"
           fi
-       elif [[ ${branch_local} == master_hs* ]]; then
+       elif [[ ${branch_local} == master_bls ]]; then
        # We are on staging
           if [[ $branch != "${branch_local}" ]]
           then
