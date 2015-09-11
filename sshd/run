@@ -3,9 +3,11 @@ cd $HOME/b2d/sshd
 . ../.bash_aliases
 
 sshd_cont="sshd.cont"
+mcron_shippingbay_cont="mcron.shippingbay.cont"
 
 if [ "${1}" != "" ]; then
 	sshd_cont="sshd.${1}.cont"
+	mcron_shippingbay_cont="mcron.shippingbay.${1}.cont"
 fi
 
 ec=$(docker inspect -f '{{ .State.Running }}' ${sshd_cont} 2> /dev/null)
@@ -17,7 +19,8 @@ if [ "${1}" = "bash" ]; then
 	cd $HOME/b2d/mcron
 	./run
 	cd $HOME/b2d/sshd
-	docker create -it --name sshd.bash.cont --volumes-from mcron.shippingbay.cont sshd bash
+	mcron_shippingbay_cont="mcron.shippingbay.cont"
+	docker create -it --name sshd.bash.cont --volumes-from ${mcron_shippingbay_cont} sshd bash
 	docker start -a -i sshd.bash.cont
 	docker inspect sshd.bash.cont > /dev/null 2>&1 && docker rm sshd.bash.cont
 	docker inspect mcron.shippingbay.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.cont
@@ -35,3 +38,6 @@ docker inspect ${sshd_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCod
 	d rm ${sshd_cont}
 fi
 docker inspect ${sshd_cont} > /dev/null 2>&1 && exit 0
+
+docker create -it --name ${sshd_cont} --volumes-from ${mcron_shippingbay_cont} sshd bash
+docker start ${sshd_cont}
