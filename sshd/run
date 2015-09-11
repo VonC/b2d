@@ -1,8 +1,37 @@
 #! /bin/sh
+cd $HOME/b2d/sshd
 . ../.bash_aliases
-ec=$(docker inspect -f '{{ .State.Running }}' sshd.cont 2> /dev/null)
-if [ "${ec}" = "false" ]; then
-	docker rm sshd.cont
+
+sshd_cont="sshd.cont"
+
+if [ "${1}" != "" ]; then
+	sshd_cont="sshd.${1}.cont"
 fi
-docker inspect sshd.cont > /dev/null 2>&1 || d run -d --name sshd.cont ssh
-docker inspect sshd.cont > /dev/null 2>&1 || exit 1
+
+ec=$(docker inspect -f '{{ .State.Running }}' ${sshd_cont} 2> /dev/null)
+if [ "${ec}" = "false" ]; then
+	docker rm ${sshd_cont}
+fi
+
+if [ "${1}" = "bash" ]; then
+	cd $HOME/b2d/mcron
+	./run
+	cd $HOME/b2d/sshd
+	docker create -it --name sshd.bash.cont --volumes-from mcron.shippingbay.cont sshd bash
+	docker start -a -i sshd.bash.cont
+	docker inspect sshd.bash.cont > /dev/null 2>&1 && docker rm sshd.bash.cont
+	docker inspect mcron.shippingbay.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.cont
+	cd $HOME/b2d/mcron
+	k all
+	cd $HOME/b2d/sshd
+fi
+
+
+if [ "${1}" != "external" ]; then
+	exit 0
+fi
+
+docker inspect ${sshd_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCode}}' ${sshd_cont})" != "0" ]; then
+	d rm ${sshd_cont}
+fi
+docker inspect ${sshd_cont} > /dev/null 2>&1 && exit 0
