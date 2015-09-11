@@ -37,6 +37,10 @@ if [ "${1}" != "external" ]; then
 	mcron_shippingbay_cont=""
 	mshippingbay=""
 fi
+if [ "${1}" = "" ]; then
+	mshippingbay="mshippingbay"
+	mcron_shippingbay_cont="mcron.shippingbay.cont"
+fi
 
 if [ "${mshippingbay}" != "" ]; then
 	docker inspect ${mcron_shippingbay_cont} > /dev/null 2>&1 || docker create --name="${mcron_shippingbay_cont}" mcron.shippingbay /bin/true
