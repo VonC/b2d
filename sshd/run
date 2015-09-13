@@ -19,9 +19,14 @@ if [ "${1}" = "bash" ]; then
 	cd $HOME/b2d/mcron
 	./run
 	cd $HOME/b2d/sshd
+	docker inspect sshd.bash.cont > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCode}}' sshd.bash.cont)" != "0" ]; then
+		d rm sshd.bash.cont
+	fi
 	mcron_shippingbay_cont="mcron.shippingbay.cont"
-	docker create -it --name sshd.bash.cont --volumes-from ${mcron_shippingbay_cont} sshd bash
-	docker start -a -i sshd.bash.cont
+	docker create -it --name sshd.bash.cont --volumes-from ${mcron_shippingbay_cont} sshd
+	docker start sshd.bash.cont
+	docker exec -it sshd.bash.cont /bin/bash
+	docker inspect sshd.bash.cont > /dev/null 2>&1 && docker stop sshd.bash.cont
 	docker inspect sshd.bash.cont > /dev/null 2>&1 && docker rm sshd.bash.cont
 	docker inspect mcron.shippingbay.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.cont
 	cd $HOME/b2d/mcron
