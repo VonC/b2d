@@ -19,3 +19,4 @@ coverage.out
 /tests/newusers/
 /tests/newcommits/
 /mcron/mshippingbay*
+/sshd/root*
