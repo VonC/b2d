@@ -14,4 +14,5 @@ if [ "${env}" != "" ] && [ "${env}" != "bash" ]; then
 	sshd_cont="sshd.${env}.cont"
 fi
 
+docker inspect ${sshd_cont} > /dev/null 2>&1 && docker stop ${sshd_cont}
 docker inspect ${sshd_cont} > /dev/null 2>&1 && docker rm ${sshd_cont}
