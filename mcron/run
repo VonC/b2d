@@ -70,8 +70,8 @@ elif [ "${1}" = "staging" ]; then
 	docker create -it --name ${mcron_cont} --volumes-from gitolite.repos.${1}.cont --link sshd.external.cont:mcron.sshd.cont mcron
 	docker cp "$HOME/b2d/envs/${envs_private}" ${mcron_cont}:/home/git/.envs.private
 	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
-	docker cp "$HOME/b2d/sshd/root" ${mcron_cont}:/home/git/.sshd/root
-	docker cp "$HOME/b2d/sshd/root.pub" ${mcron_cont}:/home/git/.sshd/root.pub
+	docker cp "$HOME/b2d/sshd/root" ${mcron_cont}:/home/git/.ssh/root
+	docker cp "$HOME/b2d/sshd/root.pub" ${mcron_cont}:/home/git/.ssh/root.pub
 	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
 	docker start ${mcron_cont}
 else
