@@ -15,7 +15,8 @@ COPY cnf .ssh/
 COPY config .ssh/
 RUN ln -s ../.ssh/post_install_ssh.sh bin/post_install_ssh.sh && \
 	chmod +x /home/git/.ssh/post_install_ssh.sh && \
-	chmod 644 .ssh/cnf && chmod 644 .ssh/config
+	chmod 644 .ssh/cnf && chmod 644 .ssh/config &&  \
+	chown git:git /etc/ssh/ssh_host*
 RUN	post_install_ssh.sh
 RUN chown -R git:git /home/git
 USER git
