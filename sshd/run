@@ -48,4 +48,6 @@ docker inspect ${sshd_cont} > /dev/null 2>&1 && exit 0
 docker create -it --name ${sshd_cont} --volumes-from ${mcron_shippingbay_cont} sshd
 docker cp ${sshd_cont}:/home/git/.ssh/root "$(readlink -f $HOME/b2d)/sshd/root" || exit 1
 docker cp ${sshd_cont}:/home/git/.ssh/root.pub "$(readlink -f $HOME/b2d)/sshd/root.pub" || exit 1
+chmod 644 root
+chmod 644 root.pub
 docker start ${sshd_cont}
