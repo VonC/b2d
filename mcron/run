@@ -62,8 +62,14 @@ if [ "${1}" = "external" ]; then
 elif [ "${1}" = "staging" ]; then
 	docker inspect gitolite.repos.${1}.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: gitolite.repos.${1}.cont not started"; exit 1; }
 	docker inspect sshd.external.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: sshd_cont 'sshd.external.cont' not started"; exit 1; }
+	if [ ! -e ../sshd/root ] || [ ! -e ../sshd/root.pub ]; then
+		echo "sshd.external.cont has not copied root(.pub) keys"
+	fi
 	docker create -it --name ${mcron_cont} --volumes-from gitolite.repos.${1}.cont --link sshd.external.cont:mcron.sshd.cont mcron
 	docker cp "$HOME/b2d/envs/${envs_private}" ${mcron_cont}:/home/git/.envs.private
+	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
+	docker cp "$HOME/b2d/sshd/root" ${mcron_cont}:/home/git/.sshd/root
+	docker cp "$HOME/b2d/sshd/root.pub" ${mcron_cont}:/home/git/.sshd/root.pub
 	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
 	docker start ${mcron_cont}
 else
