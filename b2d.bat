@@ -1,9 +1,14 @@
 @echo off
-boot2docker start
+SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+
+for /f "delims=" %%A in ('boot2docker status') do set "status=%%A"
+echo.%status%
+if "%status%" NEQ "running" (
+	boot2docker start
+)
 
 REM already running means controlvm (as opposed to modifyvm)
 
-SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 for /f "tokens=2 delims==" %%a in ('findstr PORT envs\*') do (
 	set p=%%a
