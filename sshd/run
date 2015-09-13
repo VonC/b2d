@@ -39,5 +39,7 @@ docker inspect ${sshd_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCod
 fi
 docker inspect ${sshd_cont} > /dev/null 2>&1 && exit 0
 
-docker create -it --name ${sshd_cont} --volumes-from ${mcron_shippingbay_cont} sshd bash
+docker create -it --name ${sshd_cont} --volumes-from ${mcron_shippingbay_cont} sshd
+docker cp ${sshd_cont}:/home/git/.ssh/root "$(readlink -f $HOME/b2d)/sshd/root" || exit 1
+docker cp ${sshd_cont}:/home/git/.ssh/root.pub "$(readlink -f $HOME/b2d)/sshd/root.pub" || exit 1
 docker start ${sshd_cont}
