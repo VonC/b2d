@@ -18,6 +18,8 @@ if [ "${1}" = "bash" ]; then
 	docker start -a -i mcron.bash.cont
 	docker inspect mcron.bash.cont > /dev/null 2>&1 && docker rm mcron.bash.cont
 	docker inspect mcron.shippingbay.bash.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.bash.cont
+	cd $HOME/b2d/gitolite
+	k all
 	exit 0
 fi
 
