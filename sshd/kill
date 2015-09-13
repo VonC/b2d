@@ -2,5 +2,16 @@
 cd $HOME/b2d/sshd
 . ../.bash_aliases
 
-docker inspect sshd.cont > /dev/null 2>&1 && docker kill sshd.cont 2> /dev/null
-docker inspect sshd.cont > /dev/null 2>&1 && docker rm sshd.cont
+env=${1}
+all=${2}
+if [ "${env}" = "all" ] || [ "${env}" = "ALL" ]; then
+	all=${env}
+	env=""
+fi
+
+sshd_cont="sshd.cont"
+if [ "${env}" != "" ] && [ "${env}" != "bash" ]; then
+	sshd_cont="sshd.${env}.cont"
+fi
+
+docker inspect ${sshd_cont} > /dev/null 2>&1 && docker rm ${sshd_cont}
