@@ -1,0 +1,9 @@
+Host sshd_root
+  Hostname mcron.sshd.cont
+  User git
+  Port 2200
+  IdentityFile /home/git/.ssh/root
+
+Host *
+  UserKnownHostsFile /home/git/.ssh/known_hosts
+  Port 2200
