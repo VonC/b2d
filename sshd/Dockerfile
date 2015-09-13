@@ -21,3 +21,4 @@ RUN	post_install_ssh.sh
 RUN chown -R git:git /home/git
 USER git
 ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["/usr/sbin/sshd"]
