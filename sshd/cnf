@@ -103,7 +103,7 @@ UsePrivilegeSeparation no
 #ClientAliveInterval 0
 #ClientAliveCountMax 3
 #UseDNS yes
-#PidFile /home/git/usr/local/var/run/sshd.pid
+PidFile /home/git/.ssh/sshd.pid
 #MaxStartups 10
 #PermitTunnel no
 #ChrootDirectory none
