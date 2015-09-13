@@ -34,17 +34,12 @@ l=$(grep $(hostname) "${H}/.ssh/known_hosts")
 if [[ "${k}" != "" && "${k}" != "${l}" ]] ; then
   echo "${k}" >> "${H}/.ssh/known_hosts"
 fi
-exit 0
-sshd start
+/usr/sbin/sshd
 l=$(grep "localhost" "${H}/.ssh/known_hosts" | grep nist | tail -1)
-p=$(grep "@PORT_SSHD@" "${H}/.ports.ini")
-if [[ -e "${H}/../.ports.ini.private" ]] ; then p=$(grep "@PORT_SSHD@" "${H}/../.ports.ini.private") ; fi
-if [[ -e "${H}/.ports.ini.private" ]] ; then p=$(grep "@PORT_SSHD@" "${H}/.ports.ini.private") ; fi
-p=${p#*=}
-k=$(ssh-keyscan -t ecdsa -p ${p} localhost 2>&1 | grep ecdsa | grep nist)
+k=$(ssh-keyscan -t ecdsa -p 2200 localhost 2>&1 | grep ecdsa | grep nist)
   echo "D: 0k='${k}'"
 if [[ "${k}" != "" ]]; then
-  k="[localhost]:${p} ${k#* }"
+  k="[localhost]:2200 ${k#* }"
   # echo "D: 1k='${k}'"
   # echo "D: 0l='${l}'"
   if [[ "${k}" != "" && "${k}" != "${l}" ]] ; then
