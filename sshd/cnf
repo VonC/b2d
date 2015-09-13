@@ -109,7 +109,7 @@ UsePrivilegeSeparation no
 #ChrootDirectory none
 
 # no default banner path
-Banner /home/git/.ssh/.ssh.banner
+# Banner /home/git/.ssh/.ssh.banner
 
 # override default of no subsystems
 Subsystem	sftp	/home/git/usr/local/libs/openssh/libexec/sftp-server
