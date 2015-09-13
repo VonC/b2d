@@ -20,5 +20,5 @@ RUN ln -s ../.ssh/post_install_ssh.sh bin/post_install_ssh.sh && \
 RUN	post_install_ssh.sh
 RUN chown -R git:git /home/git
 USER git
-ENTRYPOINT ["/bin/sh", "-c"]
-CMD ["/usr/sbin/sshd", "-D"]
+ENTRYPOINT ["/usr/sbin/sshd"]
+CMD ["-D", "-e"]
