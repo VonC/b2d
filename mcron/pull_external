@@ -10,10 +10,6 @@ source "${H}/sbin/usrcmd/get_tpl_value"
 
 get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_URL_HGIT@" downstream_url
 # Envs required for in order to read in shipping bay in upstream serverv
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_KEY@" upstream_key
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_USER@" upstream_user
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_SERVER@" upstream_server
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_PORT@" upstream_port
 #get_tpl_value "${H}/.envs.private" "@UPSTREAM_SHIPPINGBAY@" upstream_shippingbay
 upstream_shippingbay="/home/git/shippingbay_git"
 upstream_outgoing=${upstream_shippingbay}/outgoing
@@ -46,7 +42,7 @@ touch ${logf}
 echo "---- ${current_time} : checking shipping_bay" >> ${logf}
 #echo "Check if anything new comes from upstream '${downstream_url}', before pushing it back to downstream"
 #repos=$(git --git-dir=${H}/repositories/gitolite-admin.git show master:conf/gitolite.conf | grep "repo " | grep -v "testing" | grep -v "gitolite-admin")
-list_remotefiles=$(ssh -i ${H}/.ssh/${upstream_key} -p ${upstream_port} ${upstream_user}@${upstream_server} "ls ${upstream_outgoing}")
+list_remotefiles=$(ssh sshd_root "ls ${upstream_outgoing}")
 for aremotefile in ${list_remotefiles}
 do
    # replace the hash "#" by a slash "/"
@@ -114,7 +110,7 @@ do
       if [ $? = 0 ] 
       then
          echo "Creating file ${upstream_incoming}/${aremotefile}" 
-         createres=$(ssh -i ${H}/.ssh/${upstream_key} -p ${upstream_port} ${upstream_user}@${upstream_server} "touch ${upstream_incoming}/${aremotefile} ")  
+         createres=$(ssh sshd_root "touch ${upstream_incoming}/${aremotefile} ")
       else
          echo "Error in fetching from  ${exturl}"
       fi
