@@ -13,3 +13,4 @@ if [[ "${k}" != "" ]]; then
 	chmod 644 /home/git/.ssh/known_hosts
 	chown git:git /home/git/.ssh/known_hosts
 fi
+export no_proxy=.cont,${no_proxy}
