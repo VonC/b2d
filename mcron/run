@@ -68,7 +68,8 @@ elif [ "${1}" = "staging" ]; then
 		echo "sshd.external.cont has not copied root(.pub) keys"
 	fi
 	docker inspect apache.external.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: apache.upstream.cont: 'apache.external.cont' not started"; exit 1; }
-	docker create -it --name ${mcron_cont} --volumes-from gitolite.repos.${1}.cont --link sshd.external.cont:mcron.sshd.cont --link apache.external.cont:apache.upstream.cont mcron
+	docker inspect apache.blessed.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: apache.downstream.cont: 'apache.blessed.cont' not started"; exit 1; }
+	docker create -it --name ${mcron_cont} --volumes-from gitolite.repos.${1}.cont --link sshd.external.cont:mcron.sshd.cont --link apache.external.cont:apache.upstream.cont --link apache.blessed.cont:apache.downstream.cont mcron
 	docker cp "$HOME/b2d/envs/${envs_private}" ${mcron_cont}:/home/git/.envs.private
 	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
 	docker cp "$HOME/b2d/sshd/root" ${mcron_cont}:/home/git/.ssh/root
