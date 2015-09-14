@@ -14,3 +14,10 @@ if [[ "${k}" != "" ]]; then
 	chown git:git /home/git/.ssh/known_hosts
 fi
 export no_proxy=.cont,${no_proxy}
+cd /home/git/.ssh
+a=$(grep "apache.external.crt" curl-ca-bundle.crt)
+if [ "${a}" == "" ]; then
+	echo "">> curl-ca-bundle.crt
+	cat crts>> curl-ca-bundle.crt
+fi
+git config --file /home/git/.gitconfig http.sslCAInfo /home/git/.ssh/curl-ca-bundle.crt
