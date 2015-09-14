@@ -1,6 +1,9 @@
 #! /bin/sh
 cd $HOME/b2d/
 . ./.bash_aliases
+cd mcron
+ks
+cd ..
 kb ALL
 ks ALL
 ke ALL
