@@ -75,6 +75,7 @@ elif [ "${1}" = "staging" ]; then
 	docker cp "$HOME/b2d/sshd/root" ${mcron_cont}:/home/git/.ssh/root
 	docker cp "$HOME/b2d/sshd/root.pub" ${mcron_cont}:/home/git/.ssh/root.pub
 	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
+	docker cp "$HOME/b2d/apache/crts" ${mcron_cont}:/home/git/.ssh/
 	docker start ${mcron_cont}
 	docker exec -u root -i ${mcron_cont} update_known_hosts
 else
