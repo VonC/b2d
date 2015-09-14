@@ -21,6 +21,7 @@ run() {
 		git commit --allow-empty -m "First commit as projextusr2 on master external"
 		git branch -D master
 		git branch -M nmaster master
+		git remote set-url origin https://projextrdr@localhost:8443/hgit/module2
 	fi
 
 	check=$(git log --format=format:%H --grep "New commit as projextusr2 on master external$" master)
@@ -36,6 +37,9 @@ run() {
 
 	check=""
 	check_if_pushed "origin" "New commit as projextusr2 on master external$" "master"
+	if [ ${reset} -eq 0 ]; then
+		git remote set-url origin https://projextusr2@localhost:8443/hgit/module2
+	fi
 	if [ "${check}" = "" ]; then
 		echo "no commit 'New commit as projextusr2 on master external' pushed">> ${dirp0}/tests/err
 		return 1
