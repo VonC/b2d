@@ -83,7 +83,7 @@ do
 
     if [ ${exturl#*/hgit/}" != "${exturl} ]; then
       r="${exturl#*/hgit/}"
-      exturl="${exturl%/hgit/*}/h2git/${r}"
+      exturl="${exturl%/hgit/*}/hgit/${r}"
     fi
     nowd=`date +%Y%m%d%H%M%S`
     if [ ${branch_imported} != master ]
@@ -141,7 +141,7 @@ do
 
       if [ ${dwnurl#*/hgit/}" != "${dwnurl} ]; then
         r="${dwnurl#*/hgit/}"
-        dwnurl="${dwnurl%/hgit/*}/h2git/${r}"
+        dwnurl="${dwnurl%/hgit/*}/hgit/${r}"
       fi
 
       nowd=`date +%Y%m%d%H%M%S`
