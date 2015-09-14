@@ -32,7 +32,8 @@ if [ "${upstream_url}" = "" ]; then
   exit 0
 fi
 
-git config --global --remove-section credential
+git config --global --unset credential.helper
+git config --unset credential.helper
 logfn=log_"$(date +%Y%m%d -d "today")"
 logf="${H}/mcron/logs/${logfn}"
 current_time=`date +%H%M%S`
@@ -71,10 +72,6 @@ do
       ${ggit} remote add external ${exturl}
    fi
 
-    chelper=$(${ggit} config --local --get credential.helper)
-    if [ "${cchelper}" = "" ] || [ "${chelper#netrc -}" = "${chelper}" ]; then
-      $(${ggit} config --local credential.helper 'netrc -f ${H}/mcron/projextrdr.netrc.asc')
-    fi
     aref=""
   #  if [ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]; then
   #    aref=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
@@ -161,6 +158,3 @@ do
       fi
     fi
 done
-
-
-git config --global credential.helper netrc
