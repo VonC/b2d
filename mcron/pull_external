@@ -60,6 +60,7 @@ do
    echo arepo ${arepo}
    echo branch ${branch_imported}
    ggit="git --git-dir=${H}/repositories/${arepo}.git"
+   $(${ggit} config --unset credential.helper)
    exturl=$(${ggit} config --local --get remote.external.url)
    if [ "${exturl#*@}" != "${exturl}" ]; then
       exturl="https://projextrdr:projextrdr@${exturl#*@}"
