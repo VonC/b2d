@@ -6,6 +6,7 @@
 # The name of the branch can contain a "/"
 H="/home/git"
 source "${H}/sbin/usrcmd/get_tpl_value"
+export no_proxy=.cont,${no_proxy}
 
 
 get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_URL_HGIT@" downstream_url
