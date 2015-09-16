@@ -2,6 +2,7 @@
 chmod 644 /home/git/.ssh/root.pub
 chmod 600 /home/git/.ssh/root
 chown git:git /home/git/.ssh/root*
+# check if ssh-keyscan -H wouldn't give the right format directly
 k=$(ssh-keyscan -t ecdsa -p 2200 mcron.sshd.cont 2>&1 | grep ecdsa | grep nist)
 if [[ "${k}" != "" ]]; then
 	key="${k#* }"
