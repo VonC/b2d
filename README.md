@@ -13,3 +13,12 @@ The `env.bat` is supposed to be in the parent folder of the repo, in order to no
 (since it can include proxy environment vith username:password in it)
 
 It should also define `HOME` (to the parent folder of the b2d repo) in order to not be influenced by any existing global git config (`.gitconfig`) in the default git `HOME` (`%USERPROFILE%` on Windows)
+
+## Commands
+
+Once the env.bat is properly filled out, you need to:
+
+- execute senv.bat (in a DOS prompt) or source senv.sh (in a git bash, even on Windows)
+- type `b` for building all the images
+- type `s` to start all the containers
+- type `st` to stop and remove all the containers
