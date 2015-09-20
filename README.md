@@ -30,3 +30,10 @@ That repo comes with Dockerfiles specifying a full git repo hosting server (comp
 Typing `s` will launch actually 3 sets of containers, meaning 3 different Git hosting servers (called "blessed", "staging" and "external")
 
 Typing `t` will launch a series of tests to check if those Git server are working as expected.
+
+## Goal: commit replication accross 3 servers
+
+The goal is to facilitate the collaboration between collaborators within a company and external contributors who have no access to the company git repo.
+
+To that effect, commits done on a branch in "blessed" should be replicate to the "external" repo (through "staging").  
+Commits done on a branch in "external" will be replicated (through "staging" pull) to "blessed" ("external" has no idea that "blessed" or "staging" exist, since those are internal company server: an external server should not be aware of those).
