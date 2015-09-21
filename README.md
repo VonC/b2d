@@ -56,3 +56,79 @@ Commits done on a branch in "external" will be replicated (through "staging" pul
           * one in the DMZ (staging)                                  | Unaware of the 2 other servers
                                                                       + existence.
 ````
+
+## Applicative Architecture
+
+Each git repo hosting server follows the same appllicative archicture:
+
+````
++------------------------------------------------------+-------------------------+
+|                            Git repo hosting server                             |
+|                                                                                |
+|   +-----------+           +-----------+                       +-----------+    |
+|   |           +---------> |           |                       |           |    |
+|   | NGiNX     |     +-----+ Apache    +------------------+--> | LDAP      |    |
+|   |           |     |     |           |                  |    |           |    |
+|   +-----------+     |     +---+-------+                  |    +-----------+    |
+|                     |         |                          |                     |
+|   +-----------+     |         v                          |    +-----------+    |
+|   |           |     |      XXXXXX                        |    |           |    |
+|   | SSHD      |     |     X      X                       +--> | Gpg2      |    |
+|   |           |     |     |XXXXXX|-------+               |    |           |    |
+|   +-----+-----+     |     | git  | Hooks |               |    +-----------+    |
+|         |           |     | repos|-------+               |                     |
+|   +-----v-----+     |     \--+---/        +-----------+  |    +-----------+    |
+|   |           |     |        ^            |           |  +--> |           |    |
+|   | Data      |     |        |            | MCron     |       | Gitolite  |    |
+|   |           | <---+--------+------------+           +-----> |           |    |
+|   +-----------+                           +-----------+       +-----------+    |
++--------------------------------------------------------------------------------+
+````
+
+You can start each environment separately:
+
+* `re`: run external (`ke`: stops and rm external containers)
+* `rs`: run staging (`ks`: stops and rm staging containers)
+* `rb`: run blessed (`kb`: stops and rm blessed containers)
+
+The order is important, and that is what `start` (or alias `s` mentioned above) will do: run each environment,; starting with extenal, then staging, then blessed, then "mcron staging" (which needs to know about external, from which it pulls, and blessed, to which it pushes)
+
+### NGiNX:
+
+Allows to access to https://localhost:8443/hgit (git clone url) or https://localhost:8443/git (bit web url) through the same port number.
+
+### Apache:
+
+Allows to:
+
+* authenticate the user (with LDAP)
+* authorize the user (with gitolite)
+* browse git repos (only the ones the user is authorized for)
+* clone git repos (only the ones the user is authorized for)
+ 
+### LDAP:
+
+Include a list of test accounts ([`openldap/users-usecases.ldif`](https://github.com/VonC/b2d/blob/master/openldap/users-usecases.ldif) and [`openldap/users-usecases.ldif`](https://github.com/VonC/b2d/blob/master/openldap/users-usecases.ldif))
+
+### Gpg2:
+
+Allows to keep some service account (like `projextprdr`) password in an encrypted file
+
+### Gitolite
+
+Authorize users to access git repos
+
+### MCron:
+
+Execute jobs on schedule:
+
+* [`mcron/pull_external`](https://github.com/VonC/b2d/blob/master/mcron/pull_external): fetch from external and push to blessed
+* [`mcron/clean_shipping_bay`](https://github.com/VonC/b2d/blob/master/mcron/clean_shipping_bay): clean the new commit markers in staging, once the fetch has been done by `pull_external`.
+ 
+### Data:
+
+Data volume container for the shipping_bay (commits markers on external, in order for staging to know from which repos to pull, instead of having to pull from *all* repos).
+
+### SSHD:
+
+SSH access to external, in order to list (`ls`) the commits markers in the external shipping_bay data container.
