@@ -37,3 +37,22 @@ The goal is to facilitate the collaboration between collaborators within a compa
 
 To that effect, commits done on a branch in "blessed" should be replicate to the "external" repo (through "staging").  
 Commits done on a branch in "external" will be replicated (through "staging" pull) to "blessed" ("external" has no idea that "blessed" or "staging" exist, since those are internal company server: an external server should not be aware of those).
+
+````
+                      3 repos hosting git servers                     +                               
+                                                                      |                               
++--------------------+                   +--------------------+       |       +--------------------+  
+|                    |      push         |                    |     push      |                    |  
+|                    +------------------->                    +-------+------->                    |  
+|       Blessed      |                   |       Staging      |       |       |      External      |  
+|                    |                   |                    XXXXXXXX|XXXXXXX|                    |  
+|                    |      push         |                    |     fetch     X                    |  
+|                    <-------------------+                    <-XXXXXX|XXXXXXX|                    |  
++--------------------+                   +--------------------+       |       +--------------------+  
+                                                                      |                               
+                                                                      |                               
+          2 servers inside the company:                               | One server outside the company
+          * one acting as the main referential for dev (blessed)      | (external)                    
+          * one in the DMZ (staging)                                  | Unaware of the 2 other servers
+                                                                      + existence.
+````
