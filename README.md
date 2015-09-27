@@ -16,16 +16,16 @@ It should also define `HOME` (to the parent folder of the b2d repo) in order to 
 
 ## Commands
 
-Once the env.bat is properly filled out, you need to:
+Once the `env.bat` is properly filled out, you need to:
 
-- execute senv.bat (in a DOS prompt) or source senv.sh (in a git bash, even on Windows)
+- execute `senv.bat` (in a DOS prompt) or `source senv.sh` (in a git bash, even on Windows)
 - type `b` for building all the images
 - type `s` to start all the containers
 - type `st` to stop and remove all the containers
 
 ## Tests
 
-That repo comes with Dockerfiles specifying a full git repo hosting server (complete with a gitweb, an ssh listener, an Apache http listener, a NGiNX rever-proxy server, and LDAP authentication)
+That repo comes with Dockerfiles specifying a **full git repo hosting server** (complete with a gitweb, an ssh listener, an Apache http listener, a NGiNX rever-proxy server, and LDAP authentication)
 
 Typing `s` will launch actually 3 sets of containers, meaning 3 different Git hosting servers (called "blessed", "staging" and "external")
 
