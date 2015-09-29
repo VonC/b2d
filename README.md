@@ -62,7 +62,7 @@ Commits done on a branch in "external" will be replicated (through "staging" pul
 Each git repo hosting server follows the same appllicative archicture:
 
 ````
-+------------------------------------------------------+-------------------------+
++--------------------------------------------------------------------------------+
 |                            Git repo hosting server                             |
 |                                                                                |
 |   +-----------+           +-----------+                       +-----------+    |
