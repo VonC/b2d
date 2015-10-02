@@ -19,7 +19,7 @@ It should also define `HOME` (to the parent folder of the b2d repo) in order to 
 
 Once the `env.bat` is properly filled out, you need to:
 
-- execute `senv.bat` (in a DOS prompt) or `source senv.sh` (in a git bash, even on Windows)
+- execute `senv.bat` (in a DOS prompt) or `source senv.sh` (in a git bash, even on Windows). In both cases, it will call the private `env.bat`.
 - type `b` for building all the images
 - type `s` to start all the containers
 - type `st` to stop and remove all the containers
