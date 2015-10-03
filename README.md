@@ -30,7 +30,7 @@ That repo comes with Dockerfiles specifying a **full git repo hosting server** (
 
 Typing `s` will launch actually 3 sets of containers, meaning 3 different Git hosting servers (called "blessed", "staging" and "external")
 
-Typing `t` will launch a series of tests to check if those Git server are working as expected.
+Typing `t` will launch a series of tests to check if those Git servers are working as expected.
 
 ## Goal: commit replication accross 3 servers
 
