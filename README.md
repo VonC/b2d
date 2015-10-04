@@ -60,7 +60,7 @@ Commits done on a branch in "external" will be replicated (through "staging" pul
 
 ## Applicative Architecture
 
-Each git repo hosting server follows the same appllicative archicture:
+Each git repo hosting server follows the same applicative archicture:
 
 ````
 +--------------------------------------------------------------------------------+
@@ -92,7 +92,7 @@ You can start each environment separately:
 * `rs`: run staging (`ks`: stops and rm staging containers)
 * `rb`: run blessed (`kb`: stops and rm blessed containers)
 
-The order is important, and that is what `start` (or alias `s` mentioned above) will do: run each environment,; starting with extenal, then staging, then blessed, then "mcron staging" (which needs to know about external, from which it pulls, and blessed, to which it pushes)
+The order is important, and that is what `start` (or alias `s` mentioned above) will do: run each environment, starting with external, then staging, then blessed, then "mcron.staging" (which needs to know about external, from which it pulls, and blessed, to which it pushes)
 
 ### NGiNX:
 
