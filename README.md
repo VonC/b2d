@@ -96,7 +96,7 @@ The order is important, and that is what `start` (or alias `s` mentioned above) 
 
 ### NGiNX:
 
-Allows to access to https://localhost:8443/hgit (git clone url) or https://localhost:8443/git (bit web url) through the same port number.
+Allows to access to https://localhost:8443/hgit (git clone url) or https://localhost:8443/git (gitweb url) through the same port number.
 
 ### Apache:
 
