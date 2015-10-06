@@ -118,7 +118,7 @@ Allows to keep some service account (like `projextprdr`) password in an encrypte
 
 ### Gitolite
 
-Authorize users to access git repos
+Authorize users to access git repos (based on `gitolite-admin` repo)
 
 ### MCron:
 
