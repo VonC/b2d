@@ -34,10 +34,10 @@ Typing `t` will launch a series of tests to check if those Git servers are worki
 
 ## Goal: commit replication accross 3 servers
 
-The goal is to facilitate the collaboration between collaborators within a company and external contributors who have no access to the company git repo.
+The goal is to facilitate the collaboration between collaborators within a company and external contributors who have no access to the company git repos.
 
 To that effect, commits done on a branch in "blessed" should be replicate to the "external" repo (through "staging").  
-Commits done on a branch in "external" will be replicated (through "staging" pull) to "blessed" ("external" has no idea that "blessed" or "staging" exist, since those are internal company server: an external server should not be aware of those).
+Commits done on a branch in "external" will be replicated (through "staging" pull) to "blessed" ("external" has no idea that "blessed" or "staging" exist, since those are internal company servers: an *external* server should not be aware of those).
 
 ````
                       3 repos hosting git servers                     +                               
