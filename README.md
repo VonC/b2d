@@ -109,7 +109,8 @@ Allows to:
  
 ### LDAP:
 
-Include a list of test accounts ([`openldap/users-usecases.ldif`](https://github.com/VonC/b2d/blob/master/openldap/users-usecases.ldif) and [`openldap/users-usecases.ldif`](https://github.com/VonC/b2d/blob/master/openldap/users-usecases.ldif))
+Include a list of test accounts ([`openldap/users-usecases.ldif`](https://github.com/VonC/b2d/blob/master/openldap/users-usecases.ldif) and [`openldap/users-usecases.ldif`](https://github.com/VonC/b2d/blob/master/openldap/users-usecases.ldif))  
+Allows for authentication with dummy accounts.
 
 ### Gpg2:
 
