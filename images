@@ -1,1 +1,1 @@
-gnupg2 gitolite.repos gitolite apache nginx openldap apache.inst apache.build apache.deb gcc go git
+gnupg2 gitolite.repos gitolite apache nginx openldap apache.inst apache.build apache.deb gcc go git sshd mcron mcron.shippingbay
