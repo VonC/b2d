@@ -43,6 +43,6 @@ RUN chown -R git:git /home/git
 WORKDIR /home/git
 USER git
 RUN mkdir openldap/db.1.a
-RUN /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh
+# RUN /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh && /home/git/openldap/ini_ldap_db.sh
 ENTRYPOINT ["sh", "-c"]
 CMD ["slapds"]
