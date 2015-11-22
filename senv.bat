@@ -24,9 +24,9 @@ call "%parent%\env.bat"
 set PATH=%PATH%;%script%
 
 rem http://stackoverflow.com/a/7218493/6309: test substring
-echo.%PATH%| findstr /C:"Boot2Docker" 1>nul
+echo.%PATH%| findstr /C:"dm\latest" 1>nul
 if %errorlevel% == 1 (
-	echo "Boot2Docker is not found in PATH: check your ..\env.bat"
+	echo "docker-machine is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
 echo.%PATH%| findstr /i /C:"Git" 1>nul
@@ -34,11 +34,19 @@ if %errorlevel% == 1 (
 	echo "Git is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
-echo.%PATH%| findstr /C:"VirtualBox" 1>nul
+echo.%PATH%| findstr /C:"vbox\latest" 1>nul
 if %errorlevel% == 1 (
 	echo "VirtualBox is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
+
+doskey dm=docker-machine $*
+rem doskey dmcv=docker-machine create -d virtualbox --engine-env HTTP_PROXY=%http_proxy% --engine-env HTTPS_PROXY=%https_proxy% --engine-env http_proxy=%http_proxy% --engine-env https_proxy=%https_proxy% --engine-env NO_PROXY=%no_proxy% --engine-env no_proxy=%no_proxy% $*
+doskey dmcv=docker-machine create -d virtualbox $*
+
+set DOCKER_TOOLBOX_INSTALL_PATH=C:/prgs/latest
+set DOCKER_MACHINE=%DOCKER_TOOLBOX_INSTALL_PATH%/docker-machine.exe
+set VBOXMANAGE=C:/prgs/vbox/latest/vboxmanage.exe
 
 doskey vbm="VBoxManage.exe" $*
 doskey vbmmt="VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
@@ -62,6 +70,16 @@ if %errorlevel% == 0 (
 	sed -i -e "s;#no_proxy#;%NO_PROXY%;g" dfsmudge.sh
 )
 sed -i -e "s;_unixpath_;%unixpath%;g" dfsmudge.sh
+
+doskey alias=doskey /macros:all
+doskey h=doskey /history
+doskey gl=git lg -20
+doskey glba=git lg -20 --branches --all
+doskey glab=git lg -20 --all --branches
+doskey gla=git lg -20 --all
+
+set LANG=en_US.UTF-8
+
 goto :eof
 
 
