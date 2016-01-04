@@ -1,9 +1,6 @@
 #!/bin/bash
 if [[ "#hasproxy#" == "1" ]]; then
-	sed -e "s;^.*\(ENV\|export\) \(http_proxy[ =]\|HTTP_PROXY[ =]\).*$;\1 \2#http_proxy#;g" \
-		-e "s;^.*\(ENV\|export\) \(https_proxy[ =]\|HTTPS_PROXY[ =]\).*$;\1 \2#https_proxy#;g" \
-		-e "s;^.*\(ENV\|export\) \(no_proxy[ =]\|NO_PROXY[ =]\).*$;\1 \2#no_proxy#;g" \
-		-e "s;^\(.*\)#unixpath#\(.*\)$;\1_unixpath_\2 # unxpath:\1#unixpath#\2;g"
+	sed -e "s;^.*\(ENV\|export\) \(http_proxy[ =]\|HTTP_PROXY[ =]\).*$;\1 \2#http_proxy#;g" -e "s;^.*\(ENV\|export\) \(https_proxy[ =]\|HTTPS_PROXY[ =]\).*$;\1 \2#https_proxy#;g" -e "s;^.*\(ENV\|export\) \(no_proxy[ =]\|NO_PROXY[ =]\).*$;\1 \2#no_proxy#;g" -e "s;^\(.*\)#unixpath#\(.*\)$;\1_unixpath_\2 # unxpath:\1#unixpath#\2;g"
 else
 	sed -e "s;^\(.*\)#unixpath#\(.*\)$;\1_unixpath_\2 # unxpath:\1#unixpath#\2;g"
 fi
