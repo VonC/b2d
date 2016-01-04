@@ -71,7 +71,6 @@ if %errorlevel% == 0 (
 )
 sed -i -e "s;_unixpath_;%unixpath%;g" dfsmudge.sh
 
-doskey alias=doskey /macros:all
 doskey h=doskey /history
 doskey gl=git lg -20
 doskey glba=git lg -20 --branches --all
