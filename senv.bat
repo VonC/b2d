@@ -71,6 +71,13 @@ if %errorlevel% == 0 (
 )
 sed -i -e "s;_unixpath_;%unixpath%;g" dfsmudge.sh
 
+setlocal enabledelayedexpansion
+touch profile
+git checkout HEAD -- profile
+for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do touch %%i
+for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do git checkout HEAD -- %%i
+endlocal
+
 doskey h=doskey /history
 doskey gl=git lg -20
 doskey glba=git lg -20 --branches --all
