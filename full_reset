@@ -9,3 +9,4 @@
 /bin/rm -f gitolite/grepos
 /bin/rm -f gnupg2/gnupg2.path.*
 /bin/rm -f gnupg2/gnupg2.path
+/bin/rm -f mcron/mshippingbay.*
