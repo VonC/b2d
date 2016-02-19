@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo $PATH
-scriptdir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+scriptdir=$( cd "$( dirname . )" && pwd )
 echo $scriptdir
 echo $PATH|grep -E ":${scriptdir}($|:)"
 if [ $? -ne 0 ]; then
