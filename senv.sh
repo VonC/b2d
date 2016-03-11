@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/ash -x
 
 echo $PATH
 scriptdir=$( cd "$( dirname . )" && pwd )
@@ -9,9 +9,9 @@ if [ $? -ne 0 ]; then
 	export PATH=$PATH:${scriptdir}
 fi
 parent=$(dirname ${scriptdir})
-echo $parent
+echo parent='$parent'
 set -a 
-if [ -e ../env.bat ]; then . ../env.bat; fi
+if [ -e ../env.sh ]; then . ../env.sh; fi
 set +a
 git -C $scriptdir config filter.dffilter.smudge ${scriptdir}/dfsmudge.sh
 git -C $scriptdir config filter.dffilter.clean ${scriptdir}/dfclean.sh
