@@ -1,0 +1,7 @@
+#! /bin/sh
+# http://stackoverflow.com/questions/15541876/script-path-bash-source0-bad-substitution
+actual_path=$(readlink -f "$0")
+script_dir=$(dirname "$actual_path")
+cd ${script_dir}
+echo ${script_dir}
+. ../.bash_aliases
