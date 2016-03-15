@@ -1,3 +1,8 @@
 #! /bin/sh
 
-docker build -t git $HOME/b2d/git
+scriptdir=$(dirname "$( readlink -f "$0" )" )
+cd ${scriptdir}
+. ../.bash_aliases
+
+docker build -t git ${scriptdir} || exit 1
+drmiad 2> /dev/null
