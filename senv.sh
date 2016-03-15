@@ -1,15 +1,15 @@
-#!/bin/ash -x
+#!/bin/ash
 
-echo $PATH
+echo "PATH=${PATH}"
 scriptdir=$( cd "$( dirname . )" && pwd )
-echo $scriptdir
+echo "scriptdir='${scriptdir}'"
 echo $PATH|grep -E ":${scriptdir}($|:)"
 if [ $? -ne 0 ]; then
 	echo "add path"
 	export PATH=$PATH:${scriptdir}
 fi
 parent=$(dirname ${scriptdir})
-echo parent='$parent'
+echo "parent='${parent}'"
 set -a 
 if [ -e ../env.sh ]; then . ../env.sh; fi
 set +a
