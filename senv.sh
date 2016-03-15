@@ -15,7 +15,7 @@ if [ -e ../env.sh ]; then . ../env.sh; fi
 set +a
 git -C $scriptdir config filter.dffilter.smudge ${scriptdir}/dfsmudge.sh
 git -C $scriptdir config filter.dffilter.clean ${scriptdir}/dfclean.sh
-cp -f ${scriptdir}/dfsmudge.sh.template ${scriptdir}/dfsmudge.sh
+/bin/cp -f ${scriptdir}/dfsmudge.sh.template ${scriptdir}/dfsmudge.sh
 chmod +x ${scriptdir}/dfsmudge.sh
 
 if [[ ! -z ${http_proxy} ]]
