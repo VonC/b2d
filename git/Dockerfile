@@ -39,4 +39,5 @@ RUN chmod +x /home/git/sbin/usrcmd/get_tpl_value &&\
 ENV PATH="$PATH:/home/git/bin"
 WORKDIR /home/git
 COPY bash_aliases /root/.bash_aliases
-ENTRYPOINT bash -l
+ENTRYPOINT [ "bash" ]
+CMD [ "-l" ]
