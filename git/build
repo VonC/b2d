@@ -6,3 +6,18 @@ cd ${scriptdir}
 
 docker build -t git ${scriptdir} || exit 1
 drmiad 2> /dev/null
+
+if [ "$(docker images -q git 2> /dev/null)" = "" ]; then
+  echo "git/build: no git image"
+  exit 1
+fi
+
+ver=$(docker run --rm git -c 'git --version'|awk {'print $3'})
+echo "ver='${ver}'"
+
+docker tag
+
+if [ "$(docker images -q 192.168.99.101:5000/b2d/git:${ver} 2> /dev/null)" = "" ]; then
+  echo "git/build: no 192.168.99.101:5000/b2d/git:${ver} image"
+  exit 1
+fi
