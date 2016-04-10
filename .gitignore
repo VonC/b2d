@@ -21,3 +21,4 @@ coverage.out
 /mcron/mshippingbay*
 /sshd/root*
 WindowTabsSettings.txt
+*.key

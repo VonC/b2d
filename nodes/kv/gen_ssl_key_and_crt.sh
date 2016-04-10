@@ -4,6 +4,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 echo ${DIR}
 certs="${DIR}/certs"
 if [[ -e "${certs}/key" && -e "${certs}/crt" ]] ; then exit 0 ; fi
+if [[ ! -e ${certs} ]]; then mkdir -p ${certs}; fi
 
 a_hostname=localhost
 a_fqn=localhost

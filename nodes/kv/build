@@ -4,4 +4,7 @@ actual_path=$(readlink -f "$0")
 script_dir=$(dirname "$actual_path")
 cd ${script_dir}
 echo ${script_dir}
-. ../.bash_aliases
+. ../../.bash_aliases
+if [ ! -e certs ]; then
+  ./gen_ssl_key_and_crt.sh
+fi
