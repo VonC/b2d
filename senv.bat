@@ -1,7 +1,8 @@
 @echo off
+setlocal enabledelayedexpansion
 
-set script=%~dp0%
-set parent=%script: =,%
+set b2d=%~dp0%
+set parent=%b2d: =,%
 set parent=%parent:\= %
 set parentdir=
 set unixpath=
@@ -9,19 +10,20 @@ call :getparentdir %parent%
 set parent=%parentdir:,= %
 set unixpath=%unixpath%/b2d
 
-rem echo script='%script%'
+rem echo b2d='%b2d%'
 rem echo parentdir='%parentdir%'
 rem echo parent='%parent%'
-rem echo.unixpath='%unixpath%'
+echo.unixpath='%unixpath%'
 
 if not exist ..\env.bat (
 	echo Add %parent%\env.bat: (..\env.bat^)
-	echo See env.bat.template in %script%
+	echo See env.bat.template in %b2d%
 	echo In ..\env.bat, complete your %%PATH%% with Git, VirtualBox and Boot2Docker
 	exit /B 1
 )
-call "%parent%\env.bat"
-set PATH=%PATH%;%script%
+set PATH=C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem
+call !parent!\env.bat
+set PATH=%PATH%;%b2d%bin
 
 rem http://stackoverflow.com/a/7218493/6309: test substring
 echo.%PATH%| findstr /C:"dm\latest" 1>nul
@@ -40,11 +42,44 @@ if %errorlevel% == 1 (
 	exit /B 1
 )
 
+git --version
+docker-machine version
+vboxmanage --version
+
+set scripts=%b2d%bin
+set scriptd=%scripts:\=\\%
+git -C %b2d% config filter.dffilter.smudge %scriptd%\\dfsmudge.sh
+git -C %b2d% config filter.dffilter.clean %scriptd%\\dfclean.sh
+
+cp -f %scripts%\dfsmudge.sh.template %scripts%\dfsmudge.sh
+
+echo.%HTTP_PROXY%| findstr /C:"http" 1>nul
+if %errorlevel% == 0 (
+	sed -i -e "s/#hasproxy#/1/g" %scripts%\dfsmudge.sh
+	sed -i -e "s;#http_proxy#;%HTTP_PROXY%;g" %scripts%\dfsmudge.sh
+	sed -i -e "s;#https_proxy#;%HTTPS_PROXY%;g" %scripts%\dfsmudge.sh
+	sed -i -e "s;#no_proxy#;%NO_PROXY%;g" %scripts%\dfsmudge.sh
+)
+sed -i -e "s;_unixpath_;%unixpath%;g" %scripts%\dfsmudge.sh
+
+touch profile
+git checkout HEAD -- profile
+
+cd %b2d%compose
+for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do touch %%i
+for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do git checkout HEAD -- %%i
+cd %b2d%
+
+echo set PATH=%PATH%>p.bat
+endlocal
+call p.bat
+del p.bat
+
 doskey dm=docker-machine $*
 rem doskey dmcv=docker-machine create -d virtualbox --engine-env HTTP_PROXY=%http_proxy% --engine-env HTTPS_PROXY=%https_proxy% --engine-env http_proxy=%http_proxy% --engine-env https_proxy=%https_proxy% --engine-env NO_PROXY=%no_proxy% --engine-env no_proxy=%no_proxy% $*
 doskey dmcv=docker-machine create -d virtualbox $*
 
-set DOCKER_TOOLBOX_INSTALL_PATH=C:/prgs/latest
+set DOCKER_TOOLBOX_INSTALL_PATH=C:/prgs/dm/latest
 set DOCKER_MACHINE=%DOCKER_TOOLBOX_INSTALL_PATH%/docker-machine.exe
 set VBOXMANAGE=C:/prgs/vbox/latest/vboxmanage.exe
 
@@ -54,29 +89,7 @@ doskey vbmmu="VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp
 doskey vbmct="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
 doskey vbmcu="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
 doskey bd="boot2docker.exe" $*
-doskey cdb=cd "%~dp0"
-
-set scriptd=%script:\=\\%
-git -C %script% config filter.dffilter.smudge %scriptd%dfsmudge.sh
-git -C %script% config filter.dffilter.clean %scriptd%dfclean.sh
-
-cp -f %script%dfsmudge.sh.template %script%dfsmudge.sh
-
-echo.%HTTP_PROXY%| findstr /C:"http" 1>nul
-if %errorlevel% == 0 (
-	sed -i -e "s/#hasproxy#/1/g" dfsmudge.sh
-	sed -i -e "s;#http_proxy#;%HTTP_PROXY%;g" dfsmudge.sh
-	sed -i -e "s;#https_proxy#;%HTTPS_PROXY%;g" dfsmudge.sh
-	sed -i -e "s;#no_proxy#;%NO_PROXY%;g" dfsmudge.sh
-)
-sed -i -e "s;_unixpath_;%unixpath%;g" dfsmudge.sh
-
-setlocal enabledelayedexpansion
-touch profile
-git checkout HEAD -- profile
-for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do touch %%i
-for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do git checkout HEAD -- %%i
-endlocal
+doskey cdbb=cd "%~dp0"
 
 doskey h=doskey /history
 doskey gl=git lg -20
@@ -85,8 +98,8 @@ doskey glab=git lg -20 --all --branches
 doskey gla=git lg -20 --all
 
 set LANG=en_US.UTF-8
-
-goto :eof
+goto:eof
+goto:eof
 
 
 rem http://www.dostips.com/DtTutoFunctions.php#FunctionTutorial.ReturningValuesClassic
