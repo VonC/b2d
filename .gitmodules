@@ -5,3 +5,6 @@
 [submodule "compileEverything"]
 	path = compileEverything
 	url = https://VonC@github.com/VonC/compileEverything
+[submodule "nodes/kv/docker-consul"]
+	path = nodes/kv/docker-consul
+	url = https://github.com/hashicorp/docker-consul
