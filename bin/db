@@ -1,0 +1,21 @@
+# https://github.com/docker/docker/issues/14634#issuecomment-155572446
+# get proxy variable defines in /var/lib/boot2docker/profile
+proxys=$(grep -i proxy /var/lib/boot2docker/profile)
+proxy=""
+cr='
+'
+IFS='
+'
+for item in ${proxys//\\n/$cr}
+do
+	item=${item#*\"}
+	item=${item%\"}
+	# echo "Item: ${item}"
+	proxy="${proxy} --build-arg ${item}"
+done
+
+cmd="docker build${proxy} -t $1 $2"
+if eval ${cmd}; then
+	docker rm $(docker ps -qa --no-trunc --filter "status=exited" 2>/dev/null) 2>/dev/null
+	docker rmi $(docker images --filter "dangling=true" -q --no-trunc 2>/dev/null) 2>/dev/null
+fi

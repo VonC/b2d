@@ -12,23 +12,15 @@ if "%status%" NEQ "running" (
 REM already running means controlvm (as opposed to modifyvm)
 
 set up=
-set h=%HOME%
-call :unixpath %HOME%
-set HOME=%up%
-echo HOME='%HOME%'
-set p=%PROG%
-call :unixpath %PROG%
-set PROG=%up%
-echo PROG='%PROG%'
+set b2d=%HOME%\b2d
+call :unixpath %b2d%
+set b2du=%up%
 
-mkdir %h%\tmp 2>NUL
-cp %h%\.gitconfig %h%\tmp
-cp %p%\bin\db %h%\tmp
-%dm% ssh %vm% cp -f %HOME%/tmp/.gitconfig .
-%dm% ssh %vm% cp -f %HOME%/docker/profile .ashrc
-%dm% ssh %vm% cp -f %HOME%/docker/.bash_aliases .
+%dm% ssh %vm% cp -f %b2du%/git/.gitconfig .
+%dm% ssh %vm% cp -f %b2du%/scripts/profile .ashrc
+%dm% ssh %vm% cp -f %b2du%/scripts/.bash_aliases .
 %dm% ssh %vm% mkdir -p /home/docker/.local/bin
-%dm% ssh %vm% cp -f %HOME%/tmp/db /home/docker/.local/bin
+%dm% ssh %vm% cp -f %b2du%/bin/db /home/docker/.local/bin
 %dm% ssh %vm%
 
 goto:EOF
