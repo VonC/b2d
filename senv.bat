@@ -92,10 +92,10 @@ rem doskey dmcv=docker-machine create -d virtualbox --engine-env HTTP_PROXY=%htt
 doskey dmcv=docker-machine create -d virtualbox $*
 
 doskey vbm="VBoxManage.exe" $*
-doskey vbmmt="VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
-doskey vbmmu="VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
-doskey vbmct="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
-doskey vbmcu="VBoxManage.exe controlvm \"boot2docker-vm\" natpf1 \"udp-port$1,udp,,$1,,$1\";"
+doskey vbmmt="VBoxManage.exe modifyvm \"$1\" natpf1 \"tcp-port$2,tcp,,$2,,$2\";"
+doskey vbmmu="VBoxManage.exe modifyvm \"$1\" natpf1 \"udp-port$2,udp,,$2,,$2\";"
+doskey vbmct="VBoxManage.exe controlvm \"$1\" natpf1 \"tcp-port$2,tcp,,$2,,$2\";"
+doskey vbmcu="VBoxManage.exe controlvm \"$1\" natpf1 \"udp-port$2,udp,,$2,,$2\";"
 doskey bd="boot2docker.exe" $*
 doskey cdbb=cd "%~dp0"
 
