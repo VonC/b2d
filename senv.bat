@@ -69,8 +69,8 @@ if %errorlevel% == 0 (
 )
 sed -i -e "s;_unixpath_;%unixpath%;g" %scripts%\dfsmudge.sh
 
-touch profile
-git checkout HEAD -- profile
+touch scripts\profile
+git checkout HEAD -- scripts/profile
 
 cd %b2d%compose
 for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do touch %%i
