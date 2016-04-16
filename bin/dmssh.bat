@@ -2,7 +2,7 @@
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 set vm=%1
 if "%vm%" == "" ( set vm="default" )
-set dm=%PRGS%\dm\latest\docker-machine.exe
+set dm=docker-machine.exe
 for /f "delims=" %%A in ('%dm% status %vm%') do set "status=%%A"
 echo.%status%
 if "%status%" NEQ "running" (

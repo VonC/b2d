@@ -10,9 +10,9 @@ call :getparentdir %parent%
 set parent=%parentdir:,= %
 set unixpath=%unixpath%/b2d
 
-rem echo b2d='%b2d%'
-rem echo parentdir='%parentdir%'
-rem echo parent='%parent%'
+echo b2d='%b2d%'
+echo parentdir='%parentdir%'
+echo parent='%parent%'
 echo.unixpath='%unixpath%'
 
 if not exist ..\env.bat (
@@ -26,21 +26,28 @@ call !parent!\env.bat
 set PATH=%PATH%;%b2d%bin
 
 rem http://stackoverflow.com/a/7218493/6309: test substring
-echo.%PATH%| findstr /C:"dm\latest" 1>nul
-if %errorlevel% == 1 (
-	echo "docker-machine is not found in PATH: check your ..\env.bat"
+for /f "delims=" %%A in ('where docker-machine.exe') do set "DOCKER_MACHINE=%%A"
+if "%DOCKER_MACHINE%"=="" (
+	echo "docker-machine.exe is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
-echo.%PATH%| findstr /i /C:"Git" 1>nul
-if %errorlevel% == 1 (
-	echo "Git is not found in PATH: check your ..\env.bat"
+for %%i in ("%DOCKER_MACHINE%\..") do set "DOCKER_TOOLBOX_INSTALL_PATH=%%~fi"
+for /f "delims=" %%A in ('where git.exe') do set "GIT_HOME=%%A"
+if "%GIT_HOME%"=="" (
+	echo "git.exe is not found in PATH: check your ..\env.bat"
 	exit /B 1
 )
-echo.%PATH%| findstr /C:"vbox\latest" 1>nul
+1>nul (git --version| findstr /i /C:"version 2.")
 if %errorlevel% == 1 (
-	echo "VirtualBox is not found in PATH: check your ..\env.bat"
+	echo "Please use a git 2.x (for instance 2.8+) version: check your ..\env.bat"
 	exit /B 1
 )
+for /f "delims=" %%A in ('where vboxmanage.exe') do set "VBOXMANAGE=%%A"
+if "%VBOXMANAGE%"=="" (
+	echo "VirtualBox (vboxmanage.exe) is not found in PATH: check your ..\env.bat"
+	exit /B 1
+)
+for %%i in ("%VBOXMANAGE%\..") do set "VBOX_MSI_INSTALL_PATH=%%~fi"
 
 git --version
 docker-machine version
@@ -71,6 +78,11 @@ for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do git checkout HEAD -- %%i
 cd %b2d%
 
 echo set PATH=%PATH%>p.bat
+echo set HOME=%parentdir%>>p.bat
+echo set DOCKER_MACHINE=%DOCKER_MACHINE%>>p.bat
+echo set DOCKER_TOOLBOX_INSTALL_PATH=%DOCKER_TOOLBOX_INSTALL_PATH%>>p.bat
+echo set VBOXMANAGE=%VBOXMANAGE%>>p.bat
+echo set VBOX_MSI_INSTALL_PATH=%VBOX_MSI_INSTALL_PATH%>>p.bat
 endlocal
 call p.bat
 del p.bat
@@ -78,10 +90,6 @@ del p.bat
 doskey dm=docker-machine $*
 rem doskey dmcv=docker-machine create -d virtualbox --engine-env HTTP_PROXY=%http_proxy% --engine-env HTTPS_PROXY=%https_proxy% --engine-env http_proxy=%http_proxy% --engine-env https_proxy=%https_proxy% --engine-env NO_PROXY=%no_proxy% --engine-env no_proxy=%no_proxy% $*
 doskey dmcv=docker-machine create -d virtualbox $*
-
-set DOCKER_TOOLBOX_INSTALL_PATH=C:/prgs/dm/latest
-set DOCKER_MACHINE=%DOCKER_TOOLBOX_INSTALL_PATH%/docker-machine.exe
-set VBOXMANAGE=C:/prgs/vbox/latest/vboxmanage.exe
 
 doskey vbm="VBoxManage.exe" $*
 doskey vbmmt="VBoxManage.exe modifyvm \"boot2docker-vm\" natpf1 \"tcp-port$1,tcp,,$1,,$1\";"
