@@ -62,4 +62,6 @@ alias stop='./stop'
 alias test='./test'
 alias s=start
 alias st=stop
-alias t=test
+alias t=test2
+
+alias n='. ./next'
