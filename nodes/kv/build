@@ -1,10 +1,26 @@
 #! /bin/sh
 # http://stackoverflow.com/questions/15541876/script-path-bash-source0-bad-substitution
-actual_path=$(readlink -f "$0")
-script_dir=$(dirname "$actual_path")
-cd ${script_dir}
-echo ${script_dir}
-. ../../.bash_aliases
-if [ ! -e certs ]; then
-  ./gen_ssl_key_and_crt.sh
+kv=$(readlink -f "$0")
+kv=$( dirname "${kv}" )
+b2d="$( cd -P "$( dirname "$SOURCE" )/../.." && pwd )"
+
+. ${b2d}/scripts/.bash_aliases
+#if [ ! -e certs ]; then
+#  ./gen_ssl_key_and_crt.sh
+# fi
+consulver=0.6.4
+if [[ "$(docker images -q hashicorp/consul:${consulver} 2> /dev/null)" == "" ]]; then
+	db hashicorp/consul:${consulver} ${kv}/docker-consul/0.6
+fi
+
+if [[ "$(docker inspect -f {{.State.Running}} consul 2> /dev/null)" == "" ]]; then
+	# docker run -d -p 8400:8400 -p 8500:8500 -p 8600:53/udp -h consul --name consul --restart always hashicorp/consul:${consulver} -bootstrap -ui-dir /ui -client 0.0.0.0
+	docker run -d --net=host -p 8400:8400 -p 8500:8500 -p 53:8600/tcp -p 53:8600/udp -h consul --name consul --restart always hashicorp/consul:${consulver} server -bind=192.168.99.100 -client=0.0.0.0 -bootstrap -ui
+	docker logs -f consul&
+	# curl http://localhost:8500/v1/health/service/consul?pretty
+	# curl -L http://localhost:8500/ui
+fi
+if [[ "$(docker inspect -f {{.State.Running}} consul 2> /dev/null)" != "true" ]]; then
+	echo hashicorp/consul:${consulver} is not running
+	exit 1
 fi
