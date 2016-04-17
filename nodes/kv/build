@@ -24,4 +24,12 @@ if [[ "$(docker inspect -f {{.State.Running}} consul 2> /dev/null)" != "true" ]]
 	echo hashicorp/consul:${consulver} is not running
 	exit 1
 fi
+
 ./gen_ssl_key_and_crt.sh
+if [[ "$(docker inspect -f {{.State.Running}} registry 2> /dev/null)" == "" ]]; then
+	docker run -d -p 5000:5000 --restart=always --name registry \
+		-v $(pwd)/certs:/certs \
+		-e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/crt \
+		-e REGISTRY_HTTP_TLS_KEY=/certs/key \
+		registry:2
+fi
