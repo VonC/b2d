@@ -19,6 +19,7 @@ cmdb="docker build${proxy} -t $1 $2"
 if eval ${cmdb}; then
 	docker rm $(docker ps -qa --no-trunc --filter "status=exited" 2>/dev/null) 2>/dev/null
 	docker rmi $(docker images --filter "dangling=true" -q --no-trunc 2>/dev/null) 2>/dev/null
+	docker volume rm $(docker volume ls -qf dangling=true 2>/dev/null) 2>/dev/null
 	exit 0
 fi
 echo "KO docker build -t $1 $2"
