@@ -21,6 +21,7 @@ set b2du=%up%
 %dm% ssh %vm% cp -f %b2du%/scripts/.bash_aliases /home/docker/.bash_aliases
 %dm% ssh %vm% mkdir -p /home/docker/.local/bin
 %dm% ssh %vm% cp -f %b2du%/bin/db /home/docker/.local/bin
+%dm% ssh %vm% cp -f %b2du%/bin/drmvad /home/docker/.local/bin
 %dm% ssh %vm% "echo cd %b2du%/nodes/kv>/home/docker/next"
 %dm% ssh %vm%
 

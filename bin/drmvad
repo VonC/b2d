@@ -1,0 +1,9 @@
+#! /bin/sh
+
+d=$(docker volume ls -qf dangling=true 2>/dev/null)
+for v in ${d}; do
+	# echo ${v};
+	lb=$(docker volume inspect -f '{{ .Labels.env }}' ${v}|grep -v 'no value')
+	# echo "lb='${lb}'"
+	if [[ "${lb}" == "" ]]; then docker volume rm ${v}; fi
+done
