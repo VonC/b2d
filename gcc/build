@@ -1,3 +1,16 @@
 #! /bin/sh
 
-docker build -t gcc $HOME/b2d/gcc
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
+
+name=gcc
+db ${name} . || exit 1
+
+if [ "$(docker images -q ${name} 2> /dev/null)" = "" ]; then
+  echo "${name}/build: no ${name} image"
+  exit 1
+fi
+
+ver=$(docker run --rm gcc -c 'sh -c "gcc -v 2>&1|tail -1"'|awk '{print $3}')
+echo "ver='${ver}'"
