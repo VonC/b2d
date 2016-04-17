@@ -1,10 +1,13 @@
 #! /bin/sh
 
-cd $(readlink -f $HOME/b2d/apache)
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
-if [ "$(docker images -q apache.deb 2> /dev/null)" = "" ]; then
-  docker build -t apache.deb -f Dockerfile.build . || exit 1
+name=apache
+
+if [ "$(docker images -q ${name}.deb 2> /dev/null)" == "" ]; then
+	db ${name}.deb . Dockerfile.build || exit 1
 fi
 if [ "$(docker images -q apache.inst 2> /dev/null)" = "" ]; then
 	docker inspect apache.deb.cont > /dev/null 2>&1 || docker run -d -t --name=apache.deb.cont apache.deb
@@ -12,5 +15,17 @@ if [ "$(docker images -q apache.inst 2> /dev/null)" = "" ]; then
 	docker commit apache.inst.cont apache.inst
 	docker rm apache.deb.cont apache.inst.cont
 fi
-docker build -t apache . && drmiad 2> /dev/null
+db ${name} . || exit 1
+
+ver=$(docker run --rm ${name} -c "apachectl -v"|head -1|cut -d '/' -f 2|awk '{print $1}')
+echo "ver='${ver}'"
+
+docker tag ${name} kv:5000/b2d/${name}:${ver}
+docker push kv:5000/b2d/${name}:${ver}
+
+if [ "$(docker images -q kv:5000/b2d/${name}:${ver} 2> /dev/null)" = "" ]; then
+  echo "git/build: no kv:5000/b2d/${name}:${ver} image"
+  exit 1
+fi
+
 ./getcrt
