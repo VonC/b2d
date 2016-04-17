@@ -1,8 +1,28 @@
 #!/bin/sh
 
-cd $(readlink -f $HOME/b2d/mcron)
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
-docker build -t mcron.shippingbay -f Dockerfile.shippingbay . || exit 1
-docker build -t mcron . || exit 1
-drmiad 2> /dev/null
+if [[ "$(docker volume ls|grep mcron.shippingbay)" == "" ]]; then
+	docker volume create --name mcron.shippingbay
+fi
+
+name=mcron
+db ${name} . || exit 1
+
+if [ "$(docker images -q ${name} 2> /dev/null)" = "" ]; then
+  echo "${name}/build: no ${name} image"
+  exit 1
+fi
+
+ver=$(docker run --rm ${name} -c 'mcron --version 2> /dev/null'|grep "mcron "|awk '{print $3}'|cut -d ')' -f 1)
+echo "ver='${ver}'"
+
+docker tag ${name} kv:5000/b2d/${name}:${ver}
+docker push kv:5000/b2d/${name}:${ver}
+
+if [ "$(docker images -q kv:5000/b2d/${name}:${ver} 2> /dev/null)" = "" ]; then
+  echo "git/build: no kv:5000/b2d/${name}:${ver} image"
+  exit 1
+fi
