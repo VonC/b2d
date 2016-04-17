@@ -1,11 +1,10 @@
 #! /bin/sh
 
-scriptdir=$(dirname "$( readlink -f "$0" )" )
-cd ${scriptdir}
-. ../.bash_aliases
+gitdir="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${gitdir}
+. ${gitdir}/../scripts/.bash_aliases
 
-docker build -t git ${scriptdir} || exit 1
-drmiad 2> /dev/null
+db git ${gitdir} || exit 1
 
 if [ "$(docker images -q git 2> /dev/null)" = "" ]; then
   echo "git/build: no git image"
@@ -15,9 +14,9 @@ fi
 ver=$(docker run --rm git -c 'git --version'|awk {'print $3'})
 echo "ver='${ver}'"
 
-docker tag
+docker tag git kv:5000/b2d/git:${ver}
 
-if [ "$(docker images -q 192.168.99.101:5000/b2d/git:${ver} 2> /dev/null)" = "" ]; then
-  echo "git/build: no 192.168.99.101:5000/b2d/git:${ver} image"
+if [ "$(docker images -q kv:5000/b2d/git:${ver} 2> /dev/null)" = "" ]; then
+  echo "git/build: no kv:5000/b2d/git:${ver} image"
   exit 1
 fi
