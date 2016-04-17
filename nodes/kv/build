@@ -24,3 +24,4 @@ if [[ "$(docker inspect -f {{.State.Running}} consul 2> /dev/null)" != "true" ]]
 	echo hashicorp/consul:${consulver} is not running
 	exit 1
 fi
+./gen_ssl_key_and_crt.sh
