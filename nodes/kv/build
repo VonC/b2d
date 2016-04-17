@@ -31,3 +31,25 @@ if [[ "$(docker inspect -f {{.State.Running}} registry 2> /dev/null)" == "" ]]; 
 		-e REGISTRY_HTTP_TLS_KEY=/certs/key \
 		registry:2
 fi
+if [[ ! -e /var/lib/boot2docker/registry.crt ]]; then
+	sudo cp ${kv}/certs/crt /var/lib/boot2docker/registry.crt
+fi
+if [[ "$(grep registry.crt /var/lib/boot2docker/bootsync.sh)" == "" ]]; then
+	sudo sh -c 'echo cat /var/lib/boot2docker/registry.crt \| sudo tee -a /etc/ssl/certs/ca-certificates.crt | sudo tee -a /var/lib/boot2docker/bootsync.sh >/dev/null'
+fi
+rline=$(tail -2 /var/lib/boot2docker/registry.crt | head -1)
+if [[ "$(grep ${rline} /etc/ssl/certs/ca-certificates.crt)" == "" ]]; then
+	cat /var/lib/boot2docker/registry.crt | sudo tee -a /etc/ssl/certs/ca-certificates.crt
+fi
+grep $rline /etc/ssl/certs/ca-certificates.crt|wc
+
+# openssl s_client -connect 192.168.99.100:5000 -showcerts </dev/null 2>/dev/null | openssl x509 -outform PEM | sudo tee -a /etc/ssl/certs/ca-certificates.crt
+# docker@kv:~$ openssl s_client -connect 192.168.99.100:5000 -showcerts </dev/null 2>/dev/null | openssl x509 -outform PEM | sudo tee -a /etc/ssl/certs/ca-certificates.crt
+
+# docker@kv:/mnt/sda1/var/lib/boot2docker$ curl https://localhost:5000/v2/
+# curl: (60) SSL certificate problem: self signed certificate
+# docker@kv:/mnt/sda1/var/lib/boot2docker$ sudo cat /var/lib/boot2docker/server.pem  | sudo tee -a /etc/ssl/certs/ca-certificates.crt
+
+# openssl s_client -connect 192.168.99.100:5000 -showcerts </dev/null 2>/dev/null | openssl x509 -outform PEM | sudo tee -a /etc/ssl/certs/ca-certificates.crt
+# rline=$(tail -2 /var/lib/boot2docker/registry.crt | head -1)
+# grep $rline /etc/ssl/certs/ca-certificates.crt|wc
