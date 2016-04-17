@@ -1,10 +1,13 @@
 #! /bin/sh
-. ../.bash_aliases
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
 if [ "${1}" = "bash" ]; then
-	docker inspect gitolite.repos.test.cont > /dev/null 2>&1 || docker create --name="gitolite.repos.test.cont" gitolite.repos /bin/true
-	docker run -it --rm  --name gitolite.test --volumes-from gitolite.repos.test.cont gitolite bash
-	docker inspect gitolite.repos.test.cont > /dev/null 2>&1 && docker rm gitolite.repos.test.cont
+	dvc gitolite.repos.test.cont bash
+	docker run -it --rm  --name gitolite.test -v gitolite.repos.test.cont:/home/git/repositories gitolite bash
+	docker volume inspect gitolite.repos.test.cont > /dev/null 2>&1 && docker volume rm gitolite.repos.test.cont
 	exit 0
 fi
 
