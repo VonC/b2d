@@ -1,8 +1,28 @@
 #! /bin/sh
 
-cd $(readlink -f $HOME/b2d/gitolite)
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
-docker build -t gitolite.repos -f Dockerfile.repos . || exit 1
-docker build -t gitolite . || exit 1
-drmiad 2> /dev/null
+if [[ "$(docker volume ls|grep gitolite.repos)" == "" ]]; then
+	docker volume create --name gitolite.repos
+fi
+
+name=gitolite
+db ${name} . || exit 1
+
+if [ "$(docker images -q ${name} 2> /dev/null)" = "" ]; then
+  echo "${name}/build: no ${name} image"
+  exit 1
+fi
+
+ver=$(docker run --rm ${name} -c 'cat gitolite/bin/VERSION')
+echo "ver='${ver}'"
+
+docker tag ${name} kv:5000/b2d/${name}:${ver}
+docker push kv:5000/b2d/${name}:${ver}
+
+if [ "$(docker images -q kv:5000/b2d/${name}:${ver} 2> /dev/null)" = "" ]; then
+  echo "git/build: no kv:5000/b2d/${name}:${ver} image"
+  exit 1
+fi
