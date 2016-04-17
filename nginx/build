@@ -1,8 +1,23 @@
 #! /bin/sh
 
-. ../.bash_aliases
-cd $HOME/b2d/nginx
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
+
+name=nginx
+
 cp -f ../apache/crt crt
 cp -f ../apache/key key
-docker build -t nginx $HOME/b2d/nginx
-drmiad 2> /dev/null
+
+db ${name} . || exit 1
+
+ver=$(docker run ${name} -c 'nginx -v' 2>&1|cut -d '/' -f 2|awk '{print $1}')
+echo "ver='${ver}'"
+
+docker tag ${name} kv:5000/b2d/${name}:${ver}
+docker push kv:5000/b2d/${name}:${ver}
+
+if [ "$(docker images -q kv:5000/b2d/${name}:${ver} 2> /dev/null)" = "" ]; then
+  echo "git/build: no kv:5000/b2d/${name}:${ver} image"
+  exit 1
+fi
