@@ -1,6 +1,20 @@
 #! /bin/sh
 
-cd $(readlink -f $HOME/b2d/gnupg2)
-. ../.bash_aliases
-docker build -t gnupg2 . || exit 1
-drmiad 2> /dev/null
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
+
+name=gnupg2
+
+db ${name} . || exit 1
+
+ver=$(docker run --rm ${name} -c "gpg2 --version"| head -1|awk '{print $3}')
+echo "ver='${ver}'"
+
+docker tag ${name} kv:5000/b2d/${name}:${ver}
+docker push kv:5000/b2d/${name}:${ver}
+
+if [ "$(docker images -q kv:5000/b2d/${name}:${ver} 2> /dev/null)" = "" ]; then
+  echo "git/build: no kv:5000/b2d/${name}:${ver} image"
+  exit 1
+fi
