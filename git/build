@@ -15,6 +15,7 @@ ver=$(docker run --rm git -c 'git --version'|awk {'print $3'})
 echo "ver='${ver}'"
 
 docker tag git kv:5000/b2d/git:${ver}
+docker push kv:5000/b2d/git:${ver}
 
 if [ "$(docker images -q kv:5000/b2d/git:${ver} 2> /dev/null)" = "" ]; then
   echo "git/build: no kv:5000/b2d/git:${ver} image"
