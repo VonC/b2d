@@ -1,6 +1,6 @@
 #! /bin/sh
 
-DIR="$( cd "$( dirname "$0" )" && pwd )"
+DIR="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
 echo ${DIR}
 certs="${DIR}/certs"
 if [[ -e "${certs}/key" && -e "${certs}/crt" ]] ; then exit 0 ; fi
