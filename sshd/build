@@ -1,7 +1,19 @@
 #!/bin/sh
 
-cd $(readlink -f $HOME/b2d/sshd)
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
-docker build -t sshd . || exit 1
-drmiad 2> /dev/null
+name=sshd
+db ${name} . || exit 1
+
+ver=$(docker run --rm --entrypoint="/bin/sh" ${name} -c 'ssh -V' 2>&1|cut -d ' ' -f 4)
+echo "ver='${ver}'"
+
+docker tag ${name} kv:5000/b2d/${name}:${ver}
+docker push kv:5000/b2d/${name}:${ver}
+
+if [ "$(docker images -q kv:5000/b2d/${name}:${ver} 2> /dev/null)" = "" ]; then
+  echo "git/build: no kv:5000/b2d/${name}:${ver} image"
+  exit 1
+fi
