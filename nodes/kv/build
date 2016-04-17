@@ -5,9 +5,7 @@ kv=$( dirname "${kv}" )
 b2d="$( cd -P "$( dirname "$SOURCE" )/../.." && pwd )"
 
 . ${b2d}/scripts/.bash_aliases
-#if [ ! -e certs ]; then
-#  ./gen_ssl_key_and_crt.sh
-# fi
+
 consulver=0.6.4
 if [[ "$(docker images -q hashicorp/consul:${consulver} 2> /dev/null)" == "" ]]; then
 	db hashicorp/consul:${consulver} ${kv}/docker-consul/0.6
