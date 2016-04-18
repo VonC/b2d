@@ -72,6 +72,7 @@ sed -i -e "s;_unixpath_;%unixpath%;g" %scripts%\dfsmudge.sh
 touch scripts\profile
 git checkout HEAD -- scripts/profile
 
+echo ok '%b2d%'
 cd %b2d%compose
 for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do touch %%i
 for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do git checkout HEAD -- %%i
@@ -89,7 +90,6 @@ del p.bat
 
 doskey dm=docker-machine $*
 rem doskey dmcv=docker-machine create -d virtualbox --engine-env HTTP_PROXY=%http_proxy% --engine-env HTTPS_PROXY=%https_proxy% --engine-env http_proxy=%http_proxy% --engine-env https_proxy=%https_proxy% --engine-env NO_PROXY=%no_proxy% --engine-env no_proxy=%no_proxy% $*
-doskey dmcv=docker-machine create -d virtualbox $*
 
 doskey vbm="VBoxManage.exe" $*
 doskey vbmmt="VBoxManage.exe modifyvm \"$1\" natpf1 \"tcp-port$2,tcp,,$2,,$2\";"
