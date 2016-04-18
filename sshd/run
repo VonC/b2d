@@ -1,6 +1,9 @@
 #! /bin/sh
-cd $HOME/b2d/sshd
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
+
+image="kv:5000/b2d/mcron:1.0.8"
 
 sshd_cont="sshd.cont"
 mcron_shippingbay_cont="mcron.shippingbay.cont"
@@ -23,12 +26,12 @@ if [ "${1}" = "bash" ]; then
 		d rm sshd.bash.cont
 	fi
 	mcron_shippingbay_cont="mcron.shippingbay.cont"
-	docker create -it --name sshd.bash.cont --volumes-from ${mcron_shippingbay_cont} sshd
+	docker create -it --name sshd.bash.cont -v ${mcron_shippingbay_cont}:/home/git/shippingbay_git ${image}
 	docker start sshd.bash.cont
 	docker exec -it sshd.bash.cont /bin/bash
 	docker inspect sshd.bash.cont > /dev/null 2>&1 && docker stop sshd.bash.cont
 	docker inspect sshd.bash.cont > /dev/null 2>&1 && docker rm sshd.bash.cont
-	docker inspect mcron.shippingbay.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.cont
+	docker volume rm mcron.shippingbay.bash.cont
 	cd $HOME/b2d/mcron
 	k all
 	cd $HOME/b2d/sshd
@@ -43,14 +46,14 @@ cd $HOME/b2d/mcron
 ./run external
 cd $HOME/b2d/sshd
 
-docker inspect ${mcron_shippingbay_cont} > /dev/null 2>&1 || { echo "${sshd_cont}/run: ${mcron_shippingbay_cont} not started"; exit 1; }
+docker volume ls ${mcron_shippingbay_cont} > /dev/null 2>&1 || { echo "${sshd_cont}/run: volume ${mcron_shippingbay_cont} not created"; exit 1; }
 
 docker inspect ${sshd_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCode}}' ${sshd_cont})" != "0" ]; then
 	d rm ${sshd_cont}
 fi
 docker inspect ${sshd_cont} > /dev/null 2>&1 && exit 0
 
-docker create -it --name ${sshd_cont} --volumes-from ${mcron_shippingbay_cont} sshd
+docker create -it --name ${sshd_cont} - ${mcron_shippingbay_cont}:/home/git/shippingbay_git ${image}
 docker cp ${sshd_cont}:/home/git/.ssh/root "$(readlink -f $HOME/b2d)/sshd" || exit 1
 docker cp ${sshd_cont}:/home/git/.ssh/root.pub "$(readlink -f $HOME/b2d)/sshd" || exit 1
 chmod 644 root

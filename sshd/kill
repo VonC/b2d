@@ -1,6 +1,7 @@
 #! /bin/sh
-cd $HOME/b2d/sshd
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
 env=${1}
 all=${2}
@@ -16,3 +17,8 @@ fi
 
 docker inspect ${sshd_cont} > /dev/null 2>&1 && docker stop ${sshd_cont}
 docker inspect ${sshd_cont} > /dev/null 2>&1 && docker rm ${sshd_cont}
+
+
+if [ "${all}" = "all" ] || [ "${all}" = "ALL" ]; then
+	docker volume rm ${mcron_shippingbay_cont}
+fi
