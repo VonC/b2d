@@ -1,6 +1,7 @@
 #! /bin/sh
-cd $HOME/b2d/mcron
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
 env=${1}
 all=${2}
@@ -25,5 +26,5 @@ if [ "${env}" = "bash" ]; then
 fi
 
 if [ "${all}" = "all" ] || [ "${all}" = "ALL" ]; then
-	docker inspect ${mcron_shippingbay_cont} > /dev/null 2>&1 && docker rm ${mcron_shippingbay_cont}
+	docker volume rm ${mcron_shippingbay_cont}
 fi
