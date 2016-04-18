@@ -4,10 +4,6 @@ folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
 cd ${folder}
 . ${folder}/../scripts/.bash_aliases
 
-if [[ "$(docker volume ls|grep gitolite.repos)" == "" ]]; then
-	docker volume create --name gitolite.repos
-fi
-
 name=gitolite
 db ${name} . || exit 1
 

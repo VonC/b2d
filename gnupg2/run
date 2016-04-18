@@ -1,5 +1,10 @@
 #! /bin/sh
-. ../.bash_aliases
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
+
+image="kv:5000/b2d/gnupg2:2.1.9"
 
 if [ "${1}" = "bash" ]; then
 	docker run -it --rm -v /dev/urandom:/dev/random --name gnupg2.test gnupg2 bash
@@ -7,25 +12,22 @@ if [ "${1}" = "bash" ]; then
 fi
 
 gnupg2_cont="gnupg2.cont"
-grepos="gnupg2.path"
 
+env="none"
 if [ "${1}" != "" ]; then
 	gnupg2_cont="gnupg2.${1}.cont"
-	grepos="gnupg2.path.${1}"
+	env=$1
 fi
 
-
-docker inspect ${gnupg2_cont} > /dev/null 2>&1 || docker create --name="${gnupg2_cont}" gnupg2 /bin/true
-. ../updateDataContainerPath
-updatePath ${gnupg2_cont} "$HOME/b2d/gnupg2" ${grepos}
-
-fgrpath=$(cat $HOME/b2d/gnupg2/${grepos})
+dvc ${gnupg2_cont} /home/git/.gnupg ${env}
+fgrpath=$(dv inspect -f '{{ .Mountpoint }}' ${gnupg2_cont})
+[ ! -z "${verbose}" ] && echo "test '${fgrpath}'"
 
 empty=$(sudo ls "${fgrpath}/users.netrc.asc" 2> /dev/null)
 if [ "${empty}" = "" ] ; then
 	echo "no users.netrc.asc in '${fgrpath}'"
     docker rm gnupg2.setup.cont 2> /dev/null
-    docker run -it --rm --name gnupg2.setup.cont -v "$HOME/b2d/envs/.envs.$1.private":/home/git/.envs.private -v /dev/urandom:/dev/random --volumes-from ${gnupg2_cont} gnupg2 "/home/git/.gnupg/ini_users_gpg"
+    docker run -it --rm --name gnupg2.setup.cont -v "$HOME/b2d/envs/.envs.$1.private":/home/git/.envs.private -v /dev/urandom:/dev/random $(dvv ${gnupg2_cont}) ${image} "/home/git/.gnupg/ini_users_gpg"
 else
 	[ ! -z "${verbose}" ] && echo "users.netrc.asc already created '${fgrpath}'"
 fi

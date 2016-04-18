@@ -7,23 +7,23 @@ cd ${folder}
 image="kv:5000/b2d/gitolite:v3.6.5-4-g6ed0156"
 
 if [ "${1}" = "bash" ]; then
-	dvc gitolite.repos.test.cont bash
-	docker run -it --rm  --name gitolite.test -v gitolite.repos.test.cont:/home/git/repositories ${image} bash
+	dvc gitolite.repos.test.cont /home/git/repositories bash
+	docker run -it --rm  --name gitolite.test $(dvv gitolite.repos.test.cont) ${image} bash
 	docker volume inspect gitolite.repos.test.cont > /dev/null 2>&1 && docker volume rm gitolite.repos.test.cont
 	exit 0
 fi
 
 gitolite_cont="gitolite.cont"
 gitolite_repos_cont="gitolite.repos.cont"
-grepos="grepos"
 
+env="none"
 if [ "${1}" != "" ]; then
 	gitolite_cont="gitolite.${1}.cont"
 	gitolite_repos_cont="gitolite.repos.${1}.cont"
-	grepos="grepos.${1}"
+	env=$1
 fi
 
-docker volume create --name=${gitolite_repos_cont}
+dvc ${gitolite_repos_cont} /home/git/repositories ${env}
 fgrpath=$(dv inspect -f '{{ .Mountpoint }}' ${gitolite_repos_cont})
 [ ! -z "${verbose}" ] && echo "test '${fgrpath}'"
 
@@ -31,7 +31,7 @@ empty=$(sudo ls ${fgrpath} 2> /dev/null)
 if [ "${empty}" = "" ] ; then
 	echo "empty folder '${fgrpath}'"
     docker rm gitolite.setup.cont 2> /dev/null
-    docker run -it --rm --name gitolite.setup.cont -v ${gitolite_repos_cont}:/home/git/repositories ${image} "USER=git GITOLITE_HTTP_HOME= /home/git/gitolite/bin/gitolite setup -pk /home/git/.ssh/gitoliteadm.pub"
+    docker run -it --rm --name gitolite.setup.cont $(dvv ${gitolite_repos_cont}) ${image} "USER=git GITOLITE_HTTP_HOME= /home/git/gitolite/bin/gitolite setup -pk /home/git/.ssh/gitoliteadm.pub"
 else
 	[ ! -z "${verbose}" ] && echo "NOT empty folder '${fgrpath}'"
 fi
@@ -43,8 +43,8 @@ if [ "${remote}" = "" ] || [ ! -z "${force_init_env}" ]; then
     envs=".envs.example.private"
     if [ "${1}" != "" ]; then envs=".envs.${1}.private"; fi
 	echo "use '$HOME/b2d/envs/${envs}'"
-	[ ! -z "${verbose}" ] && echo "docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private -v ${gitolite_repos_cont}:/home/git/repositories gitolite"
-    docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private -v ${gitolite_repos_cont}:/home/git/repositories ${image} init_envs.sh
+	[ ! -z "${verbose}" ] && echo "docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private $(dvv ${gitolite_repos_cont}) ${image}"
+    docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private $(dvv ${gitolite_repos_cont}) ${image} init_envs.sh
     sudo touch ${fgrpath}/.init_envs.sh
 else
 	[ ! -z "${verbose}" ] && echo "Remote is defined for gitolite-admin in '${1}': '${remote}'"

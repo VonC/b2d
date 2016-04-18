@@ -14,9 +14,9 @@ if [ "${1}" = "bash" ]; then
 	cd $HOME/b2d/gitolite
 	./run
 	cd $HOME/b2d/mcron
-	docker volume create --name mcron.shippingbay.bash.cont
+	dvc mcron.shippingbay.bash.cont /home/git/shippingbay_git bash
 	docker inspect mcron.bash.cont > /dev/null 2>&1 && docker rm mcron.bash.cont
-	docker create -it --name mcron.bash.cont -v mcron.shippingbay.bash.cont:/home/git/shippingbay_git -v gitolite.repos.cont:/home/git/repositories ${image} bash
+	docker create -it --name mcron.bash.cont $(dvv mcron.shippingbay.bash.cont) $(dvv gitolite.repos.cont) ${image} bash
 	docker cp "$HOME/b2d/envs/.envs.example.private" mcron.bash.cont:/home/git/.envs.private
 	docker cp "$HOME/b2d/mcron/clean_shipping_bay.guile" mcron.bash.cont:/home/git/.config/cron/
 	docker cp "$HOME/b2d/mcron/pull_external.guile" mcron.bash.cont:/home/git/.config/cron/
@@ -52,7 +52,7 @@ if [ "${1}" = "" ]; then
 fi
 
 if [ "${mshippingbay}" != "" ]; then
-	docker volume create --name ${mcron_shippingbay_cont} --label env=${env}
+	dvc ${mcron_shippingbay_cont} /home/git/shippingbay_git ${env}
 fi
 
 docker inspect ${mcron_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCode}}' ${mcron_cont})" != "0" ]; then
@@ -61,7 +61,7 @@ fi
 docker inspect ${mcron_cont} > /dev/null 2>&1 && exit 0
 
 if [ "${1}" = "external" ]; then
-	docker create -it --name ${mcron_cont} -v ${mcron_shippingbay_cont}:/home/git/shippingbay_git ${image}
+	docker create -it --name ${mcron_cont} $(dvv ${mcron_shippingbay_cont}) ${image}
 	docker cp "$HOME/b2d/envs/${envs_private}" ${mcron_cont}:/home/git/.envs.private
 	docker cp "$HOME/b2d/mcron/clean_shipping_bay.guile" ${mcron_cont}:/home/git/.config/cron/
 	docker start ${mcron_cont}
@@ -73,7 +73,7 @@ elif [ "${1}" = "staging" ]; then
 	fi
 	docker inspect apache.external.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: apache.upstream.cont: 'apache.external.cont' not started"; exit 1; }
 	docker inspect apache.blessed.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: apache.downstream.cont: 'apache.blessed.cont' not started"; exit 1; }
-	docker create -it --name ${mcron_cont} -v gitolite.repos.${1}.cont:/home/git/repositories --link sshd.external.cont:mcron.sshd.cont --link apache.external.cont:apache.upstream.cont --link apache.blessed.cont:apache.downstream.cont ${image}
+	docker create -it --name ${mcron_cont} $(dvv gitolite.repos.${1}.cont) --link sshd.external.cont:mcron.sshd.cont --link apache.external.cont:apache.upstream.cont --link apache.blessed.cont:apache.downstream.cont ${image}
 	docker cp "$HOME/b2d/envs/${envs_private}" ${mcron_cont}:/home/git/.envs.private
 	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
 	docker cp "$HOME/b2d/sshd/root" ${mcron_cont}:/home/git/.ssh/root

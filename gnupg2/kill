@@ -1,6 +1,8 @@
 #! /bin/sh
-cd $HOME/b2d/gnupg2
-. ../.bash_aliases
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
 if [ "${1}" = "bash" ] && [ "${2}" = "" ]; then
 	docker inspect gnupg2.test > /dev/null 2>&1 && docker rm gnupg2.test
@@ -21,5 +23,5 @@ fi
 
 
 if [ "${all}" = "all" ] || [ "${all}" = "ALL" ]; then
-	docker inspect ${gnupg2_cont} > /dev/null 2>&1 && docker rm ${gnupg2_cont}
+	ddocker volume rm ${gnupg2_cont}
 fi

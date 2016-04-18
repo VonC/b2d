@@ -4,10 +4,6 @@ folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
 cd ${folder}
 . ${folder}/../scripts/.bash_aliases
 
-if [[ "$(docker volume ls|grep mcron.shippingbay)" == "" ]]; then
-	docker volume create --name mcron.shippingbay
-fi
-
 name=mcron
 db ${name} . || exit 1
 
