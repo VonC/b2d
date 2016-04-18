@@ -53,3 +53,5 @@ grep $rline /etc/ssl/certs/ca-certificates.crt|wc
 # openssl s_client -connect 192.168.99.100:5000 -showcerts </dev/null 2>/dev/null | openssl x509 -outform PEM | sudo tee -a /etc/ssl/certs/ca-certificates.crt
 # rline=$(tail -2 /var/lib/boot2docker/registry.crt | head -1)
 # grep $rline /etc/ssl/certs/ca-certificates.crt|wc
+
+. ${kv}/build.all
