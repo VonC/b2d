@@ -24,7 +24,7 @@ fi
 # export HTTPS_PROXY=http://<user>:<pwd>@proxy.company:80
 # export NO_PROXY=.company,.sock,localhost,127.0.0.1,::1,192.168.59.103
 
-alias cdd='cd /c/Users/vonc/prog/b2d' # unxpath:alias cdd='cd #unixpath#'
+alias cdd='cd #unixpath#'
 
-ln -fs /c/Users/vonc/prog/b2d /home/docker # unxpath:ln -fs #unixpath# /home/docker
-export PATH=$PATH:/c/Users/vonc/prog/b2d # unxpath:export PATH=$PATH:#unixpath#
+ln -fs #unixpath# /home/docker
+export PATH=$PATH:#unixpath#
