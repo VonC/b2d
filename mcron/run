@@ -1,5 +1,9 @@
 #! /bin/sh
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
+
+image="kv:5000/b2d/mcron:1.0.8"
 
 if [ "${1}" != "bash" ] && [ "${1}" != "" ]; then
 	cd $HOME/b2d/gitolite
@@ -10,14 +14,15 @@ if [ "${1}" = "bash" ]; then
 	cd $HOME/b2d/gitolite
 	./run
 	cd $HOME/b2d/mcron
-	docker inspect mcron.shippingbay.bash.cont > /dev/null 2>&1 || docker create --name="mcron.shippingbay.bash.cont" mcron.shippingbay /bin/true
-	docker create -it --name mcron.bash.cont --volumes-from mcron.shippingbay.bash.cont --volumes-from gitolite.repos.cont mcron bash
+	docker volume create --name mcron.shippingbay.bash.cont
+	docker inspect mcron.bash.cont > /dev/null 2>&1 && docker rm mcron.bash.cont
+	docker create -it --name mcron.bash.cont -v mcron.shippingbay.bash.cont:/home/git/shippingbay_git -v gitolite.repos.cont:/home/git/repositories ${image} bash
 	docker cp "$HOME/b2d/envs/.envs.example.private" mcron.bash.cont:/home/git/.envs.private
 	docker cp "$HOME/b2d/mcron/clean_shipping_bay.guile" mcron.bash.cont:/home/git/.config/cron/
 	docker cp "$HOME/b2d/mcron/pull_external.guile" mcron.bash.cont:/home/git/.config/cron/
 	docker start -a -i mcron.bash.cont
 	docker inspect mcron.bash.cont > /dev/null 2>&1 && docker rm mcron.bash.cont
-	docker inspect mcron.shippingbay.bash.cont > /dev/null 2>&1 && docker rm mcron.shippingbay.bash.cont
+	docker volume rm mcron.shippingbay.bash.cont
 	cd $HOME/b2d/gitolite
 	k all
 	exit 0
