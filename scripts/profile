@@ -27,4 +27,4 @@ fi
 alias cdd='cd #unixpath#'
 
 ln -fs #unixpath# /home/docker
-export PATH=$PATH:#unixpath#
+export PATH=$PATH:#unixpath#/bin
