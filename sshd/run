@@ -3,7 +3,7 @@ folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
 cd ${folder}
 . ${folder}/../scripts/.bash_aliases
 
-image="kv:5000/b2d/mcron:1.0.8"
+image="kv:5000/b2d/sshd:1.0.1f"
 
 sshd_cont="sshd.cont"
 mcron_shippingbay_cont="mcron.shippingbay.cont"
