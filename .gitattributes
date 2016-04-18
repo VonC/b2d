@@ -1,3 +1,3 @@
 Dockerfile filter=dffilter
 Dockerfile.* filter=dffilter
-/profile filter=dffilter
+/scripts/profile filter=dffilter
