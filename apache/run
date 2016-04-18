@@ -1,5 +1,11 @@
 #! /bin/sh
-. ../.bash_aliases
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
+
+image="kv:5000/b2d/apache:2.4.10"
+
 if [ "${1}" != "bash" ]; then
 	cd $HOME/b2d/gitolite
 	./run $1
