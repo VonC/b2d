@@ -34,11 +34,13 @@ mcron_shippingbay_cont="mcron.shippingbay.cont"
 mshippingbay="mshippingbay"
 envs_private=".envs.example.private"
 
+env="none"
 if [ "${1}" != "" ]; then
 	mcron_cont="mcron.${1}.cont"
 	mcron_shippingbay_cont="mcron.shippingbay.${1}.cont"
 	mshippingbay="mshippingbay.${1}"
 	envs_private=".envs.${1}.private"
+	env=$1
 fi
 if [ "${1}" != "external" ]; then
 	mcron_shippingbay_cont=""
@@ -50,10 +52,7 @@ if [ "${1}" = "" ]; then
 fi
 
 if [ "${mshippingbay}" != "" ]; then
-	docker inspect ${mcron_shippingbay_cont} > /dev/null 2>&1 || docker create --name="${mcron_shippingbay_cont}" mcron.shippingbay /bin/true
-
-	. ../updateDataContainerPath
-	updatePath ${mcron_shippingbay_cont} "$HOME/b2d/mcron" ${mshippingbay}
+	docker volume create --name ${mcron_shippingbay_cont} --label env=${env}
 fi
 
 docker inspect ${mcron_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCode}}' ${mcron_cont})" != "0" ]; then
