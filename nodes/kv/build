@@ -8,7 +8,7 @@ b2d="$( cd -P "$( dirname "$SOURCE" )/../.." && pwd )"
 
 consulver=0.6.4
 if [[ "$(docker images -q hashicorp/consul:${consulver} 2> /dev/null)" == "" ]]; then
-	db hashicorp/consul:${consulver} ${kv}/docker-consul/0.6
+	db hashicorp/consul:${consulver} ${kv}/docker-consul/0.6 || exit 1
 fi
 
 if [[ "$(docker inspect -f {{.State.Running}} consul 2> /dev/null)" == "" ]]; then
