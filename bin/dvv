@@ -1,0 +1,12 @@
+#! /bin/sh
+name=$1
+if [[ "${name}" == "" ]]; then
+	echo "dvcv expects a volume name to create"
+	exit 1
+fi
+path=$(docker volume inspect -f '{{ .Labels.path }}' ${name}|grep -v 'no value')
+if [[ "${path}" == "" ]]; then
+	echo "dvcv finds no path associated to volume '${name}'"
+	exit 1
+fi
+echo -v ${name}:${path}

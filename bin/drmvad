@@ -5,5 +5,5 @@ for v in ${d}; do
 	# echo ${v};
 	lb=$(docker volume inspect -f '{{ .Labels.env }}' ${v}|grep -v 'no value')
 	# echo "lb='${lb}'"
-	if [[ "${lb}" == "" ]]; then docker volume rm ${v}; fi
+	if [[ "${lb}" == "" || "${1}" == "-f" || "${1}" == "--force" ]]; then docker volume rm ${v}; fi
 done

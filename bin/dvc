@@ -5,10 +5,16 @@ if [[ "${name}" == "" ]]; then
 	exit 1
 fi
 
-env=$2
+path=$2
+if [[ "${path}" == "" ]]; then
+	echo "dvc expects a volume path to associate as a label"
+	exit 1
+fi
+
+env=$3
 if [[ "${env}" == "" ]]; then
 	echo "dvc expects a volume environment name to associate as a label"
 	exit 1
 fi
 
-docker volume create --name ${name} --label env=${env}
+docker volume create --name ${name} --label env=${env} --label path=${path}
