@@ -23,19 +23,15 @@ if [ "${1}" != "" ]; then
 	grepos="grepos.${1}"
 fi
 
-docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 || docker create --name="${gitolite_repos_cont}" gitolite.repos /bin/true
-
-. ../updateDataContainerPath
-updatePath ${gitolite_repos_cont} "$HOME/b2d/gitolite" ${grepos}
-
-fgrpath=$(cat $HOME/b2d/gitolite/${grepos})
+docker volume create --name=${gitolite_repos_cont}
+fgrpath=$(dv inspect -f '{{ .Mountpoint }}' ${gitolite_repos_cont})
 [ ! -z "${verbose}" ] && echo "test '${fgrpath}'"
 
 empty=$(sudo ls ${fgrpath} 2> /dev/null)
 if [ "${empty}" = "" ] ; then
 	echo "empty folder '${fgrpath}'"
     docker rm gitolite.setup.cont 2> /dev/null
-    docker run -it --rm --name gitolite.setup.cont --volumes-from ${gitolite_repos_cont} ${image} "USER=git GITOLITE_HTTP_HOME= /home/git/gitolite/bin/gitolite setup -pk /home/git/.ssh/gitoliteadm.pub"
+    docker run -it --rm --name gitolite.setup.cont -v ${gitolite_repos_cont}:/home/git/repositories ${image} "USER=git GITOLITE_HTTP_HOME= /home/git/gitolite/bin/gitolite setup -pk /home/git/.ssh/gitoliteadm.pub"
 else
 	[ ! -z "${verbose}" ] && echo "NOT empty folder '${fgrpath}'"
 fi
@@ -47,11 +43,11 @@ if [ "${remote}" = "" ] || [ ! -z "${force_init_env}" ]; then
     envs=".envs.example.private"
     if [ "${1}" != "" ]; then envs=".envs.${1}.private"; fi
 	echo "use '$HOME/b2d/envs/${envs}'"
-	[ ! -z "${verbose}" ] && echo "docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private --volumes-from ${gitolite_repos_cont} gitolite"
-    docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private --volumes-from ${gitolite_repos_cont} ${image} init_envs.sh
+	[ ! -z "${verbose}" ] && echo "docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private -v ${gitolite_repos_cont}:/home/git/repositories gitolite"
+    docker run -it --rm --name gitolite.setup.cont -v $HOME/b2d/envs/${envs}:/home/git/.envs.private -v ${gitolite_repos_cont}:/home/git/repositories ${image} init_envs.sh
     sudo touch ${fgrpath}/.init_envs.sh
 else
 	[ ! -z "${verbose}" ] && echo "Remote is defined for gitolite-admin in '${1}': '${remote}'"
 fi
 
-docker inspect ${gitolite_cont} > /dev/null 2>&1 || docker create --name="${gitolite_cont}" gitolite
+docker inspect ${gitolite_cont} > /dev/null 2>&1 || docker create --name="${gitolite_cont}" ${image}
