@@ -1,0 +1,68 @@
+==================================================================
+https://keybase.io/hashicorp
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://hashicorp.com
+  * I am hashicorp (https://keybase.io/hashicorp) on keybase.
+  * I have a public key with fingerprint 91A6 E7F8 5D05 C656 30BE  F189 5185 2D87 348F FC4C
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "0101690cd155a557e81dff19c37ce43f7e90ba8013c0b0358b93f35cf2a8ba9267430a",
+            "fingerprint": "91a6e7f85d05c65630bef18951852d87348ffc4c",
+            "host": "keybase.io",
+            "key_id": "51852d87348ffc4c",
+            "kid": "0101690cd155a557e81dff19c37ce43f7e90ba8013c0b0358b93f35cf2a8ba9267430a",
+            "uid": "fe64108583908cdaeacb766f4e1c2619",
+            "username": "hashicorp"
+        },
+        "service": {
+            "hostname": "hashicorp.com",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1451603537,
+    "expire_in": 157680000,
+    "prev": "838bde453609c8bf48410b66441e951fd928033d7cf57543257f93f77f92a611",
+    "seqno": 2,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+owGtUl9IFEEcvrtMTJKKHsKwrH2IHi7ZudmZnT0ohcSKon9kRRTn7uzM3eJ5e+5e
+Z2ZCWlJRUvgQZfWQYRGBZGQFGlZCf6ikKLA/SJT0DykIQvMyalbqJXpsHmaY33zf
+N9/3mzmSN8kX8K9rWrRPOTy+yn//o+Hb2HRlZ51k2GatFK6TKtnEwuImc1ORSsuU
+wpIMZIA1mZoAIR0hlRFgcg40ClXKFMhVpsmGTmQAqWzIEBFDgxwiykM6MXQthFUF
+yroUlLiViDIn6ViJlJDVgI6ZygkyZUQxwlA2GAdEQ4CgkElUqBDOqUIFMWa7HkOY
+M3SXFVm2qIlNZMLeP/D/2ff2CTnOsAJkggjUZEJNnenUUDHmCgM0hIHmAV3mJPQq
+JtAx3Y1Z1HaSUn1QEuW0RZnXWS/K35AialcJdtKxUza1495RKpV0wx41VZv0sDXM
+iPxWiRhWwhSdFIw0c1zLTkhhIJA0ZXmyQEEAizRQDUpsR9JyWMTyEEjFRBbDu4el
+hSSBxDC3MAVBLGuUGFwhIp+BsaIAJl6Bm1qIyBCaKuVIRQoMIZWLDqliDukYAMkL
+Vp2wpXBI+NSjQtO1ogk9td1hUn3uAX9Bls8f8GVPDnh/zJc7Zfqfj6cszPF1HLP6
+Ts8ZPlreEz/VcCtzGlRUduJ5Jed7X394+HKk+vjSFb150/d/Levt6q69hBsL9ReZ
+V58OTWvd1nGicdl1/+STTY177x3sfhSJDqjOgRnPGnaW5uS0Lm+Hg1c2DbsXlg5c
++3l/fk3L6Ehde/7a5hcVNxecKX6QruqcOW/c2W3cObuy98vY5bbBtU9md10cKnuv
+NJRnjwVm71o4aW4iU3TUlacWjb9bE/jck3lX3PrjU5D3qSveDHwIrB7a+7Rx/bP+
+q6uy3cWlG+5933woP++xdTIvjZ+fc774bzSPfpu1p7mloLgk/nbJotvBTP3d/ujV
+kbbCWGHLjNKmrLbk+VNscGvuLw==
+=XUDB
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/hashicorp
+
+==================================================================
+
