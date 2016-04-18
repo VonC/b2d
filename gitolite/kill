@@ -1,6 +1,7 @@
 #! /bin/sh
-cd $HOME/b2d/gitolite
-. ../.bash_aliases
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
 env=${1}
 all=${2}
@@ -19,5 +20,5 @@ fi
 docker inspect ${gitolite_cont} > /dev/null 2>&1 && docker rm ${gitolite_cont}
 
 if [ "${all}" = "all" ] || [ "${all}" = "ALL" ]; then
-	docker inspect ${gitolite_repos_cont} > /dev/null 2>&1 && docker rm ${gitolite_repos_cont}
+	docker volume rm ${gitolite_repos_cont}
 fi
