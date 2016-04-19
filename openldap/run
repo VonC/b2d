@@ -1,5 +1,9 @@
 #! /bin/sh
-. ../.bash_aliases
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
+
 ec=$(docker inspect -f '{{ .State.Running }}' openldap.cont 2> /dev/null)
 if [ "${ec}" = "false" ]; then
 	docker rm openldap.cont
