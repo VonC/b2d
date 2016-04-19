@@ -54,4 +54,6 @@ grep $rline /etc/ssl/certs/ca-certificates.crt|wc
 # rline=$(tail -2 /var/lib/boot2docker/registry.crt | head -1)
 # grep $rline /etc/ssl/certs/ca-certificates.crt|wc
 
+docker network ls kvblessed > /dev/null 2>&1 && docker network create -d overlay kvblessed
+
 . ${kv}/build.all
