@@ -30,6 +30,7 @@ alias din='docker inspect'
 alias drcat='curl -X GET https://kv:5000/v2/_catalog'
 drtag() { curl -X GET https://kv:5000/v2/$1/tags/list; }
 dvls() { vpath=$(dv inspect -f '{{ .Mountpoint }}' $1); sudo ls -alrth ${vpath}/$2; }
+alias dn='docker network'
 
 alias dc='docker run --rm -i -t -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`:`pwd` -w `pwd` docker-compose'
 
