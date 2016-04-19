@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 if not exist %USERPROFILE%\.docker\machine\machines\kv (
-	call dmcv kv
+	call dmcv kv kv
 	rm -Rf certs
 )
 docker-machine ls kv
