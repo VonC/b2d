@@ -1,6 +1,8 @@
 #! /bin/sh
-cd $HOME/b2d/nginx
-. ../.bash_aliases
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../scripts/.bash_aliases
 
 env=${1}
 if [ "${env}" = "all" ] || [ "${env}" = "ALL" ]; then
