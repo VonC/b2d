@@ -1,5 +1,11 @@
 #! /bin/sh
-. ./.bash_aliases
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/.bash_aliases
+
+echo "upstream='${upstream}'"
+
 cd $HOME/b2d/mcron
 r $1
 cd $HOME/b2d/sshd
