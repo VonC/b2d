@@ -74,9 +74,9 @@ alias drapache="docker run -it -d --name ${apache_cont} -p ${port_gitweb}:8543 -
 
 if [ -z "${upstream}" ] && [ -z "${downstream}" ]; then
 	if [ "${1}" = "external" ]; then
-		drapache $(dvv ${mcron_shippingbay_cont}) apache
+		drapache $(dvv ${mcron_shippingbay_cont}) ${image}
 	else
-		drapache apache
+		drapache ${image}
 	fi
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
 	docker cp ${apache_cont}:/home/git/apache/localhost.crt "${folder}/${crt}"
@@ -88,7 +88,7 @@ fi
 if [ ! -z "${upstream}" ] && [ -z "${downstream}" ]; then
 	# docker inspect apache.${upstream}.cont > /dev/null 2>&1 || { echo "${apache_cont}/run: apache.upstream.cont: 'apache.${upstream}.cont' not started"; exit 1; }
 	# TODO warning --link apache.${upstream}.cont:apache.upstream.cont
-	drapache apache
+	drapache ${image}
 	docker cp "$HOME/b2d/apache/apache.${upstream}.crt" ${apache_cont}:/home/git/apache/apache.upstream.crt
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
 	docker cp ${apache_cont}:/home/git/apache/localhost.crt "${folder}/${crt}"
@@ -101,7 +101,7 @@ fi
 if [ -z "${upstream}" ] && [ ! -z "${downstream}" ]; then
 	# docker inspect apache.${downstream}.cont > /dev/null 2>&1 || { echo "${apache_cont}/run: apache.downstream.cont: 'apache.${downstream}.cont' not started"; exit 1; }
 	# TODO warning on --link apache.${downstream}.cont:apache.downstream.cont 
-	drapache apache
+	drapache ${image}
 	docker cp "$HOME/b2d/apache/apache.${downstream}.crt" ${apache_cont}:/home/git/apache/apache.downstream.crt
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private
 	docker cp ${apache_cont}:/home/git/apache/localhost.crt "${folder}/apache/${crt}"
