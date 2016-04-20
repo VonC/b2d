@@ -71,9 +71,10 @@ elif [ "${1}" = "staging" ]; then
 	if [ ! -e ../sshd/root ] || [ ! -e ../sshd/root.pub ]; then
 		echo "sshd.external.cont has not copied root(.pub) keys"
 	fi
-	docker inspect apache.external.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: apache.upstream.cont: 'apache.external.cont' not started"; exit 1; }
-	docker inspect apache.blessed.cont > /dev/null 2>&1 || { echo "${mcron_cont}/run: apache.downstream.cont: 'apache.blessed.cont' not started"; exit 1; }
-	docker create -it --name ${mcron_cont} $(dvv gitolite.repos.${1}.cont) --link sshd.external.cont:mcron.sshd.cont --link apache.external.cont:apache.upstream.cont --link apache.blessed.cont:apache.downstream.cont ${image}
+	docker network inspect stagingexternal > /dev/null 2>&1 || docker network create -d overlay stagingexternal
+	docker network inspect blessedstaging > /dev/null 2>&1 || docker network create -d overlay blessedstaging
+	# depends on --link sshd.external.cont:mcron.sshd.cont --link apache.external.cont:apache.upstream.cont --link apache.blessed.cont:apache.downstream.cont
+	docker create -it --name ${mcron_cont} $(dvv gitolite.repos.${1}.cont) ${image}
 	docker cp "$HOME/b2d/envs/${envs_private}" ${mcron_cont}:/home/git/.envs.private
 	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
 	docker cp "$HOME/b2d/sshd/root" ${mcron_cont}:/home/git/.ssh/root
@@ -81,6 +82,8 @@ elif [ "${1}" = "staging" ]; then
 	docker cp "$HOME/b2d/mcron/pull_external.guile" ${mcron_cont}:/home/git/.config/cron/
 	docker cp "$HOME/b2d/apache/crts" ${mcron_cont}:/home/git/.ssh/
 	docker start ${mcron_cont}
+	docker network connect stagingexternal ${mcron_cont}
+	docker network connect blessedstaging ${mcron_cont}
 	docker exec -u root -i ${mcron_cont} update_known_hosts
 else
 	# does nothing though (for now; later, might schedule log management, or repo backups)
