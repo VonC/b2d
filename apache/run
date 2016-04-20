@@ -65,7 +65,7 @@ fi
 docker inspect ${apache_cont} > /dev/null 2>&1 && exit 0
 
 docker inspect "openldap.cont" > /dev/null 2>&1 || { echo "${apache_cont}/run: openldap.cont not started"; exit 1; }
-docker volume ls ${gitolite_repos_cont} > /dev/null 2>&1 || { echo "${apache_cont}/run: gitolite_repos_cont: '${gitolite_repos_cont}' volume not created"; exit 1; }
+docker volume inspect ${gitolite_repos_cont} > /dev/null 2>&1 || { echo "${apache_cont}/run: gitolite_repos_cont: '${gitolite_repos_cont}' volume not created"; exit 1; }
 docker inspect ${gitolite_cont} > /dev/null 2>&1 || { echo "${apache_cont}/run: gitolite_cont: '${gitolite_cont}' not created"; exit 1; }
 
 # TODO: warning --link openldap.cont:apache.openldap.cont

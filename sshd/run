@@ -46,7 +46,7 @@ cd $HOME/b2d/mcron
 ./run external
 cd $HOME/b2d/sshd
 
-docker volume ls ${mcron_shippingbay_cont} > /dev/null 2>&1 || { echo "${sshd_cont}/run: volume ${mcron_shippingbay_cont} not created"; exit 1; }
+docker volume inspect ${mcron_shippingbay_cont} > /dev/null 2>&1 || { echo "${sshd_cont}/run: volume ${mcron_shippingbay_cont} not created"; exit 1; }
 
 docker inspect ${sshd_cont} > /dev/null 2>&1 && if [ "$(din -f '{{.State.ExitCode}}' ${sshd_cont})" != "0" ]; then
 	d rm ${sshd_cont}
