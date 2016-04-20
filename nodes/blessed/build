@@ -21,5 +21,5 @@ if [[ "$(docker images -q kv:5000/b2d/git:2.8.1 2> /dev/null)" == "" ]]; then
     # {"name":"b2d/git","tags":["2.8.1"]}
 fi
 
-docker network ls brblessed > /dev/null 2>&1 && docker network create -d bridge brblessed
-docker network ls kvblessed > /dev/null 2>&1 && docker network create -d overlay kvblessed
+docker network inspect brblessed > /dev/null 2>&1 || docker network create -d bridge brblessed
+docker network inspect kvblessed > /dev/null 2>&1 || docker network create -d overlay kvblessed
