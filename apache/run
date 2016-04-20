@@ -94,11 +94,11 @@ if [ ! -z "${upstream}" ] && [ -z "${downstream}" ]; then
 	if "${env}" == "staging"; then
 		docker network inspect stagingexternal > /dev/null 2>&1 || docker network create -d overlay stagingexternal
 		docker network connect stagingexternal ${apache_cont}
-		docker network inspect blessedstaging > /dev/null 2>&1 || docker network create -d overlay stagingexternal
+		docker network inspect blessedstaging > /dev/null 2>&1 || docker network create -d overlay blessedstaging
 		docker network connect blessedstaging --alias apache.upstream.cont ${apache_cont}
 	fi
 	if "${env}" == "blessed"; then
-		docker network inspect blessedstaging > /dev/null 2>&1 || docker network create -d overlay stagingexternal
+		docker network inspect blessedstaging > /dev/null 2>&1 || docker network create -d overlay blessedstaging
 		docker network connect blessedstaging --alias apache.downstream.cont ${apache_cont}
 	fi
 	docker cp "$HOME/b2d/apache/apache.${upstream}.crt" ${apache_cont}:/home/git/apache/apache.upstream.crt
