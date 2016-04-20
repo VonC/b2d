@@ -1,0 +1,18 @@
+#! /bin/sh
+# http://stackoverflow.com/questions/15541876/script-path-bash-source0-bad-substitution
+
+external="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${external}
+echo bl=${external}
+b2d="$( cd -P "$( dirname "$external" )/.." && pwd )"
+echo b2d=${b2d}
+. ${b2d}/scripts/.bash_aliases
+
+if [[ "$(grep registry.crt /var/lib/boot2docker/bootsync.sh)" == "" ]]; then
+	cat ${b2d}/scripts/add_reg_crt.sh | sudo tee -a /var/lib/boot2docker/bootsync.sh >/dev/null
+	# . ${b2d}/scripts/add_reg_crt.sh
+fi
+
+if [[ "$(docker images -q kv:5000/b2d/git:2.8.1 2> /dev/null)" == "" ]]; then
+	d pull kv:5000/b2d/git:2.8.1
+fi

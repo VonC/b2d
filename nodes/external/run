@@ -1,0 +1,7 @@
+#! /bin/sh
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../../scripts/.bash_aliases
+
+../../scripts/run external

@@ -1,0 +1,14 @@
+#! /bin/sh
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/../../scripts/.bash_aliases
+apache=${folder}/../../apache
+nginx=${folder}/../../nginx
+
+# upstream=external rs
+upstream=external ../../scripts/run staging
+echo "">${apache}/crts && find ${apache} -name "*.crt" -exec /bin/sh -c 'l="========================================="; n={}; n=${n#*/}; echo "">> ${apache}/crts; echo "${n}" >> ${apache}/crts; ll=$(echo ${l}|cut -c ${#n}-); t=$(echo ${l}|cut -c ${#ll}-); echo ${t} >> ${apache}/crts; cat {} >> ${apache}/crts' \;
+find ${nginx} -name "*.crt" -exec /bin/sh -c 'l="========================================="; n={}; n=${n#*/}; echo "">> ${apache}/crts; echo "${n}" >> ${apache}/crts; ll=$(echo ${l}|cut -c ${#n}-); t=$(echo ${l}|cut -c ${#ll}-); echo ${t} >> ${apache}/crts; cat {} >> ${apache}/crts' \;
+cd ${folder}/../../mcron
+rs
