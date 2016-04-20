@@ -6,11 +6,16 @@ cd ${folder}
 
 image="kv:5000/b2d/openldap:2.4.31"
 
+env=$1
+if [ "${1}" == "" ]; then env="none"; fi
+
+docker network inspect br${env}  > /dev/null 2>&1 || { echo "network br${env} not created: openldap cannot join"; exit 1; }
+
 ec=$(docker inspect -f '{{ .State.Running }}' openldap.cont 2> /dev/null)
 if [ "${ec}" = "false" ]; then
 	docker rm openldap.cont
 fi
-docker inspect openldap.cont > /dev/null 2>&1 || d run -d --name openldap.cont ${image}
+docker inspect openldap.cont > /dev/null 2>&1 || d run -d --name openldap.cont --net=br${env} --net-alias=apache.openldap.cont ${image}
 docker inspect openldap.cont > /dev/null 2>&1 || exit 0
 i=$(docker exec -u git openldap.cont ./openldap/ini_ldap_db.sh 2>&1)
 [ ! -z "${verbose}" ] && echo "${i}"
