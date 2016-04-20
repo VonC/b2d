@@ -59,3 +59,6 @@ docker cp ${sshd_cont}:/home/git/.ssh/root.pub "$(readlink -f $HOME/b2d)/sshd" |
 chmod 644 root
 chmod 644 root.pub
 docker start ${sshd_cont}
+docker network inspect stagingexternal > /dev/null 2>&1 || docker network create -d overlay stagingexternal
+# mcron depends on --link sshd.external.cont:mcron.sshd.cont
+docker network connect stagingexternal --alias mcron.sshd.cont ${sshd_cont}
