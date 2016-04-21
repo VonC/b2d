@@ -1,13 +1,15 @@
 #! /bin/sh
 
-cd $HOME/b2d/git && $HOME/b2d/git/build
-# cd $HOME/b2d/go && $HOME/b2d/go/build
-cd $HOME/b2d/gitolite && $HOME/b2d/gitolite/build
-cd $HOME/b2d/gcc && $HOME/b2d/gcc/build
-cd $HOME/b2d/openldap && $HOME/b2d/openldap/build
-cd $HOME/b2d/apache && $HOME/b2d/apache/build
-cd $HOME/b2d/nginx && $HOME/b2d/nginx/build
-cd $HOME/b2d/gnupg2 && $HOME/b2d/gnupg2/build
-cd $HOME/b2d/mcron && $HOME/b2d/mcron/build
-cd $HOME/b2d/sshd && $HOME/b2d/sshd/build
-cd $HOME/b2d
+echo "b2d='${b2d}'"
+
+cd ${b2d}/git && ${b2d}/git/build
+# cd ${b2d}/go && ${b2d}/go/build
+cd ${b2d}/gitolite && ${b2d}/gitolite/build
+cd ${b2d}/gcc && ${b2d}/gcc/build
+cd ${b2d}/openldap && ${b2d}/openldap/build
+cd ${b2d}/apache && ${b2d}/apache/build
+cd ${b2d}/nginx && ${b2d}/nginx/build
+cd ${b2d}/gnupg2 && ${b2d}/gnupg2/build
+cd ${b2d}/mcron && ${b2d}/mcron/build
+cd ${b2d}/sshd && ${b2d}/sshd/build
+cd ${b2d}

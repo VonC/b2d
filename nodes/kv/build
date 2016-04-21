@@ -2,7 +2,8 @@
 # http://stackoverflow.com/questions/15541876/script-path-bash-source0-bad-substitution
 kv=$(readlink -f "$0")
 kv=$( dirname "${kv}" )
-b2d="$( cd -P "$( dirname "$SOURCE" )/../.." && pwd )"
+b2d="$( cd -P "$( dirname "${kv}" )/.." && pwd )"
+echo "b2d=${b2d}"
 
 . ${b2d}/scripts/.bash_aliases
 
