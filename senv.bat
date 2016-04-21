@@ -16,10 +16,10 @@ echo parent='%parent%'
 echo.unixpath='%unixpath%'
 
 if not exist ..\env.bat (
-	echo Add %parent%\env.bat: (..\env.bat^)
-	echo See env.bat.template in %b2d%
+	echo Copy env.bat.template as %parent%\env.bat: (..\env.bat^)
+	copy %b2d%env.bat.template %parent%
 	echo In ..\env.bat, complete your %%PATH%% with Git, VirtualBox and Boot2Docker
-	exit /B 1
+	set /p DUMMY=Hit ENTER to continue
 )
 set PATH=C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem
 call !parent!\env.bat
@@ -84,6 +84,8 @@ echo set DOCKER_MACHINE=%DOCKER_MACHINE%>>p.bat
 echo set DOCKER_TOOLBOX_INSTALL_PATH=%DOCKER_TOOLBOX_INSTALL_PATH%>>p.bat
 echo set VBOXMANAGE=%VBOXMANAGE%>>p.bat
 echo set VBOX_MSI_INSTALL_PATH=%VBOX_MSI_INSTALL_PATH%>>p.bat
+echo set SKIP_STAGING=%SKIP_STAGING%>>p.bat
+echo set SKIP_EXTERNAL=%SKIP_EXTERNAL%>>p.bat
 endlocal
 call p.bat
 del p.bat
@@ -96,7 +98,6 @@ doskey vbmmt="VBoxManage.exe modifyvm \"$1\" natpf1 \"tcp-port$2,tcp,,$2,,$2\";"
 doskey vbmmu="VBoxManage.exe modifyvm \"$1\" natpf1 \"udp-port$2,udp,,$2,,$2\";"
 doskey vbmct="VBoxManage.exe controlvm \"$1\" natpf1 \"tcp-port$2,tcp,,$2,,$2\";"
 doskey vbmcu="VBoxManage.exe controlvm \"$1\" natpf1 \"udp-port$2,udp,,$2,,$2\";"
-doskey bd="boot2docker.exe" $*
 doskey cdbb=cd "%~dp0"
 
 doskey h=doskey /history
