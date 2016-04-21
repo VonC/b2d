@@ -86,6 +86,9 @@ echo set VBOXMANAGE=%VBOXMANAGE%>>p.bat
 echo set VBOX_MSI_INSTALL_PATH=%VBOX_MSI_INSTALL_PATH%>>p.bat
 echo set SKIP_STAGING=%SKIP_STAGING%>>p.bat
 echo set SKIP_EXTERNAL=%SKIP_EXTERNAL%>>p.bat
+echo set HTTP_PROXY=%HTTP_PROXY%>>p.bat
+echo set HTTPS_PROXY=%HTTPS_PROXY%>>p.bat
+echo set NO_PROXY=%NO_PROXY%>>p.bat
 endlocal
 call p.bat
 del p.bat
