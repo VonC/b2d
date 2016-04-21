@@ -24,7 +24,7 @@ if not "%kv%"=="" (
 	rem http://stackoverflow.com/questions/16203629/batch-assign-command-output-to-variable
 	set kvip=
 	if "%kv%"=="kv" (
-		kvip="192.168.99.100"
+		set kvip="192.168.99.100"
 	) else (
 		for /f "delims=" %%i in ('docker-machine ip %kv%') do set kvip=%%i
 	)
