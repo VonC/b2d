@@ -78,7 +78,7 @@ if [ -z "${upstream}" ] && [ -z "${downstream}" ]; then
 	if [ "${1}" = "external" ]; then
 		drapache $(dvv ${mcron_shippingbay_cont}) ${image}
 		docker network inspect stagingexternal > /dev/null 2>&1 || docker network create -d overlay stagingexternal
-		docker network connect stagingexternal --alias apache.upstream.cont ${apache_cont}
+		docker network connect --alias=apache.upstream.cont stagingexternal ${apache_cont}
 	else
 		drapache ${image}
 	fi
@@ -95,11 +95,11 @@ if [ ! -z "${upstream}" ] && [ -z "${downstream}" ]; then
 		docker network inspect stagingexternal > /dev/null 2>&1 || docker network create -d overlay stagingexternal
 		docker network connect stagingexternal ${apache_cont}
 		docker network inspect blessedstaging > /dev/null 2>&1 || docker network create -d overlay blessedstaging
-		docker network connect blessedstaging --alias apache.upstream.cont ${apache_cont}
+		docker network connect --alias=apache.upstream.cont blessedstaging ${apache_cont}
 	fi
 	if "${env}" == "blessed"; then
 		docker network inspect blessedstaging > /dev/null 2>&1 || docker network create -d overlay blessedstaging
-		docker network connect blessedstaging --alias apache.downstream.cont ${apache_cont}
+		docker network connect --alias=apache.downstream.cont blessedstaging ${apache_cont}
 	fi
 	docker cp "$HOME/b2d/apache/apache.${upstream}.crt" ${apache_cont}:/home/git/apache/apache.upstream.crt
 	docker cp "$HOME/b2d/envs/${envs_private}" ${apache_cont}:/home/git/.envs.private

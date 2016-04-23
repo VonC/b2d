@@ -61,4 +61,4 @@ chmod 644 root.pub
 docker start ${sshd_cont}
 docker network inspect stagingexternal > /dev/null 2>&1 || docker network create -d overlay stagingexternal
 # mcron depends on --link sshd.external.cont:mcron.sshd.cont
-docker network connect stagingexternal --alias mcron.sshd.cont ${sshd_cont}
+docker network connect --alias=mcron.sshd.cont stagingexternal ${sshd_cont}
