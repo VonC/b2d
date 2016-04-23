@@ -1,5 +1,9 @@
 #! /bin/sh
-. ./.bash_aliases
+
+folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
+cd ${folder}
+. ${folder}/scripts/.bash_aliases
+
 env=${1}
 all=${2}
 if [ "${env}" = "all" ] || [ "${env}" = "ALL" ]; then
