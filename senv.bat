@@ -53,6 +53,14 @@ git --version
 docker-machine version
 vboxmanage --version
 
+if not exist %b2d%nodes\kv\docker-consul/0.6 (
+	git  -C %b2d% submodule update --init
+)
+if not exist %b2d%nodes\kv\docker-consul/0.6 (
+	echo "b2d submodule not cloned"
+	exit /B 1
+)
+
 set scripts=%b2d%bin
 set scriptd=%scripts:\=\\%
 git -C %b2d% config filter.dffilter.smudge %scriptd%\\dfsmudge.sh
