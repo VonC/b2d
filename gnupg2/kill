@@ -23,5 +23,5 @@ fi
 
 
 if [ "${all}" = "all" ] || [ "${all}" = "ALL" ]; then
-	ddocker volume rm ${gnupg2_cont}
+	docker volume rm ${gnupg2_cont}
 fi
