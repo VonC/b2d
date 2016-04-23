@@ -81,9 +81,17 @@ touch scripts\profile
 git checkout HEAD -- scripts/profile
 
 echo ok '%b2d%'
-cd %b2d%compose
+cd %b2d%
 for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do touch %%i
-for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do git checkout HEAD -- %%i
+for /F "usebackq" %%i in (`dir Dockerfile* /b/s`) do (
+	set f=%%i
+	if "!f:compose=!"=="!f!" if "!f:docker-consul=!"=="!f!"  (
+		rem echo "git checkout HEAD -- !f!"
+		git checkout HEAD -- !f!
+	)
+)
+echo "done"
+
 cd %b2d%
 
 echo set PATH=%PATH%>p.bat
