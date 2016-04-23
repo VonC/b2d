@@ -4,6 +4,9 @@ folder="$( cd "$( dirname "$(readlink -f "$0")" )" && pwd )"
 cd ${folder}
 . ${folder}/../scripts/.bash_aliases
 
+ff=""
+if [ "$1" = "-f" ]; then ff="-f"; fi
+
 name=apache
 
 if [ "$(docker images -q ${name}.deb 2> /dev/null)" == "" ]; then
@@ -15,7 +18,9 @@ if [ "$(docker images -q apache.inst 2> /dev/null)" = "" ]; then
 	docker commit apache.inst.cont apache.inst
 	docker rm apache.deb.cont apache.inst.cont
 fi
-db ${name} . || exit 1
+if [ "$(docker images -q ${name} 2> /dev/null)" = "" -o "${ff}" = "-f" ]; then
+	db ${name} . || exit 1
+fi
 
 ver=$(docker run --rm ${name} -c "apachectl -v"|head -1|cut -d '/' -f 2|awk '{print $1}')
 echo "ver='${ver}'"
