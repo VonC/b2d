@@ -57,10 +57,26 @@ alias bi='./build internal'
 alias ri='./run internal'
 alias ki='./kill internal'
 
-deb() { docker exec -u git -it $1 bash; }
-debr() { docker exec -u root -it $1 bash; }
-debc() { docker exec -u git -it "$@"; }
-debrc() { docker exec -u root -it "$@"; }
+deb() {
+	echo "docker exec -u git -it $1 bash;"
+	docker exec -u git -it $1 bash;
+ }
+debr() {
+	echo "docker exec -u root -it $1 bash;"
+	docker exec -u root -it $1 bash;
+}
+debc() {
+	echo "docker exec -u git -it $@";
+	docker exec -u git -it "$@";
+}
+debrc() {
+	echo "docker exec -u root -it $@";
+	docker exec -u root -it "$@";
+}
+drb() {
+	echo "docker run -itd --name $1 busybox";
+	docker run -itd --name $1 busybox;
+}
 scpe() { sudo cp -f "${1}" $(cat $(ls *.path.${2})); sudo chown 105:112 $(cat $(ls *.path.${2}))/"${1}"; }
 
 alias stop='./stop'
