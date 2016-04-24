@@ -21,14 +21,14 @@ Once the `env.bat` is properly filled out, you need to:
 
 - execute `senv.bat` (in a DOS prompt) or `source senv.sh` (in a git bash, even on Windows). In both cases, it will call the private `env.bat`.
 - type `b` for building all the images
-- type `s` to start all the containers
-- type `st` to stop and remove all the containers
+- type `r` to run all the containers
+- type `s` to stop and remove all the containers
 
 ## Tests
 
 That repo comes with Dockerfiles specifying a **full git repo hosting server** (complete with a gitweb, an ssh listener, an Apache http listener, a NGiNX rever-proxy server, and LDAP authentication)
 
-Typing `s` will launch actually 3 sets of containers, meaning 3 different Git hosting servers (called "blessed", "staging" and "external")
+Typing `r` will launch actually 3 sets of containers, meaning 3 different Git hosting servers (called "blessed", "staging" and "external")
 
 Typing `t` will launch a series of tests to check if those Git servers are working as expected.
 
