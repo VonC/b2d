@@ -27,8 +27,14 @@ alias dritrm='docker run -it --rm'
 alias dr='docker run -it --rm'
 alias dpsa='docker ps -a'
 alias din='docker inspect'
-alias drcat='curl -X GET https://kv:5000/v2/_catalog'
-drtag() { curl -X GET https://kv:5000/v2/$1/tags/list; }
+drcat() {
+	echo "curl -X GET https://kv:5000/v2/_catalog";
+	curl -X GET https://kv:5000/v2/_catalog;
+}
+drtag() {
+	echo "curl -X GET https://kv:5000/v2/$1/tags/list;"
+	curl -X GET https://kv:5000/v2/$1/tags/list;
+}
 dvls() { vpath=$(dv inspect -f '{{ .Mountpoint }}' $1); sudo ls -alrth ${vpath}/$2; }
 alias dn='docker network'
 
@@ -58,11 +64,11 @@ alias ri='./run internal'
 alias ki='./kill internal'
 
 deb() {
-	echo "docker exec -u git -it $1 bash;"
+	echo "docker exec -u git -it $1 bash";
 	docker exec -u git -it $1 bash;
  }
 debr() {
-	echo "docker exec -u root -it $1 bash;"
+	echo "docker exec -u root -it $1 bash";
 	docker exec -u root -it $1 bash;
 }
 debc() {
